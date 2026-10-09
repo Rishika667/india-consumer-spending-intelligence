@@ -73,3 +73,26 @@ def test_quality_engine_detects_synthetic_violations():
     assert report["composite_score"] < 100.0
     failed_checks = [c["check_id"] for c in report["checks"] if c["status"] == "FAIL"]
     assert "V01" in failed_checks or "V02" in failed_checks
+
+
+def test_quality_engine_p02_line_endings_robustness():
+    """Verify that check P02 succeeds regardless of LF or CRLF git checkout line endings."""
+    engine = DataQualityEngine()
+    df_state = build_state_mpce_dataset()
+    df_category = build_category_shares_dataset()
+    df_fractile = build_fractile_distribution_dataset()
+    df_cpi = build_cpi_series_dataset()
+    df_pfce = build_macro_pfce_dataset()
+
+    report = engine.run_audit(
+        df_state=df_state,
+        df_category=df_category,
+        df_fractile=df_fractile,
+        df_cpi=df_cpi,
+        df_pfce=df_pfce
+    )
+    p02_checks = [c for c in report["checks"] if c["check_id"] == "P02"]
+    assert len(p02_checks) == 1
+    assert p02_checks[0]["status"] == "PASS"
+    assert "6/6 source files verified" in p02_checks[0]["actual_value"]
+

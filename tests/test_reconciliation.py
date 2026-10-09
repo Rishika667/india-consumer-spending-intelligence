@@ -52,7 +52,7 @@ def test_reconciliation_detects_data_corruption(tmp_path):
     df_state.loc[mask, "mpce_unimputed"] = 9999.0
     df_state.to_csv(state_csv, index=False)
 
-    reconciler = SourceReconciliationEngine(sources_dir=str(temp_sources), raw_dir=RAW_DIR)
+    reconciler = SourceReconciliationEngine(sources_dir=str(temp_sources), raw_dir=RAW_DIR, docs_dir=None)
     result = reconciler.run_reconciliation()
 
     assert result["records_mismatched"] > 0
@@ -70,7 +70,7 @@ def test_reconciliation_handles_missing_raw_doc(tmp_path):
     temp_raw = tmp_path / "raw"
     temp_raw.mkdir()
 
-    reconciler = SourceReconciliationEngine(sources_dir=SOURCES_DIR, raw_dir=str(temp_raw))
+    reconciler = SourceReconciliationEngine(sources_dir=SOURCES_DIR, raw_dir=str(temp_raw), docs_dir=None)
     result = reconciler.run_reconciliation()
 
     assert result["unresolved_records"] > 0

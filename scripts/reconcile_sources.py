@@ -28,9 +28,10 @@ DOCS_DIR = os.path.join(BASE_DIR, "docs")
 
 
 class SourceReconciliationEngine:
-    def __init__(self, sources_dir: str = SOURCES_DIR, raw_dir: str = RAW_DIR):
+    def __init__(self, sources_dir: str = SOURCES_DIR, raw_dir: str = RAW_DIR, docs_dir: Optional[str] = DOCS_DIR):
         self.sources_dir = sources_dir
         self.raw_dir = raw_dir
+        self.docs_dir = docs_dir
         self.datasets: Dict[str, pd.DataFrame] = {}
         self.raw_texts: Dict[str, str] = {}
         self.parsed_tables: Dict[str, Any] = {}
@@ -731,46 +732,46 @@ class SourceReconciliationEngine:
             "reconciliation_checks": self.reconciliation_log
         }
 
-        # Write to JSON
-        os.makedirs(DOCS_DIR, exist_ok=True)
-        with open(os.path.join(DOCS_DIR, "SOURCE_RECONCILIATION.json"), "w", encoding="utf-8") as f:
-            json.dump(summary, f, indent=2)
+        # Write to JSON and Markdown if docs_dir is specified
+        if self.docs_dir:
+            os.makedirs(self.docs_dir, exist_ok=True)
+            with open(os.path.join(self.docs_dir, "SOURCE_RECONCILIATION.json"), "w", encoding="utf-8") as f:
+                json.dump(summary, f, indent=2)
 
-        # Write to Markdown
-        md_lines = [
-            "# Source Reconciliation & Verification Matrix — ConsumerLens India",
-            "**Bidirectional verification comparing structured observations in `data/sources/*.csv` against preserved raw government releases in `data/raw/`.**",
-            "",
-            f"- **Total Benchmark Records Checked:** {total_checked}",
-            f"- **Records Matched Against Source Evidence:** {records_matched} ({match_rate}%)",
-            f"- **Mismatches:** {records_mismatched}",
-            f"- **Unresolved Records:** {unresolved_records}",
-            "",
-            "## 1. Scope and Claims Precision",
-            summary["audit_scope"]["scope_limitation_statement"],
-            "",
-            "## 2. Verified Benchmark Log",
-            "",
-            "| ID | Metric / Observation | Source Dataset | Observed Value | Target Document | Status | Evidence / Extraction |",
-            "| :--- | :--- | :--- | :---: | :--- | :---: | :--- |"
-        ]
-        for c in self.reconciliation_log:
-            obs_str = f"{c['observed_value']:,.2f}" if c["observed_value"] is not None else "NaN"
-            md_lines.append(
-                f"| `{c['check_id']}` | {c['metric']} | `{c['dataset']}` | {obs_str} | `{c['primary_source_doc']}` | **{c['status']}** | {c['source_evidence']} |"
-            )
+            md_lines = [
+                "# Source Reconciliation & Verification Matrix — ConsumerLens India",
+                "**Bidirectional verification comparing structured observations in `data/sources/*.csv` against preserved raw government releases in `data/raw/`.**",
+                "",
+                f"- **Total Benchmark Records Checked:** {total_checked}",
+                f"- **Records Matched Against Source Evidence:** {records_matched} ({match_rate}%)",
+                f"- **Mismatches:** {records_mismatched}",
+                f"- **Unresolved Records:** {unresolved_records}",
+                "",
+                "## 1. Scope and Claims Precision",
+                summary["audit_scope"]["scope_limitation_statement"],
+                "",
+                "## 2. Verified Benchmark Log",
+                "",
+                "| ID | Metric / Observation | Source Dataset | Observed Value | Target Document | Status | Evidence / Extraction |",
+                "| :--- | :--- | :--- | :---: | :--- | :---: | :--- |"
+            ]
+            for c in self.reconciliation_log:
+                obs_str = f"{c['observed_value']:,.2f}" if c["observed_value"] is not None else "NaN"
+                md_lines.append(
+                    f"| `{c['check_id']}` | {c['metric']} | `{c['dataset']}` | {obs_str} | `{c['primary_source_doc']}` | **{c['status']}** | {c['source_evidence']} |"
+                )
 
-        md_lines.extend([
-            "",
-            "## 3. Documented Officially Unavailable Observations",
-            "The following items are officially unpublished in primary government releases. They are strictly preserved as explicit `NaN` / missing entries and are not estimated or fabricated:",
-            ""
-        ])
-        for unavail in summary["officially_unavailable_observations"]:
-            md_lines.append(f"- **{unavail}**")
+            md_lines.extend([
+                "",
+                "## 3. Documented Officially Unavailable Observations",
+                "The following items are officially unpublished in primary government releases. They are strictly preserved as explicit `NaN` / missing entries and are not estimated or fabricated:",
+                ""
+            ])
+            for unavail in summary["officially_unavailable_observations"]:
+                md_lines.append(f"- **{unavail}**")
 
-        with open(os.path.join(DOCS_DIR, "SOURCE_RECONCILIATION.md"), "w", encoding="utf-8") as f:
-            f.write("\n".join(md_lines) + "\n")
+            with open(os.path.join(self.docs_dir, "SOURCE_RECONCILIATION.md"), "w", encoding="utf-8") as f:
+                f.write("\n".join(md_lines) + "\n")
 
         print(f"Source reconciliation complete: {records_matched}/{total_checked} matched ({match_rate}%). Mismatches: {records_mismatched}, Unresolved: {unresolved_records}.")
         return summary

@@ -433,9 +433,9 @@ def main():
         raw_manifest = [
             {"Source File": "HCES_Press_Note_2023-24_27122024_rev.pdf", "SHA-256 Checksum": "9a67df191fac044f1c3b45fdfe3d40bbb43ff2865789fc3a1f7d35875be60bc7", "Producer": "MoSPI / NSSO", "Status": "VERIFIED"},
             {"Source File": "Factsheet_HCES_2022-23.pdf", "SHA-256 Checksum": "2993c572f87f8b58c9c4ddc075431b2d2f2593aef00914f136d11ac434e3e9fc", "Producer": "MoSPI / NSSO", "Status": "VERIFIED"},
-            {"Source File": "CPI_Release_Aug2026.html", "SHA-256 Checksum": "bce912654ac399ebdec9a10115a15fb812ccee8f909c6c75912752b9c8013f28", "Producer": "MoSPI / PSD", "Status": "VERIFIED"},
+            {"Source File": "CPI_Release_Aug2026.html", "SHA-256 Checksum": "4a33fea3c701b0afbafd6ec0f028320d2d22a326f5489e09329d9f5c173ea9cc", "Producer": "MoSPI / PSD", "Status": "VERIFIED"},
             {"Source File": "Factsheet_HCES_2023-24_PIB.pdf", "SHA-256 Checksum": "8af294a423d39b5184e73e0c8e6a24db4199aa3eec4cdb5525c81f12968fce37", "Producer": "PIB / MoSPI", "Status": "VERIFIED"},
-            {"Source File": "HCES_2023-24_PIB_2247612.html", "SHA-256 Checksum": "09f9b686230f677d8ee22d2686425cd1ceb113f3c77e73f7a95599b3752d828f", "Producer": "PIB / MoSPI", "Status": "VERIFIED"},
+            {"Source File": "HCES_2023-24_PIB_2247612.html", "SHA-256 Checksum": "6c8ecec8cf9b44347e235951596f40ddc02438769aed3a068b838fc37bd585be", "Producer": "PIB / MoSPI", "Status": "VERIFIED"},
             {"Source File": "HCES_2023-24_PIB_2088390.html", "SHA-256 Checksum": "bfe042dfb51beefc4bfe0a30d621037af5d8d90787f0fcb85f159ed63953716b", "Producer": "PIB / MoSPI", "Status": "VERIFIED"}
         ]
         st.table(pd.DataFrame(raw_manifest))

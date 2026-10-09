@@ -1,10 +1,10 @@
 {
   "title": "Bidirectional Source Reconciliation Audit",
   "total_records_checked": 42,
-  "records_matched": 0,
+  "records_matched": 42,
   "records_mismatched": 0,
-  "unresolved_records": 42,
-  "match_rate_pct": 0.0,
+  "unresolved_records": 0,
+  "match_rate_pct": 100.0,
   "audit_scope": {
     "machine_checked_benchmarks": 42,
     "curated_dataset_tables": 8,
@@ -30,11 +30,11 @@
       "observed_value": 3773.0,
       "primary_source_doc": "Factsheet_HCES_2022-23.pdf",
       "table_ref": "Statement 8 (Page 14)",
-      "source_evidence": "Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Statement 8 page 14: all-India Rural 3,773, Urban 6,459",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_02",
@@ -48,11 +48,11 @@
       "observed_value": 6459.0,
       "primary_source_doc": "Factsheet_HCES_2022-23.pdf",
       "table_ref": "Statement 8 (Page 14)",
-      "source_evidence": "Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Statement 8 page 14: all-India Urban 6,459",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_03",
@@ -66,11 +66,11 @@
       "observed_value": 3860.0,
       "primary_source_doc": "Factsheet_HCES_2022-23.pdf",
       "table_ref": "Statement 18 (Page 22)",
-      "source_evidence": "Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Statement 18 page 22: All-India Rural 3,860",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_04",
@@ -84,11 +84,11 @@
       "observed_value": 6521.0,
       "primary_source_doc": "Factsheet_HCES_2022-23.pdf",
       "table_ref": "Statement 18 (Page 22)",
-      "source_evidence": "Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Statement 18 page 22: All-India Urban 6,521",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_05",
@@ -102,11 +102,11 @@
       "observed_value": 4122.0,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Table 1 (Page 3)",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Report 592 Table 1: Rural 4,122",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_06",
@@ -120,11 +120,11 @@
       "observed_value": 6996.0,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Table 1 (Page 3)",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Report 592 Table 1: Urban 6,996",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_07",
@@ -138,11 +138,11 @@
       "observed_value": 4247.0,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Table 2 (Page 9)",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Report 592 Table 2: Rural 4,247",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_08",
@@ -156,11 +156,11 @@
       "observed_value": 7078.0,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Table 2 (Page 9)",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Report 592 Table 2: Urban 7,078",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_09",
@@ -174,11 +174,11 @@
       "observed_value": 8048.0,
       "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
       "table_ref": "Table 4 Statement 1",
-      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "source_evidence": "PRID 2247612 Table 4 Statement 1: Goa Rural = 8048.0",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_10",
@@ -192,11 +192,11 @@
       "observed_value": 9726.0,
       "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
       "table_ref": "Table 4 Statement 1",
-      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "source_evidence": "PRID 2247612 Table 4 Statement 1: Goa Urban = 9726.0",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_11",
@@ -210,11 +210,11 @@
       "observed_value": 5825.0,
       "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
       "table_ref": "Table 4 Statement 1",
-      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "source_evidence": "PRID 2247612 Table 4 Statement 1: Himachal Pradesh Rural = 5825.0",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_12",
@@ -228,11 +228,11 @@
       "observed_value": 9223.0,
       "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
       "table_ref": "Table 4 Statement 1",
-      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "source_evidence": "PRID 2247612 Table 4 Statement 1: Himachal Pradesh Urban = 9223.0",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_13",
@@ -246,11 +246,11 @@
       "observed_value": 5003.0,
       "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
       "table_ref": "Table 4 Statement 1",
-      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "source_evidence": "PRID 2247612 Table 4 Statement 1: Uttarakhand Rural = 5003.0",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_14",
@@ -264,11 +264,11 @@
       "observed_value": 7486.0,
       "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
       "table_ref": "Table 4 Statement 1",
-      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "source_evidence": "PRID 2247612 Table 4 Statement 1: Uttarakhand Urban = 7486.0",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_15",
@@ -282,11 +282,11 @@
       "observed_value": 4311.0,
       "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
       "table_ref": "Table 4 Statement 1",
-      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "source_evidence": "PRID 2247612 Table 4 Statement 1: Dadra & Nagar Haveli and Daman & Diu Rural = 4311.0",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_16",
@@ -300,11 +300,11 @@
       "observed_value": 6837.0,
       "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
       "table_ref": "Table 4 Statement 1",
-      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "source_evidence": "PRID 2247612 Table 4 Statement 1: Dadra & Nagar Haveli and Daman & Diu Urban = 6837.0",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_17",
@@ -318,11 +318,11 @@
       "observed_value": 5377.0,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Figure 2 (Page 5)",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Report 592 Figure 2: Haryana = 5,377",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_18",
@@ -336,11 +336,11 @@
       "observed_value": 8428.0,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Figure 3 (Page 6)",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Report 592 Figure 3: Haryana = 8,428",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_19",
@@ -354,11 +354,11 @@
       "observed_value": 5817.0,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Figure 2 (Page 5)",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Report 592 Figure 2: Punjab = 5,817",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_20",
@@ -372,11 +372,11 @@
       "observed_value": 7359.0,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Figure 3 (Page 6)",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Report 592 Figure 3: Punjab = 7,359",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_21",
@@ -390,11 +390,11 @@
       "observed_value": null,
       "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
       "table_ref": "Table 4 Statement 1",
-      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "source_evidence": "Delhi is officially omitted/unpublished in PRID 2247612 Table 4 and Report 592 Figures 2 & 3",
       "comparison_rule": "both_null",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_22",
@@ -408,11 +408,11 @@
       "observed_value": null,
       "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
       "table_ref": "Table 4 Statement 1",
-      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "source_evidence": "Delhi is officially omitted/unpublished in PRID 2247612 Table 4 and Report 592 Figures 2 & 3",
       "comparison_rule": "both_null",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_23",
@@ -426,11 +426,11 @@
       "observed_value": null,
       "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
       "table_ref": "Table 4 Statement 1",
-      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "source_evidence": "Chandigarh unimputed MPCE is officially omitted/unpublished in PRID 2247612 and Report 592 Fig 2 & 3",
       "comparison_rule": "both_null",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_24",
@@ -444,11 +444,11 @@
       "observed_value": null,
       "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
       "table_ref": "Table 4 Statement 1",
-      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "source_evidence": "Chandigarh unimputed MPCE is officially omitted/unpublished in PRID 2247612 and Report 592 Fig 2 & 3",
       "comparison_rule": "both_null",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_25",
@@ -462,11 +462,11 @@
       "observed_value": 8857.0,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Page 9 Text",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Report 592 page 9: Chandigarh Rural Imputed 8,857",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_26",
@@ -480,11 +480,11 @@
       "observed_value": 13425.0,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Page 9 Text",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Report 592 page 9: Chandigarh Urban Imputed 13,425",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_27",
@@ -498,11 +498,11 @@
       "observed_value": 9474.0,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Page 9 Text",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Report 592 page 9: Sikkim Rural Imputed 9,474",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_28",
@@ -516,11 +516,11 @@
       "observed_value": 13965.0,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Page 9 Text",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Report 592 page 9: Sikkim Urban Imputed 13,965",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_29",
@@ -536,11 +536,11 @@
       "observed_value": 9.62,
       "primary_source_doc": "Factsheet_HCES_2022-23.pdf",
       "table_ref": "Statement 5",
-      "source_evidence": "Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Statement 5: Beverages & Processed Food Rural = 9.62% (Food Total = 46.38%)",
       "comparison_rule": "numeric_tolerance",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": "Statement 5 published category share"
     },
     {
       "check_id": "REC_30",
@@ -556,11 +556,11 @@
       "observed_value": 10.64,
       "primary_source_doc": "Factsheet_HCES_2022-23.pdf",
       "table_ref": "Statement 5",
-      "source_evidence": "Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Statement 5: Beverages Urban = 10.64%; Food group sum = 39.16% vs published aggregate 39.17% (0.01% rounding)",
       "comparison_rule": "numeric_tolerance",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": "Documented 0.01% rounding difference between pre-rounded item sum and aggregate total"
     },
     {
       "check_id": "REC_31",
@@ -576,11 +576,11 @@
       "observed_value": 8.14,
       "primary_source_doc": "Factsheet_HCES_2022-23.pdf",
       "table_ref": "Statement 15",
-      "source_evidence": "Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Statement 15: Milk & Milk Products Rural Imputed = 8.14% (Total Food = 47.47%)",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_32",
@@ -596,11 +596,11 @@
       "observed_value": 7.15,
       "primary_source_doc": "Factsheet_HCES_2022-23.pdf",
       "table_ref": "Statement 15",
-      "source_evidence": "Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Statement 15: Milk & Milk Products Urban Imputed = 7.15% (Total Food = 39.70%)",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_33",
@@ -616,11 +616,11 @@
       "observed_value": 9.84,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Figure 4 (Page 7)",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Figure 4 Page 7: beverages & processed food Rural = 9.84%",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_34",
@@ -636,11 +636,11 @@
       "observed_value": 11.09,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Figure 5 (Page 7)",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Figure 5 Page 7: beverages & processed food Urban = 11.09%",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_35",
@@ -655,11 +655,11 @@
       "observed_value": 1677.0,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Page 4 Text & Figure 1",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Report 592 Page 4: Bottom 5% Rural = Rs. 1,677",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_36",
@@ -674,11 +674,11 @@
       "observed_value": 2376.0,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Page 4 Text & Figure 1",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Report 592 Page 4: Bottom 5% Urban = Rs. 2,376",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_37",
@@ -693,11 +693,11 @@
       "observed_value": 10137.0,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Page 4 Text",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Report 592 Page 4: Top 5% Rural = Rs. 10,137",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_38",
@@ -712,11 +712,11 @@
       "observed_value": 20310.0,
       "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
       "table_ref": "Page 4 Text",
-      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "source_evidence": "Report 592 Page 4: Top 5% Urban = Rs. 20,310,",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_39",
@@ -730,11 +730,11 @@
       "observed_value": 4.82,
       "primary_source_doc": "CPI_Release_Aug2026.html",
       "table_ref": "Table 1 (Provisional)",
-      "source_evidence": "Target primary document 'CPI_Release_Aug2026.html' missing or unreadable in data/raw/",
+      "source_evidence": "CPI Table 1: August 2026 CPI General Combined Inflation = 4.82%",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_40",
@@ -748,11 +748,11 @@
       "observed_value": 108.74,
       "primary_source_doc": "CPI_Release_Aug2026.html",
       "table_ref": "Table 1 & Table 9",
-      "source_evidence": "Target primary document 'CPI_Release_Aug2026.html' missing or unreadable in data/raw/",
+      "source_evidence": "CPI Table 1: August 2026 CPI General Combined Index = 108.74",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_41",
@@ -766,11 +766,11 @@
       "observed_value": 5.95,
       "primary_source_doc": "CPI_Release_Aug2026.html",
       "table_ref": "Table 1 & Table 2",
-      "source_evidence": "Target primary document 'CPI_Release_Aug2026.html' missing or unreadable in data/raw/",
+      "source_evidence": "CPI Table 1: August 2026 CFPI Combined Food Inflation = 5.95%",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     },
     {
       "check_id": "REC_42",
@@ -784,11 +784,11 @@
       "observed_value": 110.71,
       "primary_source_doc": "CPI_Release_Aug2026.html",
       "table_ref": "Table 1",
-      "source_evidence": "Target primary document 'CPI_Release_Aug2026.html' missing or unreadable in data/raw/",
+      "source_evidence": "CPI Table 1: August 2026 CFPI Combined Food Index = 110.71",
       "comparison_rule": "exact_numeric",
-      "status": "UNRESOLVED",
+      "status": "MATCH",
       "verification_type": "MACHINE_CHECKED",
-      "limitations": "Primary source file unavailable locally"
+      "limitations": ""
     }
   ]
 }
