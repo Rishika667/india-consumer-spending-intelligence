@@ -393,16 +393,26 @@ def main():
         st.subheader("🔍 Primary Source Reconciliation Summary")
         st.caption("Verifies structured source dataset observations against preserved primary documents in data/raw/ using scripts/reconcile_sources.py.")
         rec_data = validation_report.get("source_reconciliation_summary", {})
-        
+        rec_status = rec_data.get("status", "NOT_RUN")
         checked_count = rec_data.get('records_checked', 0)
         matched_count = rec_data.get('records_matched', 0)
         mismatch_count = rec_data.get('records_mismatched', 0)
         unres_count = rec_data.get('unresolved_records', 0)
-        match_rate_str = f"{rec_data.get('match_rate_pct', 0.0):.1f}% Match Rate" if checked_count > 0 else "N/A"
+        match_rate_pct = rec_data.get('match_rate_pct', 0.0)
+        match_rate_str = f"{match_rate_pct:.1f}% Match Rate" if checked_count > 0 else "N/A"
+
+        if rec_status == "PASSED" and checked_count > 0:
+            st.success(f"✓ Source Reconciliation Verified: {matched_count}/{checked_count} primary benchmarks (100.0%) programmatically matched against preserved official MoSPI/PIB releases in data/raw/.")
+        elif rec_status == "FAILED":
+            st.error(f"❌ Source Reconciliation Gate Alert: {mismatch_count} mismatch(es) and {unres_count} unresolved record(s) detected across {checked_count} evaluated benchmarks.")
+        elif rec_status == "MALFORMED":
+            st.warning("⚠️ Source reconciliation report docs/SOURCE_RECONCILIATION.json is malformed or could not be loaded.")
+        else:
+            st.info("ℹ️ Source reconciliation has not yet been executed for this run. Execute python scripts/reconcile_sources.py to verify benchmarks against raw primary sources.")
 
         rec_cols = st.columns(4)
         with rec_cols[0]:
-            render_metric_card("Records Checked", f"{checked_count}", "Official Primary Citations")
+            render_metric_card("Records Checked", f"{checked_count}", "Official Primary Citations" if checked_count > 0 else "Reconciliation Pending")
         with rec_cols[1]:
             render_metric_card("Records Matched", f"{matched_count}", match_rate_str)
         with rec_cols[2]:

@@ -173,6 +173,15 @@ Open `http://localhost:8501` in your browser.
 python -m pytest -v tests/
 ```
 
+### 7. Streamlit Community Cloud Deployment
+To host this application publicly at zero cost:
+1. Navigate to [Streamlit Community Cloud](https://share.streamlit.io/) and log in with your GitHub account.
+2. Click **"New app"** and specify the following deployment parameters:
+   - **Repository:** `Rishika667/india-consumer-spending-intelligence`
+   - **Branch:** `main`
+   - **Main file path:** `app.py`
+3. Click **"Deploy!"**. The platform automatically installs dependencies from `requirements.txt` and serves the application on a public URL.
+
 ---
 
 ## 📚 Official Source Citations

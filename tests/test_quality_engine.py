@@ -96,3 +96,75 @@ def test_quality_engine_p02_line_endings_robustness():
     assert p02_checks[0]["status"] == "PASS"
     assert "6/6 source files verified" in p02_checks[0]["actual_value"]
 
+
+def test_reconciliation_summary_integration_success():
+    """Verify that quality engine integrates real source reconciliation summary from disk."""
+    engine = DataQualityEngine()
+    df_state = build_state_mpce_dataset()
+    df_category = build_category_shares_dataset()
+    df_fractile = build_fractile_distribution_dataset()
+    df_cpi = build_cpi_series_dataset()
+    df_pfce = build_macro_pfce_dataset()
+
+    report = engine.run_audit(
+        df_state=df_state,
+        df_category=df_category,
+        df_fractile=df_fractile,
+        df_cpi=df_cpi,
+        df_pfce=df_pfce
+    )
+    rec_sum = report.get("source_reconciliation_summary", {})
+    assert rec_sum["status"] == "PASSED"
+    assert rec_sum["records_checked"] >= 42
+    assert rec_sum["records_matched"] == rec_sum["records_checked"]
+    assert rec_sum["records_mismatched"] == 0
+    assert rec_sum["unresolved_records"] == 0
+    assert rec_sum["match_rate_pct"] == 100.0
+
+
+def test_reconciliation_summary_integration_missing_and_malformed(tmp_path, monkeypatch):
+    """Verify that quality engine handles missing and malformed reconciliation reports without silent false passes."""
+    import src.quality_engine as qe
+    engine = DataQualityEngine()
+    df_state = build_state_mpce_dataset()
+    df_category = build_category_shares_dataset()
+    df_fractile = build_fractile_distribution_dataset()
+    df_cpi = build_cpi_series_dataset()
+    df_pfce = build_macro_pfce_dataset()
+
+    # Case 1: Missing file
+    fake_docs_missing = tmp_path / "docs_missing"
+    fake_docs_missing.mkdir()
+    monkeypatch.setattr(qe, "DOCS_DIR", str(fake_docs_missing))
+
+    report_missing = engine.run_audit(
+        df_state=df_state,
+        df_category=df_category,
+        df_fractile=df_fractile,
+        df_cpi=df_cpi,
+        df_pfce=df_pfce
+    )
+    rec_missing = report_missing.get("source_reconciliation_summary", {})
+    assert rec_missing["status"] == "NOT_RUN"
+    assert rec_missing["records_checked"] == 0
+    assert "not found" in rec_missing["message"].lower()
+
+    # Case 2: Malformed file
+    fake_docs_malformed = tmp_path / "docs_malformed"
+    fake_docs_malformed.mkdir()
+    (fake_docs_malformed / "SOURCE_RECONCILIATION.json").write_text("{invalid json", encoding="utf-8")
+    monkeypatch.setattr(qe, "DOCS_DIR", str(fake_docs_malformed))
+
+    report_malformed = engine.run_audit(
+        df_state=df_state,
+        df_category=df_category,
+        df_fractile=df_fractile,
+        df_cpi=df_cpi,
+        df_pfce=df_pfce
+    )
+    rec_malformed = report_malformed.get("source_reconciliation_summary", {})
+    assert rec_malformed["status"] == "MALFORMED"
+    assert rec_malformed["records_checked"] == 0
+    assert "failed to parse" in rec_malformed["message"].lower()
+
+

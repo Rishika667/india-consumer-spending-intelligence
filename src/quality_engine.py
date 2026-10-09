@@ -14,6 +14,7 @@ Pipeline Validation Score.
 
 import os
 import sys
+import json
 import hashlib
 from typing import Dict, List, Any, Optional
 import pandas as pd
@@ -477,23 +478,62 @@ class DataQualityEngine:
         # ==============================================================================
         # SOURCE RECONCILIATION INTEGRATION
         # ==============================================================================
+        # SOURCE RECONCILIATION INTEGRATION
+        # ==============================================================================
         rec_summary = {
             "status": "NOT_RUN",
-            "total_records_checked": 0,
+            "records_checked": 0,
             "records_matched": 0,
             "records_mismatched": 0,
             "match_rate_pct": 0.0,
             "unresolved_records": 0,
             "verification_engine": "scripts/reconcile_sources.py",
-            "documentation": "docs/SOURCE_RECONCILIATION.md"
+            "documentation": "docs/SOURCE_RECONCILIATION.md",
+            "message": "Reconciliation report not found. Run scripts/reconcile_sources.py to execute primary benchmark checks."
         }
         rec_path = os.path.join(DOCS_DIR, "SOURCE_RECONCILIATION.json")
         if os.path.exists(rec_path):
             try:
                 with open(rec_path, "r", encoding="utf-8") as f:
-                    rec_summary = json.load(f)
-            except Exception:
-                pass
+                    rec_json = json.load(f)
+                
+                checks = rec_json.get("reconciliation_checks", [])
+                total_checked = int(rec_json.get("total_records_checked", len(checks)))
+                matched = int(rec_json.get("records_matched", len([c for c in checks if c.get("status") == "MATCH"])))
+                mismatched = int(rec_json.get("records_mismatched", len([c for c in checks if c.get("status") == "MISMATCH"])))
+                unresolved = int(rec_json.get("unresolved_records", len([c for c in checks if c.get("status") in ("UNRESOLVED", "MANUAL_REVIEW_REQUIRED")])))
+                match_rate = float(rec_json.get("match_rate_pct", round((matched / total_checked * 100), 2) if total_checked > 0 else 0.0))
+                
+                if total_checked > 0:
+                    status = "PASSED" if (mismatched == 0 and unresolved == 0 and matched == total_checked) else "FAILED"
+                    msg = "Reconciliation verified against primary source documents." if status == "PASSED" else "Reconciliation contains mismatches or unresolved records."
+                else:
+                    status = "EMPTY"
+                    msg = "Reconciliation report contains zero benchmark checks."
+
+                rec_summary = {
+                    "status": status,
+                    "records_checked": total_checked,
+                    "records_matched": matched,
+                    "records_mismatched": mismatched,
+                    "match_rate_pct": match_rate,
+                    "unresolved_records": unresolved,
+                    "verification_engine": "scripts/reconcile_sources.py",
+                    "documentation": "docs/SOURCE_RECONCILIATION.md",
+                    "message": msg
+                }
+            except Exception as e:
+                rec_summary = {
+                    "status": "MALFORMED",
+                    "records_checked": 0,
+                    "records_matched": 0,
+                    "records_mismatched": 0,
+                    "match_rate_pct": 0.0,
+                    "unresolved_records": 0,
+                    "verification_engine": "scripts/reconcile_sources.py",
+                    "documentation": "docs/SOURCE_RECONCILIATION.md",
+                    "message": f"Failed to parse source reconciliation report: {e}"
+                }
 
         # ==============================================================================
         # SCORING CALCULATION
@@ -525,13 +565,7 @@ class DataQualityEngine:
             "composite_score": round(pipeline_val_score, 2),  # Backward compatibility alias
             "dimension_breakdown": dimension_scores,
             "data_availability_summary": availability_summary,
-            "source_reconciliation_summary": {
-                "records_checked": rec_summary.get("total_records_checked", 0),
-                "records_matched": rec_summary.get("records_matched", 0),
-                "records_mismatched": rec_summary.get("records_mismatched", 0),
-                "match_rate_pct": rec_summary.get("match_rate_pct", 0.0),
-                "unresolved_records": rec_summary.get("unresolved_records", 0)
-            },
+            "source_reconciliation_summary": rec_summary,
             "methodological_disclaimer": (
                 "The pipeline validation score evaluates automated data pipeline integrity, deterministic formatting constraints, "
                 "aggregation consistency, and cryptographic file matching. It does not assert statistical sampling precision, "
