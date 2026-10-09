@@ -6,6 +6,7 @@ Engineered for syndicated research reports: restrained palette, clean formatting
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
+import numpy as np
 
 
 PRIMARY_NAVY = "#1e3a8a"
@@ -101,9 +102,16 @@ def create_fractile_curve_chart(df_fractile: pd.DataFrame) -> go.Figure:
 def create_state_bar_chart(df_state: pd.DataFrame, selected_round: str = "2023-24", valuation_col: str = "mpce_unimputed", sector_view: str = "Both") -> go.Figure:
     """
     Creates a ranked horizontal bar chart of states and union territories.
+    Gracefully handles missing observations.
     """
     filtered = df_state[(df_state["survey_round"] == selected_round) & (df_state["state_name"] != "All-India")]
-    
+    filtered = filtered.dropna(subset=[valuation_col])
+
+    if filtered.empty:
+        fig = go.Figure()
+        fig.add_annotation(text="No published data available for selected filters", showarrow=False, font={"size": 14})
+        return format_chart_layout(fig, "State & UT Consumption Ranking — No Data Available", 400)
+
     if sector_view in ["Rural", "Urban"]:
         filtered = filtered[filtered["sector"] == sector_view]
         filtered = filtered.sort_values(by=valuation_col, ascending=True)
@@ -113,12 +121,13 @@ def create_state_bar_chart(df_state: pd.DataFrame, selected_round: str = "2023-2
             x=valuation_col,
             orientation="h",
             color_discrete_sequence=["#10b981" if sector_view == "Rural" else "#2563eb"],
-            labels={"state_name": "State / UT", valuation_col: f"MPCE (₹/month)"}
+            labels={"state_name": "State / UT", valuation_col: "MPCE (₹/month)"}
         )
     else:
-        # Side-by-side grouped horizontal bars
-        # Sort states by Urban MPCE
-        order = filtered[filtered["sector"] == "Urban"].sort_values(by=valuation_col)["state_name"].tolist()
+        # Grouped horizontal bars sorted by Urban MPCE (falling back to Rural if Urban missing)
+        piv = filtered.pivot(index="state_name", columns="sector", values=valuation_col)
+        sort_col = "Urban" if "Urban" in piv.columns else "Rural"
+        order = piv.sort_values(by=sort_col, ascending=True).index.tolist()
         fig = px.bar(
             filtered,
             y="state_name",
@@ -132,15 +141,23 @@ def create_state_bar_chart(df_state: pd.DataFrame, selected_round: str = "2023-2
         )
 
     val_label = "With Welfare Transfers" if "imputed" in valuation_col and "un" not in valuation_col else "Out-of-Pocket"
-    return format_chart_layout(fig, f"State & UT Consumption Ranking — {selected_round} ({val_label})", 720)
+    chart_height = max(400, min(850, len(filtered["state_name"].unique()) * 26))
+    return format_chart_layout(fig, f"State & UT Consumption Ranking — {selected_round} ({val_label})", chart_height)
 
 
 def create_disparity_scatter_chart(df_state: pd.DataFrame, selected_round: str = "2023-24", valuation_col: str = "mpce_unimputed") -> go.Figure:
     """
     Plots Rural MPCE vs Urban MPCE with parity line (1:1) and national benchmark.
+    Harmonized with the state filter selection.
     """
     filtered = df_state[(df_state["survey_round"] == selected_round) & (df_state["state_name"] != "All-India")]
     pivoted = filtered.pivot(index="state_name", columns="sector", values=valuation_col).dropna().reset_index()
+
+    if pivoted.empty:
+        fig = go.Figure()
+        fig.add_annotation(text="No paired Rural-Urban observations available for selected filters", showarrow=False, font={"size": 14})
+        return format_chart_layout(fig, f"Urban-Rural Consumption Disparity & Convergence ({selected_round})", 400)
+
     pivoted["ratio"] = (pivoted["Urban"] / pivoted["Rural"]).round(2)
 
     fig = px.scatter(
@@ -155,11 +172,11 @@ def create_disparity_scatter_chart(df_state: pd.DataFrame, selected_round: str =
     )
     fig.update_traces(textposition="top center", marker={"size": 10})
     
-    # 1.70x national reference line
+    # National 1.70x reference line
     max_val = max(pivoted["Rural"].max(), pivoted["Urban"].max()) * 1.05
     fig.add_trace(go.Scatter(
         x=[0, max_val / 1.70], y=[0, max_val], mode="lines",
-        line={"color": "#94a3b8", "dash": "dot"}, name="National 1.70x Ratio Line"
+        line={"color": "#94a3b8", "dash": "dot"}, name="National 1.70x Benchmark Line"
     ))
     return format_chart_layout(fig, f"Urban-Rural Consumption Disparity & Convergence ({selected_round})", 540)
 
@@ -167,8 +184,31 @@ def create_disparity_scatter_chart(df_state: pd.DataFrame, selected_round: str =
 def create_category_comparison_chart(df_category: pd.DataFrame, selected_sector: str = "Rural", valuation_filter: str = "Unimputed") -> go.Figure:
     """
     Plots commodity shares comparing 2022-23 vs 2023-24.
+    If Imputed is selected, displays 2022-23 Imputed shares alongside clear annotation
+    that 2023-24 item-level imputed shares were not published by MoSPI.
     """
     filtered = df_category[(df_category["sector"] == selected_sector) & (df_category["valuation"] == valuation_filter)]
+    
+    if filtered[filtered["survey_round"] == "2023-24"].empty:
+        # Only 2022-23 available for this valuation
+        order = filtered.sort_values(by="share_pct", ascending=True)["category"].tolist()
+        fig = px.bar(
+            filtered,
+            y="category",
+            x="share_pct",
+            color="survey_round",
+            orientation="h",
+            category_orders={"category": order},
+            color_discrete_map={"2022-23": "#0284c7"},
+            labels={"category": "Commodity Group", "share_pct": "Share of MPCE (%)", "survey_round": "Survey Round"}
+        )
+        fig.add_annotation(
+            text="Note: MoSPI did NOT publish item-group category breakdown with welfare imputation for 2023-24.<br>Comparisons are restricted to the official Unimputed basis (Figures 4–7).",
+            xref="paper", yref="paper", x=0.5, y=-0.15, showarrow=False,
+            font={"size": 11, "color": "#b91c1c"}
+        )
+        return format_chart_layout(fig, f"Commodity Budget Allocation: 2022-23 ({selected_sector}, {valuation_filter})", 620)
+
     order = filtered[filtered["survey_round"] == "2023-24"].sort_values(by="share_pct", ascending=True)["category"].tolist()
     
     fig = px.bar(
@@ -187,18 +227,55 @@ def create_category_comparison_chart(df_category: pd.DataFrame, selected_sector:
 
 def create_cpi_trends_chart(df_cpi: pd.DataFrame, base_selection: str = "2024=100") -> go.Figure:
     """
-    Plots CPI inflation trends for General vs Food components.
+    Plots CPI inflation trends including BOTH Headline General Inflation and CFPI Food Inflation.
     """
     filtered = df_cpi[df_cpi["base_year"] == base_selection]
     
-    fig = px.line(
-        filtered,
-        x="month_year",
-        y="inflation_general_pct",
-        color="sector",
-        markers=True,
-        labels={"month_year": "Month", "inflation_general_pct": "YoY Inflation Rate (%)", "sector": "Sector"},
-        color_discrete_map={"Combined": "#0f172a", "Rural": "#10b981", "Urban": "#2563eb"}
-    )
-    fig.update_traces(line={"width": 3}, marker={"size": 8})
-    return format_chart_layout(fig, f"MoSPI Consumer Price Index (CPI) Inflation — Base {base_selection}", 420)
+    fig = go.Figure()
+
+    if base_selection == "2024=100":
+        # 2024 Base monthly series: Plot YoY inflation for Combined, Rural, Urban
+        combined_inf = filtered[(filtered["sector"] == "Combined") & (filtered["inflation_general_pct"].notnull())]
+        rural_inf = filtered[(filtered["sector"] == "Rural") & (filtered["inflation_general_pct"].notnull())]
+        urban_inf = filtered[(filtered["sector"] == "Urban") & (filtered["inflation_general_pct"].notnull())]
+
+        # General Headline Inflation lines
+        fig.add_trace(go.Scatter(
+            x=combined_inf["month_year"], y=combined_inf["inflation_general_pct"],
+            mode="lines+markers", name="CPI General (Combined)",
+            line={"color": "#0f172a", "width": 3}, marker={"size": 8}
+        ))
+        fig.add_trace(go.Scatter(
+            x=rural_inf["month_year"], y=rural_inf["inflation_general_pct"],
+            mode="lines+markers", name="CPI General (Rural)",
+            line={"color": "#10b981", "width": 2}, marker={"size": 6}
+        ))
+        fig.add_trace(go.Scatter(
+            x=urban_inf["month_year"], y=urban_inf["inflation_general_pct"],
+            mode="lines+markers", name="CPI General (Urban)",
+            line={"color": "#2563eb", "width": 2}, marker={"size": 6}
+        ))
+
+        # CFPI Food Inflation points (Jul-26 and Aug-26 from Table 2 & 19)
+        cfpi_data = filtered[(filtered["sector"] == "Combined") & (filtered["inflation_food_pct"].notnull())]
+        if not cfpi_data.empty:
+            fig.add_trace(go.Scatter(
+                x=cfpi_data["month_year"], y=cfpi_data["inflation_food_pct"],
+                mode="lines+markers", name="CFPI Food Inflation (Combined)",
+                line={"color": "#d97706", "width": 3, "dash": "dash"}, marker={"size": 10, "symbol": "diamond"}
+            ))
+    else:
+        # Base 2012=100 Historical Benchmarks
+        comb_12 = filtered[filtered["sector"] == "Combined"]
+        fig.add_trace(go.Scatter(
+            x=comb_12["month_year"], y=comb_12["inflation_general_pct"],
+            mode="lines+markers", name="CPI General (Base 2012)",
+            line={"color": "#0f172a", "width": 3}, marker={"size": 8}
+        ))
+        fig.add_trace(go.Scatter(
+            x=comb_12["month_year"], y=comb_12["inflation_food_pct"],
+            mode="lines+markers", name="CFPI Food Inflation (Base 2012)",
+            line={"color": "#d97706", "width": 3, "dash": "dash"}, marker={"size": 8, "symbol": "diamond"}
+        ))
+
+    return format_chart_layout(fig, f"MoSPI Consumer Price Index (CPI) Inflation & CFPI — Base {base_selection}", 440)

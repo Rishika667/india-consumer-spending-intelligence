@@ -148,4 +148,25 @@ This document records the architectural, methodological, and data engineering de
 - **Fallback:** Complete offline fixture datasets bundled in `data/raw/` ensure 100% offline reproducibility.
 
 ---
+
+## Decision 9: Audit-Led Data Repair, Geographic Reconciliation, and Decoupled Structured Ingestion
+
+- **Status:** APPROVED & IMPLEMENTED
+- **Context:** An audit identified data defects: incomplete state accounting in 2023–24 (26 states instead of 36), discrepancies in state observations (Goa, Himachal Pradesh, Uttarakhand, Dadra & Nagar Haveli and Daman & Diu, Haryana), synthetic values invented where data was unpublished, hardcoded python lists in pipeline.py, a 28-vs-29 QC check count discrepancy, unharmonized state filtering in the Regional Explorer, and missing CFPI in the CPI view.
+- **Decision:**
+  1. **Source Decoupling & Structured Ingestion:** Replaced code literals with documented, tabular source CSVs in `data/sources/` with explicit `source_id` and `table_ref` fields.
+  2. **Complete Geographic Reconciliation:** Incorporated official parliamentary statement `PIB PRID 2247612` (providing 32 States/UTs) cross-referenced with `HCES Press Note Report 592` (providing Haryana, Punjab, and All-India). Corrected Goa (Rural ₹8,048, Urban ₹9,726), Himachal Pradesh (Rural ₹5,825, Urban ₹9,223), Uttarakhand (Rural ₹5,003, Urban ₹7,486), Dadra & Nagar Haveli and Daman & Diu (Rural ₹4,311, Urban ₹6,837), and Haryana (Rural ₹5,377, Urban ₹8,428).
+  3. **Strict Non-Fabrication of Unpublished Figures:** Retained explicit `NaN` / missing indicators for Delhi (2023–24), Chandigarh unimputed (2023–24), and smaller states/UTs whose welfare imputation was not published in Report 592. Removed synthetic 2023–24 imputed category shares and restricted comparisons to the official unimputed series.
+  4. **Complete CPI Monthly Series & CFPI:** Extracted the 20-month monthly series (Jan 2025 – Aug 2026) from Table 10 of the August 2026 release, and integrated Consumer Food Price Index (CFPI) data from Table 2 and Table 19 alongside headline inflation.
+  5. **QC Check Count Reconciliation:** Aligned the Quality Engine to exactly 28 rules across 5 dimensions, and introduced a Data Availability Register to report coverage transparently without penalizing officially unpublished cells.
+  6. **UI Harmonization:** Linked the state filter selection consistently across the Regional Explorer bar chart, disparity scatter plot, and data table.
+- **Rejected Alternatives:**
+  - *Alternative A: Imputing missing state observations through statistical regression.* Rejected because official statistical reporting must not present simulated values as government data.
+  - *Alternative B: Retaining 29 checks by adding ad-hoc rules.* Rejected in favor of exact reconciliation to the documented 28-rule blueprint.
+- **Evidence:** PIB PRID 2247612, MoSPI NSS Report No. 592 Press Note, and PIB PRID 2310058.
+- **Unresolved Issues:** None.
+- **Fallback:** Automated unit tests in `tests/test_pipeline.py` and `tests/test_quality_engine.py` enforce non-regression on verified figures.
+
+---
 *End of Decision Log.*
+

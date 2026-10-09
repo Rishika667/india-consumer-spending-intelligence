@@ -1,5 +1,6 @@
 """
 Automated unit tests for the Data Quality Engine and Composite Quality Scoring.
+Verifies the exact 28-rule audit suite, corruption detection, and availability tracking.
 """
 
 import pytest
@@ -30,11 +31,18 @@ def test_quality_engine_clean_data_audit():
         df_pfce=df_pfce
     )
 
-    assert report["total_evaluated"] >= 25
+    assert report["total_evaluated"] == 28
+    assert report["expected_total_checks"] == 28
     assert report["failed"] == 0
     assert report["composite_score"] == 100.0
     for dim, meta in report["dimension_breakdown"].items():
         assert meta["score_pct"] == 100.0
+    
+    # Verify presence of data availability metrics
+    assert "data_availability_summary" in report
+    avail = report["data_availability_summary"]
+    assert "hces_2022_23_state_coverage" in avail
+    assert "hces_2023_24_unimputed_coverage" in avail
 
 
 def test_quality_engine_detects_synthetic_violations():

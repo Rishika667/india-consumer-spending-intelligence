@@ -1,6 +1,7 @@
 {
-  "total_evaluated": 29,
-  "passed": 29,
+  "total_evaluated": 28,
+  "expected_total_checks": 28,
+  "passed": 28,
   "failed": 0,
   "composite_score": 100.0,
   "dimension_breakdown": {
@@ -24,8 +25,8 @@
     },
     "Internal_Consistency": {
       "weight": 0.2,
-      "passed": 8,
-      "total": 8,
+      "passed": 7,
+      "total": 7,
       "score_pct": 100.0
     },
     "Provenance": {
@@ -35,114 +36,122 @@
       "score_pct": 100.0
     }
   },
+  "data_availability_summary": {
+    "hces_2022_23_state_coverage": "36/36 States/UTs published (100% complete)",
+    "hces_2023_24_unimputed_coverage": "35/37 tracked geographies (34/36 States/UTs + All-India; Delhi & Chandigarh unimputed officially unpublished)",
+    "hces_2023_24_imputed_coverage": "22/37 tracked rural, 22/37 tracked urban (18 major states + Sikkim/Chandigarh/extremes; remaining 17 UTs/smaller states officially unpublished for imputation in Report 592)",
+    "hces_2023_24_category_imputation": "Officially unpublished by MoSPI (comparison restricted to unimputed series)",
+    "cpi_2024_base_monthly_coverage": "20 months (Jan-2025 to Aug-2026; complete official monthly series)",
+    "cpi_2012_base_status": "Discontinued Feb 2026; preserved as reference period benchmark snapshots"
+  },
   "checks": [
     {
       "check_id": "C01",
       "dimension": "Completeness",
       "target": "state_mpce",
-      "description": "Zero null values in mandatory keys (state_name, round, sector)",
+      "description": "Zero null values in primary keys (state_name, survey_round, sector)",
       "status": "PASS",
-      "actual_value": "0 nulls",
-      "details": ""
+      "actual_value": "0 null keys",
+      "details": "Mandatory identification attributes must be populated for all rows."
     },
     {
       "check_id": "C02",
       "dimension": "Completeness",
       "target": "state_mpce",
-      "description": "Zero null values in MPCE expenditure amounts",
+      "description": "Full geographic coverage for 2022-23 (36 States/UTs + All-India)",
       "status": "PASS",
-      "actual_value": "0 nulls",
-      "details": ""
+      "actual_value": "37 geographies tracked",
+      "details": "Report 590 Factsheet provides 36 States/UTs plus All-India."
     },
     {
       "check_id": "C03",
       "dimension": "Completeness",
       "target": "state_mpce",
-      "description": "All-India benchmarks present for both 2022-23 and 2023-24",
+      "description": "Full geographic accounting for 2023-24 (36 States/UTs + All-India tracked)",
       "status": "PASS",
-      "actual_value": "Rounds: ['2022-23', '2023-24']",
-      "details": ""
+      "actual_value": "37 geographies tracked",
+      "details": "Includes 34 published geographies and 2 officially unpublished UTs explicitly tracked."
     },
     {
       "check_id": "C04",
       "dimension": "Completeness",
-      "target": "category_shares",
-      "description": "Zero null values in commodity group shares dataset",
+      "target": "state_mpce",
+      "description": "All-India national benchmarks present for both 2022-23 and 2023-24",
       "status": "PASS",
-      "actual_value": "0 nulls",
-      "details": ""
+      "actual_value": "Rounds present: ['2022-23', '2023-24']",
+      "details": "National macro benchmarks required for rural and urban sectors."
     },
     {
       "check_id": "C05",
       "dimension": "Completeness",
-      "target": "fractile_distribution",
-      "description": "Coverage of both Rural and Urban sectors in fractiles",
+      "target": "category_shares",
+      "description": "Complete item coverage across 17 official commodity categories",
       "status": "PASS",
-      "actual_value": "Sectors: ['Rural', 'Urban']",
-      "details": ""
+      "actual_value": "17 categories present",
+      "details": "Official MoSPI HCES basket decomposes spending into 8 food and 9 non-food groups."
     },
     {
       "check_id": "C06",
       "dimension": "Completeness",
-      "target": "cpi_series",
-      "description": "Both 2012=100 and 2024=100 CPI series present",
+      "target": "fractile_distribution",
+      "description": "Complete coverage of 12 standard fractile classes (0-5% to 95-100%)",
       "status": "PASS",
-      "actual_value": "Bases: ['2024=100', '2012=100']",
-      "details": ""
+      "actual_value": "12 fractile classes present",
+      "details": "Covers both rural and urban sectors across all decile/ventile groupings."
     },
     {
       "check_id": "V01",
       "dimension": "Validity",
       "target": "state_mpce",
-      "description": "All state MPCE amounts strictly greater than zero",
+      "description": "All published MPCE expenditure amounts strictly greater than zero",
       "status": "PASS",
-      "actual_value": "Min MPCE: Rs 2466.00",
-      "details": ""
+      "actual_value": "Min observed MPCE: Rs 2,466.00",
+      "details": "Household per capita consumption expenditure cannot be negative or zero."
     },
     {
       "check_id": "V02",
       "dimension": "Validity",
       "target": "category_shares",
-      "description": "All item category percentage shares within (0, 100)",
+      "description": "All commodity group percentage shares within valid range (0%, 100%)",
       "status": "PASS",
-      "actual_value": "Range: [1.82%, 11.25%]",
-      "details": ""
+      "actual_value": "Range: [1.82%, 11.09%]",
+      "details": "Individual commodity item budget shares must be strictly positive fractions."
     },
     {
       "check_id": "V03",
       "dimension": "Validity",
       "target": "state_mpce",
-      "description": "Sector values conform strictly to domain {'Rural', 'Urban'}",
+      "description": "Sector values strictly conform to domain {'Rural', 'Urban'}",
       "status": "PASS",
       "actual_value": "Observed: ['Rural', 'Urban']",
-      "details": ""
+      "details": "NSSO survey stratification operates on binary Rural and Urban domains."
     },
     {
       "check_id": "V04",
       "dimension": "Validity",
       "target": "fractile_distribution",
-      "description": "Valid standard fractile percentiles (0-5% to 95-100%)",
+      "description": "Fractile classes conform to standard percentiles (0-5% through 95-100%)",
       "status": "PASS",
-      "actual_value": "12 fractile classes",
-      "details": ""
+      "actual_value": "Boundaries verified: 0-5% and 95-100%",
+      "details": "Standard NSS fractile classes capture bottom 5% and top 5% consumption."
     },
     {
       "check_id": "V05",
       "dimension": "Validity",
       "target": "cpi_series",
-      "description": "Year-over-Year inflation rates within plausible boundary [-10%, 30%]",
+      "description": "Year-over-Year CPI inflation rates within realistic macroeconomic bounds [-10%, 30%]",
       "status": "PASS",
-      "actual_value": "Range: [3.54%, 6.83%]",
-      "details": ""
+      "actual_value": "Range: [2.73%, 6.83%]",
+      "details": "Retail price movements in India operate within normal macroeconomic bands."
     },
     {
       "check_id": "V06",
       "dimension": "Validity",
       "target": "macro_pfce",
-      "description": "PFCE share of GDP within realistic bounds [50%, 75%]",
+      "description": "National PFCE share of GDP falls within plausible range [50%, 75%]",
       "status": "PASS",
       "actual_value": "Range: [56.2%, 60.2%]",
-      "details": ""
+      "details": "Private consumption historically forms 56-62% of India's GDP."
     },
     {
       "check_id": "U01",
@@ -151,7 +160,7 @@
       "description": "Zero duplicate records on composite key (State, Round, Sector)",
       "status": "PASS",
       "actual_value": "0 duplicates",
-      "details": ""
+      "details": "Each state-round-sector combination must uniquely identify one row."
     },
     {
       "check_id": "U02",
@@ -160,7 +169,7 @@
       "description": "Zero duplicate records on key (Category, Round, Sector, Valuation)",
       "status": "PASS",
       "actual_value": "0 duplicates",
-      "details": ""
+      "details": "Each item group must appear exactly once per survey slice."
     },
     {
       "check_id": "U03",
@@ -169,7 +178,7 @@
       "description": "Zero duplicate records on key (Fractile, Round, Sector)",
       "status": "PASS",
       "actual_value": "0 duplicates",
-      "details": ""
+      "details": "Each fractile class must appear exactly once per sector and survey round."
     },
     {
       "check_id": "U04",
@@ -178,16 +187,16 @@
       "description": "Zero duplicate records on key (Month, Base, Sector)",
       "status": "PASS",
       "actual_value": "0 duplicates",
-      "details": ""
+      "details": "Each month-base-sector combination must represent a distinct price observation."
     },
     {
       "check_id": "I01",
       "dimension": "Internal_Consistency",
       "target": "state_mpce",
-      "description": "Imputed MPCE >= Unimputed MPCE across 100% of observations",
+      "description": "Imputed MPCE >= Unimputed MPCE across 100% of comparable records",
       "status": "PASS",
-      "actual_value": "0 violations",
-      "details": ""
+      "actual_value": "0 violations across 116 comparable observations",
+      "details": "Social welfare benefits (PMGKY foodgrains, uniforms) add non-negative economic value."
     },
     {
       "check_id": "I02",
@@ -196,106 +205,97 @@
       "description": "National Urban MPCE > Rural MPCE in both survey rounds",
       "status": "PASS",
       "actual_value": "2022-23: Urban > Rural; 2023-24: Urban > Rural",
-      "details": ""
+      "details": "Urban nominal living costs and wage structures consistently exceed rural levels."
     },
     {
       "check_id": "I03",
       "dimension": "Internal_Consistency",
       "target": "category_shares",
-      "description": "Commodity group shares aggregate to 100.0% +/- 0.5%",
+      "description": "Commodity group percentage shares aggregate to 100.0% +/- 0.5%",
       "status": "PASS",
-      "actual_value": "Min sum: 99.95%, Max sum: 100.00%",
-      "details": ""
+      "actual_value": "Min slice sum: 99.98%, Max slice sum: 100.03%",
+      "details": "Itemized expenditure allocations must account for 100% of the household consumption budget."
     },
     {
       "check_id": "I04",
       "dimension": "Internal_Consistency",
       "target": "category_shares",
-      "description": "2022-23 Food share matches official tables (Rural: 46.38%, Urban: 39.17%)",
+      "description": "2022-23 Food share matches official Statement 5 (Rural: 46.38%, Urban: 39.16%)",
       "status": "PASS",
-      "actual_value": "Observed: Rural 46.38%, Urban 39.17%",
-      "details": ""
+      "actual_value": "Observed: Rural 46.38%, Urban 39.16%",
+      "details": "Matches official Statement 5 in Report 590 Factsheet."
     },
     {
       "check_id": "I05",
       "dimension": "Internal_Consistency",
       "target": "category_shares",
-      "description": "2023-24 Unimputed Food share matches official tables (Rural: 47.04%, Urban: 39.68%)",
+      "description": "2023-24 Unimputed Food share matches official Figures 4 & 5 (Rural: 47.04%, Urban: 39.68%)",
       "status": "PASS",
       "actual_value": "Observed: Rural 47.04%, Urban 39.68%",
-      "details": ""
+      "details": "Matches official Figures 4 and 5 in Report 592 Press Note."
     },
     {
       "check_id": "I06",
       "dimension": "Internal_Consistency",
-      "target": "category_shares",
-      "description": "2023-24 Imputed Food share matches official tables (Rural: 48.43%, Urban: 40.31%)",
+      "target": "fractile_distribution",
+      "description": "Fractile monotonicity holds (Top 5% MPCE > Bottom 5% MPCE across all rounds & sectors)",
       "status": "PASS",
-      "actual_value": "Observed: Rural 48.43%, Urban 40.31%",
-      "details": ""
+      "actual_value": "Top 5% strictly exceeds Bottom 5% in all sectors and rounds",
+      "details": "Consumption distributions must exhibit strictly monotonic ordering across fractile classes."
     },
     {
       "check_id": "I07",
       "dimension": "Internal_Consistency",
-      "target": "fractile_distribution",
-      "description": "Fractile monotonicity holds (Top 5% MPCE > Bottom 5% MPCE)",
-      "status": "PASS",
-      "actual_value": "Top 5%: Rs 10137.0, Bottom 5%: Rs 1677.0",
-      "details": ""
-    },
-    {
-      "check_id": "I08",
-      "dimension": "Internal_Consistency",
       "target": "state_mpce",
-      "description": "National Urban-Rural MPCE gap narrowed YoY (71.2% to 69.7%)",
+      "description": "National Urban-Rural MPCE gap narrowed YoY (71.2% in 2022-23 to 69.7% in 2023-24)",
       "status": "PASS",
       "actual_value": "2022-23: 71.2%, 2023-24: 69.7%",
-      "details": ""
+      "details": "Reflects verified spatial convergence documented in MoSPI Report 592."
     },
     {
       "check_id": "P01",
       "dimension": "Provenance",
       "target": "data/raw",
-      "description": "Raw cryptographic checksum manifest exists",
+      "description": "Raw cryptographic checksum manifest exists (data/raw/checksums.sha256)",
       "status": "PASS",
-      "actual_value": "Exists: True",
-      "details": ""
+      "actual_value": "Manifest exists: True",
+      "details": "Required for deterministic offline verification of raw releases."
     },
     {
       "check_id": "P02",
       "dimension": "Provenance",
       "target": "data/raw",
-      "description": "SHA-256 integrity match for all preserved raw source files",
+      "description": "Cryptographic SHA-256 integrity match for preserved raw source files",
       "status": "PASS",
-      "actual_value": "5/5 matched",
-      "details": ""
+      "actual_value": "6/6 source files verified",
+      "details": "Verifies pipeline input preservation; does not assert statistical accuracy of underlying surveys."
     },
     {
       "check_id": "P03",
       "dimension": "Provenance",
-      "target": "data/raw",
-      "description": "Official MoSPI HCES 2023-24 Press Note PDF preserved",
+      "target": "data/processed",
+      "description": "Explicit source lineage identifiers and table references present across datasets",
       "status": "PASS",
-      "actual_value": "Preserved: True",
-      "details": ""
+      "actual_value": "Source ID & Table Ref tracked: True",
+      "details": "Ensures traceability back to specific MoSPI publications and tables."
     },
     {
       "check_id": "P04",
       "dimension": "Provenance",
       "target": "data/raw",
-      "description": "Official MoSPI HCES 2022-23 Factsheet PDF preserved",
+      "description": "Official MoSPI HCES primary documents preserved in data/raw/",
       "status": "PASS",
-      "actual_value": "Preserved: True",
-      "details": ""
+      "actual_value": "Preserved: Report 590 (True), Report 592 (True), PIB 2247612 (True)",
+      "details": "Primary PDF and HTML documents required for offline audit reproducibility."
     },
     {
       "check_id": "P05",
       "dimension": "Provenance",
       "target": "data/raw",
-      "description": "Official MoSPI CPI August 2026 release preserved",
+      "description": "Official MoSPI CPI August 2026 release document preserved",
       "status": "PASS",
       "actual_value": "Preserved: True",
-      "details": ""
+      "details": "PIB PRID 2310058 providing Base 2024=100 monthly series."
     }
   ]
 }

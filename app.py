@@ -66,7 +66,7 @@ def main():
             "Expenditure Valuation Basis:",
             options=["Out-of-Pocket Only (Without Imputation)", "Including Social Welfare Imputation"],
             index=0,
-            help="HCES reports both out-of-pocket expenditure and an imputed series valuing in-kind government transfers (PMGKY grains, uniforms, devices) at market price."
+            help="HCES reports both out-of-pocket expenditure and an imputed series valuing in-kind government transfers (PMGKY foodgrains, uniforms, devices) at market price."
         )
         is_imputed = "Including Social Welfare" in valuation_option
         valuation_col = "mpce_imputed" if is_imputed else "mpce_unimputed"
@@ -75,8 +75,10 @@ def main():
         st.divider()
         st.markdown("**Data Quality Health:**")
         cqs_score = validation_report["composite_score"]
-        st.markdown(f"<span class='qc-badge-pass'>✓ CQS: {cqs_score:.1f}% ({validation_report['passed']}/{validation_report['total_evaluated']} Checks)</span>", unsafe_allow_html=True)
-        st.caption("Evaluated by deterministic Data Quality Engine across Completeness, Validity, Uniqueness, Consistency & Provenance.")
+        total_eval = validation_report["total_evaluated"]
+        passed_eval = validation_report["passed"]
+        st.markdown(f"<span class='qc-badge-pass'>✓ CQS: {cqs_score:.1f}% ({passed_eval}/{total_eval} Checks Passed)</span>", unsafe_allow_html=True)
+        st.caption("Evaluated by deterministic Data Quality Engine across Completeness, Validity, Uniqueness, Consistency & Lineage.")
 
         st.divider()
         st.markdown("**Navigation Sections:**")
@@ -92,7 +94,7 @@ def main():
         st.title("ConsumerLens India")
         st.markdown(
             "**Official Household Consumption Expenditure & Price Intelligence Engine** • "
-            "Primary Benchmark: NSS Report No. 592 (August 2023 – July 2024)"
+            "Primary Benchmark: NSS Report No. 592 & PIB Factsheets (August 2023 – July 2024)"
         )
     with col_hdr2:
         st.metric(
@@ -120,7 +122,6 @@ def main():
 
         ratio_23 = u_val_23 / r_val_23
         food_share_r = 48.43 if is_imputed else 47.04
-        food_share_u = 40.31 if is_imputed else 39.68
 
         kpi1, kpi2, kpi3, kpi4, kpi5 = st.columns(5)
         with kpi1:
@@ -130,9 +131,9 @@ def main():
         with kpi3:
             render_metric_card("Urban/Rural Ratio", f"{ratio_23:.2f}×", "Narrowed from 1.71× (2022-23)")
         with kpi4:
-            render_metric_card("Rural Food Share", f"{food_share_r:.2f}%", "Engel modernization shift")
+            render_metric_card("Rural Food Share", f"{food_share_r:.2f}%", "Budget allocation shift (Descriptive)")
         with kpi5:
-            render_metric_card("QC Health Score", f"{cqs_score:.1f}%", "29/29 Automated Checks Passed")
+            render_metric_card("QC Health Score", f"{cqs_score:.1f}%", f"{passed_eval}/{total_eval} Checks Passed")
 
         st.markdown("---")
 
@@ -144,41 +145,58 @@ def main():
 
         st.markdown("### 📌 Executive Research Findings (Syndicated Brief)")
         st.markdown("""
-        - **Persistent Rural Consumption Momentum:** Rural nominal out-of-pocket MPCE reached **₹4,122** (+9.2% YoY), while urban MPCE reached **₹6,996** (+8.3% YoY). The urban-to-rural spending gap narrowed to **1.70×** (down from 1.71× in 2022-23 and 1.84× in 2011-12).
-        - **Pro-Poor Bottom-Decile Acceleration:** The bottom 5% of India's population experienced the fastest consumption expansion, growing **+22.1% in rural areas** (₹1,677) and **+18.7% in urban areas** (₹2,376).
-        - **Structural Modernization (Engel's Law):** Non-food spending now accounts for **52.96% of rural** and **60.32% of urban** budgets. Within food, spending has shifted decisively from basic grains toward processed refreshments and dairy.
-        - **Impact of Social Transfers:** Imputing the value of free welfare transfers (PMGKY foodgrains, school uniforms, cycles) raises rural MPCE to **₹4,247** (+₹125/month) and urban MPCE to **₹7,078** (+₹82/month).
+        - **Rural Consumption Growth:** Rural nominal out-of-pocket MPCE reached **₹4,122** (+9.2% YoY), while urban MPCE reached **₹6,996** (+8.3% YoY). The urban-to-rural spending premium narrowed to **1.70×** (down from 1.71× in 2022-23 and 1.84× in 2011-12).
+        - **Bottom-Decile Expansion:** The bottom 5% fractile class recorded notable percentage increases, reaching **₹1,677 in rural areas** (+22.1% YoY) and **₹2,376 in urban areas** (+18.7% YoY).
+        - **Descriptive Shift in Budget Allocations:** Non-food spending accounts for **52.96% of rural** and **60.30% of urban** budgets. Within food, spending has shifted toward processed refreshments, milk, and vegetables relative to basic cereals.
+        - **Measured Effect of In-Kind Transfers:** Imputing the value of free welfare transfers (PMGKY foodgrains, school uniforms, cycles) raises rural MPCE to **₹4,247** (+₹125/month) and urban MPCE to **₹7,078** (+₹82/month).
         """)
 
     # ==================== SECTION 2: REGIONAL EXPLORER ====================
     elif selected_tab == "2. Regional Explorer":
         st.markdown("<div class='section-title'>2. Regional Explorer: State & UT Consumption Divergence</div>", unsafe_allow_html=True)
-        st.markdown("<div class='section-subtitle'>Analyze cross-state purchasing power, regional inequality, and rural-urban convergence ratios.</div>", unsafe_allow_html=True)
+        st.markdown("<div class='section-subtitle'>Analyze cross-state purchasing power, regional disparity, and rural-urban convergence ratios.</div>", unsafe_allow_html=True)
 
         # Filters
         fcol1, fcol2, fcol3 = st.columns([2, 1, 1])
         with fcol1:
             all_states = sorted(list(df_state[df_state["state_name"] != "All-India"]["state_name"].unique()))
-            selected_states = st.multiselect("Filter States / UTs:", options=all_states, default=all_states[:15], help="Select specific states or clear to choose custom geographic cohorts.")
+            selected_states = st.multiselect(
+                "Filter States / UTs:",
+                options=all_states,
+                default=all_states,
+                help="Select specific states or clear to choose custom geographic cohorts. Harmonized across bar chart, scatter plot, and data table."
+            )
         with fcol2:
             selected_round = st.selectbox("Survey Round:", options=["2023-24", "2022-23"], index=0)
         with fcol3:
             sector_view = st.selectbox("Sector Breakdown:", options=["Both", "Rural", "Urban"], index=0)
 
+        # Harmonized filtered subset applied consistently across all charts & table
         filtered_state_df = df_state[
             (df_state["survey_round"] == selected_round) & 
             (df_state["state_name"].isin(selected_states))
         ]
 
+        # Check for officially unpublished records in the selection
+        missing_records = filtered_state_df[filtered_state_df[valuation_col].isnull()]
+        if not missing_records.empty:
+            missing_names = sorted(missing_records["state_name"].unique().tolist())
+            st.info(
+                f"ℹ️ **Data Availability Notice:** In the **{selected_round}** survey ({valuation_label} basis), "
+                f"the following {len(missing_names)} state(s)/UT(s) have officially unavailable values in MoSPI Report 592/PRID 2247612: "
+                f"**{', '.join(missing_names)}**. These observations are retained as explicit missing entries rather than inferred."
+            )
+
         st.plotly_chart(create_state_bar_chart(filtered_state_df, selected_round, valuation_col, sector_view), use_container_width=True)
 
         st.markdown("---")
         st.subheader("Spatial Convergence: Rural vs. Urban Disparity")
-        st.plotly_chart(create_disparity_scatter_chart(df_state, selected_round, valuation_col), use_container_width=True)
+        st.plotly_chart(create_disparity_scatter_chart(filtered_state_df, selected_round, valuation_col), use_container_width=True)
 
-        with st.expander("🔍 View Raw State Data Table"):
+        with st.expander("🔍 View Raw State Data Table (Harmonized Selection)"):
             pivoted_view = filtered_state_df.pivot(index="state_name", columns="sector", values=valuation_col).reset_index()
-            pivoted_view["Urban_to_Rural_Ratio"] = (pivoted_view["Urban"] / pivoted_view["Rural"]).round(2)
+            if "Rural" in pivoted_view.columns and "Urban" in pivoted_view.columns:
+                pivoted_view["Urban_to_Rural_Ratio"] = (pivoted_view["Urban"] / pivoted_view["Rural"]).round(2)
             st.dataframe(pivoted_view, use_container_width=True)
 
     # ==================== SECTION 3: CONSUMPTION BASKET ====================
@@ -192,22 +210,29 @@ def main():
         with bcol2:
             st.info(f"Currently viewing **{valuation_option}** (Controlled via sidebar)")
 
+        if is_imputed:
+            st.warning(
+                "⚠️ **Methodological Boundary Notice:** MoSPI published item-level commodity shares with welfare imputation "
+                "for **2022–23** (Statement 15), but did **NOT** publish item-group category breakdown with welfare imputation for **2023–24** "
+                "in Report 592. To maintain empirical integrity, cross-year category comparisons are evaluated on the official **Unimputed** series."
+            )
+
         st.plotly_chart(create_category_comparison_chart(df_category, basket_sector, valuation_label), use_container_width=True)
 
-        st.markdown("### 📊 Budget Allocation Insights")
+        st.markdown("### 📊 Budget Allocation Insights (Official Unimputed Series)")
         col_b1, col_b2 = st.columns(2)
         with col_b1:
             st.markdown("""
-            **Top Food Expenditure Drivers (2023-24):**
+            **Top Food Expenditure Allocations (2023-24):**
             1. **Beverages & Processed Food:** 9.84% (Rural) | 11.09% (Urban) — Leading food spending category nationwide.
             2. **Milk & Milk Products:** 8.44% (Rural) | 7.19% (Urban).
             3. **Vegetables:** 6.03% (Rural) | 4.12% (Urban).
-            4. **Cereals:** 4.99% (Rural) | 3.76% (Urban) — Continues structural historical decline.
+            4. **Cereals:** 4.99% (Rural) | 3.76% (Urban) — Continues historical downward share trajectory.
             """)
         with col_b2:
             st.markdown("""
-            **Top Non-Food Expenditure Drivers (2023-24):**
-            1. **Conveyance / Transport:** 7.59% (Rural) | 8.46% (Urban) — Highest single non-food component.
+            **Top Non-Food Expenditure Allocations (2023-24):**
+            1. **Conveyance / Transport:** 7.59% (Rural) | 8.46% (Urban) — Largest single non-food category.
             2. **Rent & Accommodation:** Urban households allocate ~7% to housing.
             3. **Medical Care:** 6.83% (Rural) | 5.85% (Urban).
             4. **Clothing & Footwear:** 6.63% (Rural) | 5.66% (Urban).
@@ -216,38 +241,42 @@ def main():
     # ==================== SECTION 4: PRICE CONTEXT ====================
     elif selected_tab == "4. Price Context":
         st.markdown("<div class='section-title'>4. Macroeconomic Price Context (Official MoSPI CPI)</div>", unsafe_allow_html=True)
-        st.markdown("<div class='section-subtitle'>Official inflation trends presented as separate macroeconomic context.</div>", unsafe_allow_html=True)
+        st.markdown("<div class='section-subtitle'>Official retail inflation trends presented as separate macroeconomic context.</div>", unsafe_allow_html=True)
 
         render_disclaimer_banner(
             "Strict Methodological Decoupling",
             "MoSPI CPI price indices measure changes in a fixed market basket across time and must NOT be used as spatial deflators for cross-sectional state survey spending. Direct comparison between Base 2012=100 and Base 2024=100 is not methodologically valid."
         )
 
-        cpi_tabs = st.tabs(["Base 2024=100 (Transition Series)", "Base 2012=100 (Historical 2014-2025)"])
+        cpi_tabs = st.tabs(["Base 2024=100 (Monthly Series Jan 2025 – Aug 2026)", "Base 2012=100 (Discontinued Historical Snapshots)"])
 
         with cpi_tabs[0]:
-            st.markdown("#### Transition Series (Base 2024=100) — Latest August 2026 Release")
+            st.markdown("#### Transition Series (Base 2024=100) — Latest August 2026 Release (PRID 2310058)")
             st.caption("Derived directly from HCES 2023-24 consumption weights, expanding coverage to 358 items and incorporating online markets.")
 
-            cp1, cp2, cp3 = st.columns(3)
+            cp1, cp2, cp3, cp4 = st.columns(4)
             with cp1:
-                render_metric_card("General CPI (Aug 2026)", "108.74", "YoY Inflation: 4.82% (Combined)")
+                render_metric_card("General CPI (Aug 2026)", "108.74", "YoY Headline: 4.82% (Combined)")
             with cp2:
-                render_metric_card("Rural Inflation", "5.23%", "General CPI: 109.27")
+                render_metric_card("CFPI Food Inflation", "5.95%", "Food Index: 110.71 (Combined)")
             with cp3:
-                render_metric_card("Urban Inflation", "4.31%", "General CPI: 108.07")
+                render_metric_card("Rural General / Food", "5.23% / 6.13%", "General CPI: 109.27")
+            with cp4:
+                render_metric_card("Urban General / Food", "4.31% / 5.64%", "General CPI: 108.07")
 
             st.plotly_chart(create_cpi_trends_chart(df_cpi, "2024=100"), use_container_width=True)
 
             st.markdown("""
             **Key Features of the Revised 2024 Base Series:**
-            - **HCES 2023-24 Weighting Diagram:** Food weight decreased to reflect modern consumption habits.
-            - **Basket Expansion:** Expanded from 299 to 358 items, incorporating streaming services, personal electronics, and modern services.
+            - **HCES 2023-24 Weighting Diagram:** Basket weights updated to reflect recent household spending patterns.
+            - **Basket Expansion:** Expanded from 299 to 358 items, incorporating streaming services, personal electronics, and modern consumer services.
             - **Market Scope:** 1,465 rural markets, 1,395 urban markets, and 12 online ecommerce markets.
+            - **Food Inflation Tracking:** Consumer Food Price Index (CFPI) monitored alongside headline CPI.
             """)
 
         with cpi_tabs[1]:
-            st.markdown("#### Historical Series (Base 2012=100)")
+            st.markdown("#### Discontinued Historical Series (Base 2012=100)")
+            st.info("ℹ️ **Discontinuation Notice:** The Base 2012=100 series was officially discontinued by MoSPI in February 2026 upon the introduction of the Base 2024=100 series. Data points below represent reference-period benchmarks corresponding to HCES survey rounds.")
             st.plotly_chart(create_cpi_trends_chart(df_cpi, "2012=100"), use_container_width=True)
 
     # ==================== SECTION 5: DATA QUALITY & SOURCES ====================
@@ -257,14 +286,14 @@ def main():
 
         q1, q2 = st.columns([1, 2])
         with q1:
-            render_metric_card("Composite Quality Score", f"{cqs_score:.1f}%", "Mathematical Multi-Attribute Audit")
+            render_metric_card("Composite Quality Score", f"{cqs_score:.1f}%", f"{passed_eval}/{total_eval} Automated Checks Evaluated")
             st.markdown("""
             **Scoring Dimension Weights:**
-            - Completeness: **25%**
-            - Validity: **25%**
-            - Uniqueness: **15%**
-            - Internal Consistency: **20%**
-            - Provenance: **15%**
+            - Completeness: **25%** (6 checks)
+            - Validity: **25%** (6 checks)
+            - Uniqueness: **15%** (4 checks)
+            - Internal Consistency: **20%** (7 checks)
+            - Provenance: **15%** (5 checks)
             """)
         with q2:
             st.markdown("#### Dimension Breakdown")
@@ -278,16 +307,24 @@ def main():
                 })
             st.table(pd.DataFrame(breakdown_rows))
 
+        st.subheader("📊 Official Data Availability & Missingness Register")
+        avail_dict = validation_report.get("data_availability_summary", {})
+        avail_table = [{"Dataset / Dimension": k.replace("_", " ").title(), "Official Status & Coverage": v} for k, v in avail_dict.items()]
+        st.table(pd.DataFrame(avail_table))
+
         st.subheader("📋 Comprehensive 28-Rule Audit Log")
         checks_df = pd.DataFrame(validation_report["checks"])
         st.dataframe(checks_df, use_container_width=True)
 
         st.subheader("🔐 Cryptographic Lineage Manifest (SHA-256)")
+        st.caption("Cryptographic hashes verify pipeline file integrity against original downloads; they do not assert statistical accuracy or sampling precision of the underlying NSSO surveys.")
         raw_manifest = [
             {"Source File": "HCES_Press_Note_2023-24_27122024_rev.pdf", "SHA-256 Checksum": "9a67df191fac044f1c3b45fdfe3d40bbb43ff2865789fc3a1f7d35875be60bc7", "Producer": "MoSPI / NSSO", "Status": "VERIFIED"},
             {"Source File": "Factsheet_HCES_2022-23.pdf", "SHA-256 Checksum": "2993c572f87f8b58c9c4ddc075431b2d2f2593aef00914f136d11ac434e3e9fc", "Producer": "MoSPI / NSSO", "Status": "VERIFIED"},
             {"Source File": "CPI_Release_Aug2026.html", "SHA-256 Checksum": "bce912654ac399ebdec9a10115a15fb812ccee8f909c6c75912752b9c8013f28", "Producer": "MoSPI / PSD", "Status": "VERIFIED"},
-            {"Source File": "Factsheet_HCES_2023-24_PIB.pdf", "SHA-256 Checksum": "8af294a423d39b5184e73e0c8e6a24db4199aa3eec4cdb5525c81f12968fce37", "Producer": "PIB / MoSPI", "Status": "VERIFIED"}
+            {"Source File": "Factsheet_HCES_2023-24_PIB.pdf", "SHA-256 Checksum": "8af294a423d39b5184e73e0c8e6a24db4199aa3eec4cdb5525c81f12968fce37", "Producer": "PIB / MoSPI", "Status": "VERIFIED"},
+            {"Source File": "HCES_2023-24_PIB_2247612.html", "SHA-256 Checksum": "09f9b686230f677d8ee22d2686425cd1ceb113f3c77e73f7a95599b3752d828f", "Producer": "PIB / MoSPI", "Status": "VERIFIED"},
+            {"Source File": "HCES_2023-24_PIB_2088390.html", "SHA-256 Checksum": "bfe042dfb51beefc4bfe0a30d621037af5d8d90787f0fcb85f159ed63953716b", "Producer": "PIB / MoSPI", "Status": "VERIFIED"}
         ]
         st.table(pd.DataFrame(raw_manifest))
 
@@ -296,17 +333,17 @@ def main():
         st.markdown("<div class='section-title'>6. Research Methodology & Data Downloads</div>", unsafe_allow_html=True)
         st.markdown("<div class='section-subtitle'>Detailed survey design notes, conceptual boundary documentation, and exportable data artifacts.</div>", unsafe_allow_html=True)
 
-        m_tabs = st.tabs(["Survey Methodology", "HCES vs. PFCE Divergence", "Export Center"])
+        m_tabs = st.tabs(["Survey Methodology", "HCES vs. PFCE Divergence", "Export Center & Licensing"])
 
         with m_tabs[0]:
             st.markdown("""
             ### MoSPI HCES Survey Design (CAPI 3-Visit Architecture)
             - **Sample Size:** 2,61,953 households (1,54,357 rural and 1,07,596 urban) across 14,827 First Stage Units (FSUs).
-            - **Elimination of Seasonal Recall Bias:** In HCES 2022-23 and 2023-24, MoSPI deployed a 3-visit panel method canvassing three distinct schedules:
+            - **Panel Questionnaire Design:** In HCES 2022-23 and 2023-24, MoSPI deployed a 3-visit panel method canvassing three distinct schedules:
               1. **FDQ (Food Items):** Canvassed in month 1 of a quarter.
               2. **CSQ (Consumables & Services):** Canvassed in month 2.
               3. **DGQ (Durable Goods):** Canvassed in month 3.
-            - **Social Welfare Imputation:** For the first time in Indian statistical history, MoSPI captures in-kind transfers (foodgrains under PMGKY, school uniforms, cycles, computers) and values them at local market rates.
+            - **Social Welfare Imputation:** Captures in-kind transfers (foodgrains under PMGKY, school uniforms, cycles, computers) and values them at local market rates.
             """)
 
         with m_tabs[1]:
@@ -366,6 +403,14 @@ def main():
                     file_name="consumerlens_source_register.csv",
                     mime="text/csv"
                 )
+
+            st.divider()
+            st.markdown("### ⚖️ Licensing & Attribution Framework")
+            st.markdown("""
+            - **Software Code License:** MIT License — Open source, free for academic, personal, and commercial adaptation.
+            - **Underlying Official Data License:** Open Government Data License - India (OGDL-India) — Produced and published by the Ministry of Statistics and Programme Implementation (MoSPI), Government of India.
+            - **Citation:** National Sample Survey Office (NSSO), MoSPI, Government of India: *Household Consumption Expenditure Survey: 2023-24* (Report No. 592) and *2022-23* (Report No. 590); Price Statistics Division (PSD), MoSPI: *Consumer Price Index Releases (Base 2024=100 & Base 2012=100)*.
+            """)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,7 @@
+month_year,base_year,sector,cpi_general,cpi_food_cfpi,inflation_general_pct,inflation_food_pct,release_status,source_id,table_ref
+2023-08,2012=100,Combined,186.2,188.4,6.83,9.94,Final,MoSPI_CPI_Archive,Press Release Aug 2023
+2023-12,2012=100,Combined,185.7,189.0,5.69,9.53,Final,MoSPI_CPI_Archive,Press Release Dec 2023
+2024-04,2012=100,Combined,186.7,189.6,4.83,8.7,Final,MoSPI_CPI_Archive,Press Release Apr 2024
+2024-07,2012=100,Combined,191.9,198.5,3.54,5.42,Final,MoSPI_CPI_Archive,Press Release Jul 2024
+2024-12,2012=100,Combined,190.5,195.1,5.22,8.4,Final,MoSPI_CPI_Archive,Press Release Dec 2024
+2025-06,2012=100,Combined,194.1,199.8,4.1,5.15,Final,MoSPI_CPI_Archive,Press Release Jun 2025
