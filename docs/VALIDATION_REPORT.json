@@ -1,0 +1,301 @@
+{
+  "total_evaluated": 29,
+  "passed": 29,
+  "failed": 0,
+  "composite_score": 100.0,
+  "dimension_breakdown": {
+    "Completeness": {
+      "weight": 0.25,
+      "passed": 6,
+      "total": 6,
+      "score_pct": 100.0
+    },
+    "Validity": {
+      "weight": 0.25,
+      "passed": 6,
+      "total": 6,
+      "score_pct": 100.0
+    },
+    "Uniqueness": {
+      "weight": 0.15,
+      "passed": 4,
+      "total": 4,
+      "score_pct": 100.0
+    },
+    "Internal_Consistency": {
+      "weight": 0.2,
+      "passed": 8,
+      "total": 8,
+      "score_pct": 100.0
+    },
+    "Provenance": {
+      "weight": 0.15,
+      "passed": 5,
+      "total": 5,
+      "score_pct": 100.0
+    }
+  },
+  "checks": [
+    {
+      "check_id": "C01",
+      "dimension": "Completeness",
+      "target": "state_mpce",
+      "description": "Zero null values in mandatory keys (state_name, round, sector)",
+      "status": "PASS",
+      "actual_value": "0 nulls",
+      "details": ""
+    },
+    {
+      "check_id": "C02",
+      "dimension": "Completeness",
+      "target": "state_mpce",
+      "description": "Zero null values in MPCE expenditure amounts",
+      "status": "PASS",
+      "actual_value": "0 nulls",
+      "details": ""
+    },
+    {
+      "check_id": "C03",
+      "dimension": "Completeness",
+      "target": "state_mpce",
+      "description": "All-India benchmarks present for both 2022-23 and 2023-24",
+      "status": "PASS",
+      "actual_value": "Rounds: ['2022-23', '2023-24']",
+      "details": ""
+    },
+    {
+      "check_id": "C04",
+      "dimension": "Completeness",
+      "target": "category_shares",
+      "description": "Zero null values in commodity group shares dataset",
+      "status": "PASS",
+      "actual_value": "0 nulls",
+      "details": ""
+    },
+    {
+      "check_id": "C05",
+      "dimension": "Completeness",
+      "target": "fractile_distribution",
+      "description": "Coverage of both Rural and Urban sectors in fractiles",
+      "status": "PASS",
+      "actual_value": "Sectors: ['Rural', 'Urban']",
+      "details": ""
+    },
+    {
+      "check_id": "C06",
+      "dimension": "Completeness",
+      "target": "cpi_series",
+      "description": "Both 2012=100 and 2024=100 CPI series present",
+      "status": "PASS",
+      "actual_value": "Bases: ['2024=100', '2012=100']",
+      "details": ""
+    },
+    {
+      "check_id": "V01",
+      "dimension": "Validity",
+      "target": "state_mpce",
+      "description": "All state MPCE amounts strictly greater than zero",
+      "status": "PASS",
+      "actual_value": "Min MPCE: Rs 2466.00",
+      "details": ""
+    },
+    {
+      "check_id": "V02",
+      "dimension": "Validity",
+      "target": "category_shares",
+      "description": "All item category percentage shares within (0, 100)",
+      "status": "PASS",
+      "actual_value": "Range: [1.82%, 11.25%]",
+      "details": ""
+    },
+    {
+      "check_id": "V03",
+      "dimension": "Validity",
+      "target": "state_mpce",
+      "description": "Sector values conform strictly to domain {'Rural', 'Urban'}",
+      "status": "PASS",
+      "actual_value": "Observed: ['Rural', 'Urban']",
+      "details": ""
+    },
+    {
+      "check_id": "V04",
+      "dimension": "Validity",
+      "target": "fractile_distribution",
+      "description": "Valid standard fractile percentiles (0-5% to 95-100%)",
+      "status": "PASS",
+      "actual_value": "12 fractile classes",
+      "details": ""
+    },
+    {
+      "check_id": "V05",
+      "dimension": "Validity",
+      "target": "cpi_series",
+      "description": "Year-over-Year inflation rates within plausible boundary [-10%, 30%]",
+      "status": "PASS",
+      "actual_value": "Range: [3.54%, 6.83%]",
+      "details": ""
+    },
+    {
+      "check_id": "V06",
+      "dimension": "Validity",
+      "target": "macro_pfce",
+      "description": "PFCE share of GDP within realistic bounds [50%, 75%]",
+      "status": "PASS",
+      "actual_value": "Range: [56.2%, 60.2%]",
+      "details": ""
+    },
+    {
+      "check_id": "U01",
+      "dimension": "Uniqueness",
+      "target": "state_mpce",
+      "description": "Zero duplicate records on composite key (State, Round, Sector)",
+      "status": "PASS",
+      "actual_value": "0 duplicates",
+      "details": ""
+    },
+    {
+      "check_id": "U02",
+      "dimension": "Uniqueness",
+      "target": "category_shares",
+      "description": "Zero duplicate records on key (Category, Round, Sector, Valuation)",
+      "status": "PASS",
+      "actual_value": "0 duplicates",
+      "details": ""
+    },
+    {
+      "check_id": "U03",
+      "dimension": "Uniqueness",
+      "target": "fractile_distribution",
+      "description": "Zero duplicate records on key (Fractile, Round, Sector)",
+      "status": "PASS",
+      "actual_value": "0 duplicates",
+      "details": ""
+    },
+    {
+      "check_id": "U04",
+      "dimension": "Uniqueness",
+      "target": "cpi_series",
+      "description": "Zero duplicate records on key (Month, Base, Sector)",
+      "status": "PASS",
+      "actual_value": "0 duplicates",
+      "details": ""
+    },
+    {
+      "check_id": "I01",
+      "dimension": "Internal_Consistency",
+      "target": "state_mpce",
+      "description": "Imputed MPCE >= Unimputed MPCE across 100% of observations",
+      "status": "PASS",
+      "actual_value": "0 violations",
+      "details": ""
+    },
+    {
+      "check_id": "I02",
+      "dimension": "Internal_Consistency",
+      "target": "state_mpce",
+      "description": "National Urban MPCE > Rural MPCE in both survey rounds",
+      "status": "PASS",
+      "actual_value": "2022-23: Urban > Rural; 2023-24: Urban > Rural",
+      "details": ""
+    },
+    {
+      "check_id": "I03",
+      "dimension": "Internal_Consistency",
+      "target": "category_shares",
+      "description": "Commodity group shares aggregate to 100.0% +/- 0.5%",
+      "status": "PASS",
+      "actual_value": "Min sum: 99.95%, Max sum: 100.00%",
+      "details": ""
+    },
+    {
+      "check_id": "I04",
+      "dimension": "Internal_Consistency",
+      "target": "category_shares",
+      "description": "2022-23 Food share matches official tables (Rural: 46.38%, Urban: 39.17%)",
+      "status": "PASS",
+      "actual_value": "Observed: Rural 46.38%, Urban 39.17%",
+      "details": ""
+    },
+    {
+      "check_id": "I05",
+      "dimension": "Internal_Consistency",
+      "target": "category_shares",
+      "description": "2023-24 Unimputed Food share matches official tables (Rural: 47.04%, Urban: 39.68%)",
+      "status": "PASS",
+      "actual_value": "Observed: Rural 47.04%, Urban 39.68%",
+      "details": ""
+    },
+    {
+      "check_id": "I06",
+      "dimension": "Internal_Consistency",
+      "target": "category_shares",
+      "description": "2023-24 Imputed Food share matches official tables (Rural: 48.43%, Urban: 40.31%)",
+      "status": "PASS",
+      "actual_value": "Observed: Rural 48.43%, Urban 40.31%",
+      "details": ""
+    },
+    {
+      "check_id": "I07",
+      "dimension": "Internal_Consistency",
+      "target": "fractile_distribution",
+      "description": "Fractile monotonicity holds (Top 5% MPCE > Bottom 5% MPCE)",
+      "status": "PASS",
+      "actual_value": "Top 5%: Rs 10137.0, Bottom 5%: Rs 1677.0",
+      "details": ""
+    },
+    {
+      "check_id": "I08",
+      "dimension": "Internal_Consistency",
+      "target": "state_mpce",
+      "description": "National Urban-Rural MPCE gap narrowed YoY (71.2% to 69.7%)",
+      "status": "PASS",
+      "actual_value": "2022-23: 71.2%, 2023-24: 69.7%",
+      "details": ""
+    },
+    {
+      "check_id": "P01",
+      "dimension": "Provenance",
+      "target": "data/raw",
+      "description": "Raw cryptographic checksum manifest exists",
+      "status": "PASS",
+      "actual_value": "Exists: True",
+      "details": ""
+    },
+    {
+      "check_id": "P02",
+      "dimension": "Provenance",
+      "target": "data/raw",
+      "description": "SHA-256 integrity match for all preserved raw source files",
+      "status": "PASS",
+      "actual_value": "5/5 matched",
+      "details": ""
+    },
+    {
+      "check_id": "P03",
+      "dimension": "Provenance",
+      "target": "data/raw",
+      "description": "Official MoSPI HCES 2023-24 Press Note PDF preserved",
+      "status": "PASS",
+      "actual_value": "Preserved: True",
+      "details": ""
+    },
+    {
+      "check_id": "P04",
+      "dimension": "Provenance",
+      "target": "data/raw",
+      "description": "Official MoSPI HCES 2022-23 Factsheet PDF preserved",
+      "status": "PASS",
+      "actual_value": "Preserved: True",
+      "details": ""
+    },
+    {
+      "check_id": "P05",
+      "dimension": "Provenance",
+      "target": "data/raw",
+      "description": "Official MoSPI CPI August 2026 release preserved",
+      "status": "PASS",
+      "actual_value": "Preserved: True",
+      "details": ""
+    }
+  ]
+}

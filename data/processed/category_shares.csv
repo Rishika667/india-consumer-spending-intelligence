@@ -1,0 +1,103 @@
+category,broad_group,survey_round,sector,valuation,share_pct
+Beverages & Processed Food,Food,2022-23,Rural,Unimputed,9.62
+Beverages & Processed Food,Food,2022-23,Urban,Unimputed,10.64
+Beverages & Processed Food,Food,2023-24,Rural,Unimputed,9.84
+Beverages & Processed Food,Food,2023-24,Urban,Unimputed,11.09
+Beverages & Processed Food,Food,2023-24,Rural,Imputed,10.12
+Beverages & Processed Food,Food,2023-24,Urban,Imputed,11.25
+Milk & Milk Products,Food,2022-23,Rural,Unimputed,8.33
+Milk & Milk Products,Food,2022-23,Urban,Unimputed,7.22
+Milk & Milk Products,Food,2023-24,Rural,Unimputed,8.44
+Milk & Milk Products,Food,2023-24,Urban,Unimputed,7.19
+Milk & Milk Products,Food,2023-24,Rural,Imputed,8.68
+Milk & Milk Products,Food,2023-24,Urban,Imputed,7.3
+Vegetables,Food,2022-23,Rural,Unimputed,5.38
+Vegetables,Food,2022-23,Urban,Unimputed,3.8
+Vegetables,Food,2023-24,Rural,Unimputed,6.03
+Vegetables,Food,2023-24,Urban,Unimputed,4.12
+Vegetables,Food,2023-24,Rural,Imputed,6.22
+Vegetables,Food,2023-24,Urban,Imputed,4.2
+"Egg, Fish & Meat",Food,2022-23,Rural,Unimputed,4.91
+"Egg, Fish & Meat",Food,2022-23,Urban,Unimputed,3.57
+"Egg, Fish & Meat",Food,2023-24,Rural,Unimputed,4.92
+"Egg, Fish & Meat",Food,2023-24,Urban,Unimputed,3.56
+"Egg, Fish & Meat",Food,2023-24,Rural,Imputed,5.06
+"Egg, Fish & Meat",Food,2023-24,Urban,Imputed,3.62
+Cereals & Substitutes,Food,2022-23,Rural,Unimputed,4.91
+Cereals & Substitutes,Food,2022-23,Urban,Unimputed,3.62
+Cereals & Substitutes,Food,2023-24,Rural,Unimputed,4.99
+Cereals & Substitutes,Food,2023-24,Urban,Unimputed,3.76
+Cereals & Substitutes,Food,2023-24,Rural,Imputed,5.25
+Cereals & Substitutes,Food,2023-24,Urban,Imputed,3.9
+Fruits,Food,2022-23,Rural,Unimputed,3.71
+Fruits,Food,2022-23,Urban,Unimputed,3.81
+Fruits,Food,2023-24,Rural,Unimputed,3.85
+Fruits,Food,2023-24,Urban,Unimputed,3.87
+Fruits,Food,2023-24,Rural,Imputed,3.96
+Fruits,Food,2023-24,Urban,Imputed,3.93
+Edible Oil,Food,2022-23,Rural,Unimputed,3.59
+Edible Oil,Food,2022-23,Urban,Unimputed,2.37
+Edible Oil,Food,2023-24,Rural,Unimputed,2.77
+Edible Oil,Food,2023-24,Urban,Unimputed,1.82
+Edible Oil,Food,2023-24,Rural,Imputed,2.85
+Edible Oil,Food,2023-24,Urban,Imputed,1.85
+"Other Food Items (Pulses, Spices, Sugar)",Food,2022-23,Rural,Unimputed,5.93
+"Other Food Items (Pulses, Spices, Sugar)",Food,2022-23,Urban,Unimputed,4.14
+"Other Food Items (Pulses, Spices, Sugar)",Food,2023-24,Rural,Unimputed,6.2
+"Other Food Items (Pulses, Spices, Sugar)",Food,2023-24,Urban,Unimputed,4.27
+"Other Food Items (Pulses, Spices, Sugar)",Food,2023-24,Rural,Imputed,6.29
+"Other Food Items (Pulses, Spices, Sugar)",Food,2023-24,Urban,Imputed,4.26
+Conveyance / Transport,Non-Food,2022-23,Rural,Unimputed,7.55
+Conveyance / Transport,Non-Food,2022-23,Urban,Unimputed,8.59
+Conveyance / Transport,Non-Food,2023-24,Rural,Unimputed,7.59
+Conveyance / Transport,Non-Food,2023-24,Urban,Unimputed,8.46
+Conveyance / Transport,Non-Food,2023-24,Rural,Imputed,7.38
+Conveyance / Transport,Non-Food,2023-24,Urban,Imputed,8.37
+"Clothing, Bedding & Footwear",Non-Food,2022-23,Rural,Unimputed,6.1
+"Clothing, Bedding & Footwear",Non-Food,2022-23,Urban,Unimputed,5.41
+"Clothing, Bedding & Footwear",Non-Food,2023-24,Rural,Unimputed,6.63
+"Clothing, Bedding & Footwear",Non-Food,2023-24,Urban,Unimputed,5.66
+"Clothing, Bedding & Footwear",Non-Food,2023-24,Rural,Imputed,6.45
+"Clothing, Bedding & Footwear",Non-Food,2023-24,Urban,Imputed,5.6
+Durable Goods,Non-Food,2022-23,Rural,Unimputed,6.89
+Durable Goods,Non-Food,2022-23,Urban,Unimputed,7.17
+Durable Goods,Non-Food,2023-24,Rural,Unimputed,6.48
+Durable Goods,Non-Food,2023-24,Urban,Unimputed,6.87
+Durable Goods,Non-Food,2023-24,Rural,Imputed,6.3
+Durable Goods,Non-Food,2023-24,Urban,Imputed,6.79
+Medical Care,Non-Food,2022-23,Rural,Unimputed,7.13
+Medical Care,Non-Food,2022-23,Urban,Unimputed,5.91
+Medical Care,Non-Food,2023-24,Rural,Unimputed,6.83
+Medical Care,Non-Food,2023-24,Urban,Unimputed,5.85
+Medical Care,Non-Food,2023-24,Rural,Imputed,6.64
+Medical Care,Non-Food,2023-24,Urban,Imputed,5.79
+Fuel and Light,Non-Food,2022-23,Rural,Unimputed,6.66
+Fuel and Light,Non-Food,2022-23,Urban,Unimputed,6.26
+Fuel and Light,Non-Food,2023-24,Rural,Unimputed,6.11
+Fuel and Light,Non-Food,2023-24,Urban,Unimputed,5.59
+Fuel and Light,Non-Food,2023-24,Rural,Imputed,5.94
+Fuel and Light,Non-Food,2023-24,Urban,Imputed,5.53
+Misc. Goods & Entertainment,Non-Food,2022-23,Rural,Unimputed,6.21
+Misc. Goods & Entertainment,Non-Food,2022-23,Urban,Unimputed,6.56
+Misc. Goods & Entertainment,Non-Food,2023-24,Rural,Unimputed,6.22
+Misc. Goods & Entertainment,Non-Food,2023-24,Urban,Unimputed,6.92
+Misc. Goods & Entertainment,Non-Food,2023-24,Rural,Imputed,6.05
+Misc. Goods & Entertainment,Non-Food,2023-24,Urban,Imputed,6.84
+Education,Non-Food,2022-23,Rural,Unimputed,3.3
+Education,Non-Food,2022-23,Urban,Unimputed,5.78
+Education,Non-Food,2023-24,Rural,Unimputed,3.24
+Education,Non-Food,2023-24,Urban,Unimputed,5.97
+Education,Non-Food,2023-24,Rural,Imputed,3.15
+Education,Non-Food,2023-24,Urban,Imputed,5.9
+Consumer Services excl Conveyance,Non-Food,2022-23,Rural,Unimputed,5.08
+Consumer Services excl Conveyance,Non-Food,2022-23,Urban,Unimputed,5.92
+Consumer Services excl Conveyance,Non-Food,2023-24,Rural,Unimputed,5.25
+Consumer Services excl Conveyance,Non-Food,2023-24,Urban,Unimputed,5.72
+Consumer Services excl Conveyance,Non-Food,2023-24,Rural,Imputed,5.11
+Consumer Services excl Conveyance,Non-Food,2023-24,Urban,Imputed,5.66
+Rent & Taxes / Other Non-Food,Non-Food,2022-23,Rural,Unimputed,4.7
+Rent & Taxes / Other Non-Food,Non-Food,2022-23,Urban,Unimputed,9.23
+Rent & Taxes / Other Non-Food,Non-Food,2023-24,Rural,Unimputed,4.61
+Rent & Taxes / Other Non-Food,Non-Food,2023-24,Urban,Unimputed,9.26
+Rent & Taxes / Other Non-Food,Non-Food,2023-24,Rural,Imputed,4.5
+Rent & Taxes / Other Non-Food,Non-Food,2023-24,Urban,Imputed,9.21
