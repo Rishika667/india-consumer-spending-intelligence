@@ -104,7 +104,7 @@ def inject_custom_css():
         border-left: 4px solid #1e3a8a;
         border-radius: 6px;
         padding: 1.2rem 1.35rem;
-        margin-bottom: 1.1rem;
+        margin-bottom: 1.15rem;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
     }
     .insight-header {
@@ -134,6 +134,9 @@ def inject_custom_css():
         font-size: 0.91rem;
         color: #334155;
         line-height: 1.6;
+    }
+    .insight-body p {
+        margin-bottom: 0.65rem;
     }
     .insight-dim-label {
         font-weight: 600;
@@ -168,18 +171,16 @@ def render_disclaimer_banner(title: str, text: str):
 def render_insight_card(
     title: str,
     tag: str,
-    what_changed: str,
-    where_visible: str,
-    why_matters: str,
-    limitation: str,
+    finding_text: str,
+    implication_text: str,
+    limitation_text: str,
     border_color: str = "#1e3a8a"
 ):
     """
-    Renders a structured 4-dimension syndicated research insight card answering:
-    1. What changed/differs?
-    2. Where is it most visible?
-    3. Why does it matter commercially?
-    4. What is the empirical limitation?
+    Renders an editorial syndicated research brief card with natural narrative paragraphs:
+    1. Finding & measured movement
+    2. Analytical & commercial implication
+    3. Methodological boundary & caveat
     """
     st.markdown(f"""
     <div class="insight-card" style="border-left-color: {border_color};">
@@ -188,10 +189,9 @@ def render_insight_card(
             <span class="insight-tag">{tag}</span>
         </div>
         <div class="insight-body">
-            <p><strong><span class="insight-dim-label">1. Measured Comparison:</span></strong> {what_changed}</p>
-            <p><strong><span class="insight-dim-label">2. Geographic & Cohort Concentration:</span></strong> {where_visible}</p>
-            <p><strong><span class="insight-dim-label">3. Commercial & Strategic Implication:</span></strong> {why_matters}</p>
-            <p style="margin-bottom: 0;"><strong><span class="insight-lim-label">4. Boundary & Limitation:</span></strong> {limitation}</p>
+            <p>{finding_text}</p>
+            <p><strong><span class="insight-dim-label">Analytical & Market Implications:</span></strong> {implication_text}</p>
+            <p style="margin-bottom: 0;"><strong><span class="insight-lim-label">Methodological Boundary:</span></strong> {limitation_text}</p>
         </div>
     </div>
     """, unsafe_allow_html=True)

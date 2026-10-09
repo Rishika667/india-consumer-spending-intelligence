@@ -57,7 +57,7 @@ Crucially, modern official economic releases require deep methodological precisi
 5. **Deterministic Pipeline Validation & Quality Engine:**
    - Exactly 28 automated checks spanning Completeness (25%), Validity (25%), Uniqueness (15%), Internal Consistency (20%), and Provenance (15%).
    - Produces a defensible **Pipeline Validation Score** (100.0%, 28/28 passed) asserting data pipeline hygiene without claiming survey sampling precision.
-   - Supported by an independent **Source Reconciliation Engine** (`scripts/reconcile_sources.py`) matching 23 primary benchmarks against preserved raw source texts with 100.0% verification.
+   - Supported by an independent **Source Reconciliation Engine** (`scripts/reconcile_sources.py`) matching 42 primary benchmarks against preserved raw source texts with 100.0% verification.
 
 ### 3.2 What is OUT of Scope (Anti-Goals)
 - **NO Stock Market or Commodity Price Prediction:** This is an economic intelligence application, not an algorithmic trading tool.
@@ -90,7 +90,7 @@ flowchart TD
 
     subgraph Pipeline ["ETL, Reconciliation & Quality Engine (src/ & scripts/)"]
         Ingest["src/pipeline.py (Ingestion & Normalization)"]
-        Reconcile["scripts/reconcile_sources.py (23 Primary Source Checks)"]
+        Reconcile["scripts/reconcile_sources.py (42 Primary Source Checks)"]
         QC["src/quality_engine.py (28 Deterministic Rule Checks)"]
         Audit["docs/VALIDATION_REPORT.json & docs/SOURCE_RECONCILIATION.json"]
     end

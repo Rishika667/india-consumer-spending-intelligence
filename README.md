@@ -25,12 +25,12 @@ The application analyzes the official **Household Consumption Expenditure Survey
 
 ## 🔍 Key Empirical Insights
 
-- **Sustained Rural Consumption Momentum:** Average nominal Monthly Per Capita Consumption Expenditure (MPCE) reached **₹4,122** in rural India (+9.2% YoY) and **₹6,996** in urban India (+8.3% YoY).
-- **Disparity Compression:** The urban-to-rural consumption premium narrowed to **1.70×** (69.7%), down from 1.71× in 2022–23 and 1.84× in 2011–12.
+- **Nominal Rural and Urban MPCE Growth:** Average nominal Monthly Per Capita Consumption Expenditure (MPCE) reached **₹4,122** in rural India (+9.2% YoY) and **₹6,996** in urban India (+8.3% YoY). Deflated to constant 2011–12 prices, real MPCE stands at **₹2,079 rural** and **₹3,632 urban**.
+- **Ratio Compression vs. Expanding Rupee Gap:** The national urban-to-rural consumption premium narrowed to **1.70×** (69.7% premium), down from 1.71× in 2022–23 and 1.84× in 2011–12 (and 1.67× under welfare imputation). However, the absolute monthly per-capita spending gap widened to **₹2,874/month** (up from ₹2,686 in 2022–23).
 - **State Coverage Rigor:** 34 States/UTs published for out-of-pocket (unimputed) MPCE in 2023-24 (with Delhi and Chandigarh retained as explicit unpublished cells), and 36 States/UTs published with social welfare imputation.
-- **Bottom-Fractile Growth:** The bottom 5% fractile class recorded notable percentage increases nationwide: **+22.1% in rural areas** (₹1,677) and **+18.7% in urban areas** (₹2,376).
-- **Descriptive Shift in Spending Allocations:** Non-food spending accounts for **52.96% rural and 60.30% urban** budgets. Within food, spending has shifted toward processed refreshments, milk, and vegetables relative to basic cereals (**4.99% rural, 3.76% urban**).
-- **Social Transfer Imputation Impact:** Imputing the value of free welfare goods (PMGKY foodgrains, school uniforms, cycles, computers) raises rural MPCE to **₹4,247** (+₹125/month) and urban MPCE to **₹7,078** (+₹82/month).
+- **Bottom-Fractile Growth & Quintile Concentration:** The bottom 5% fractile class recorded notable percentage increases nationwide: **+22.1% in rural areas** (₹1,677) and **+18.7% in urban areas** (₹2,376). Within 2023–24, the top-to-bottom MPCE ratio was **6.04× rural** (top 5%: ₹10,137) and **8.55× urban** (top 5%: ₹20,310).
+- **Budget Allocation Observations:** Non-food spending accounts for **52.96% rural and 60.30% urban** unimputed budgets. The rural food share was already below 50% in 2022–23 (46.38% unimputed, 47.47% imputed), rising slightly to 47.04% unimputed and 48.43% imputed in 2023–24. Within food, beverages and processed goods represent the largest share (**9.84% rural, 11.09% urban**), while cereal shares edged up to **4.99% rural and 3.76% urban** between rounds.
+- **Social Transfer Imputation Impact:** Imputing the value of free welfare goods (PMGKY foodgrains, school uniforms, cycles, computers) at local market prices raises rural MPCE to **₹4,247** (+₹125/month) and urban MPCE to **₹7,078** (+₹82/month). Fractile-level and item-level imputed series were not published for 2023–24.
 - **Food Share Distinctions:**
   - *HCES 2022–23 (unimputed):* Rural 46.38%, Urban 39.16% (Statement 5 category sum; published aggregate is 39.17%)
   - *HCES 2022–23 (with welfare imputation):* Rural 47.47%, Urban 39.70% (Statement 15)

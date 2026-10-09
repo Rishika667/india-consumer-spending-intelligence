@@ -88,9 +88,26 @@ def main():
 
         st.divider()
         st.markdown("**Navigation Sections:**")
+        tab_options = [
+            "1. Overview",
+            "2. Regional Explorer",
+            "3. Consumption Basket",
+            "4. Price Context",
+            "5. Data Quality & Sources",
+            "6. Methodology & Downloads"
+        ]
+        default_tab_idx = 0
+        qp_tab = st.query_params.get("tab", None)
+        if qp_tab:
+            for idx, opt in enumerate(tab_options):
+                if opt.startswith(str(qp_tab)) or str(qp_tab).lower() in opt.lower():
+                    default_tab_idx = idx
+                    break
+
         selected_tab = st.radio(
             "Go to section:",
-            ["1. Overview", "2. Regional Explorer", "3. Consumption Basket", "4. Price Context", "5. Data Quality & Sources", "6. Methodology & Downloads"],
+            tab_options,
+            index=default_tab_idx,
             label_visibility="collapsed"
         )
 
@@ -129,8 +146,37 @@ def main():
         ratio_23 = u_val_23 / r_val_23
         ratio_22 = u_val_22 / r_val_22
         abs_gap_23 = u_val_23 - r_val_23
-        food_share_r = 48.43 if is_imputed else 47.04
+        abs_gap_22 = u_val_22 - r_val_22
 
+        # Verified food shares by survey round and valuation basis
+        food_share_r_23 = 48.43 if is_imputed else 47.04
+        food_share_r_22 = 47.47 if is_imputed else 46.38
+        food_share_u_23 = 40.31 if is_imputed else 39.68
+        food_share_u_22 = 39.70 if is_imputed else 39.16
+
+        # Real MPCE values (2011-12 base) from national trajectory
+        sub_traj = df_traj[df_traj["valuation"] == ("Imputed" if is_imputed else "Unimputed")]
+        r_real_23 = sub_traj[(sub_traj["survey_round"] == "2023-24") & (sub_traj["sector"] == "Rural")]["mpce_constant_2011_12_inr"].values[0] if not sub_traj.empty else 2079.0
+        u_real_23 = sub_traj[(sub_traj["survey_round"] == "2023-24") & (sub_traj["sector"] == "Urban")]["mpce_constant_2011_12_inr"].values[0] if not sub_traj.empty else 3632.0
+
+        # Dynamic fractile metrics strictly from same survey round
+        f23_r_bot = df_fractile[(df_fractile["survey_round"] == "2023-24") & (df_fractile["sector"] == "Rural") & (df_fractile["fractile_class"] == "0-5%")]["avg_mpce"].values[0]
+        f23_r_top = df_fractile[(df_fractile["survey_round"] == "2023-24") & (df_fractile["sector"] == "Rural") & (df_fractile["fractile_class"] == "95-100%")]["avg_mpce"].values[0]
+        f23_u_bot = df_fractile[(df_fractile["survey_round"] == "2023-24") & (df_fractile["sector"] == "Urban") & (df_fractile["fractile_class"] == "0-5%")]["avg_mpce"].values[0]
+        f23_u_top = df_fractile[(df_fractile["survey_round"] == "2023-24") & (df_fractile["sector"] == "Urban") & (df_fractile["fractile_class"] == "95-100%")]["avg_mpce"].values[0]
+
+        ratio_frac_r_23 = f23_r_top / f23_r_bot
+        ratio_frac_u_23 = f23_u_top / f23_u_bot
+
+        f22_r_bot = df_fractile[(df_fractile["survey_round"] == "2022-23") & (df_fractile["sector"] == "Rural") & (df_fractile["fractile_class"] == "0-5%")]["avg_mpce"].values[0]
+        f22_r_top = df_fractile[(df_fractile["survey_round"] == "2022-23") & (df_fractile["sector"] == "Rural") & (df_fractile["fractile_class"] == "95-100%")]["avg_mpce"].values[0]
+        f22_u_bot = df_fractile[(df_fractile["survey_round"] == "2022-23") & (df_fractile["sector"] == "Urban") & (df_fractile["fractile_class"] == "0-5%")]["avg_mpce"].values[0]
+        f22_u_top = df_fractile[(df_fractile["survey_round"] == "2022-23") & (df_fractile["sector"] == "Urban") & (df_fractile["fractile_class"] == "95-100%")]["avg_mpce"].values[0]
+
+        ratio_frac_r_22 = f22_r_top / f22_r_bot
+        ratio_frac_u_22 = f22_u_top / f22_u_bot
+
+        # Render top KPI cards
         kpi1, kpi2, kpi3, kpi4, kpi5 = st.columns(5)
         with kpi1:
             render_metric_card("Rural MPCE", f"₹{r_val_23:,.0f}", f"+{r_growth:.1f}% vs 2022-23")
@@ -139,7 +185,7 @@ def main():
         with kpi3:
             render_metric_card("Urban/Rural Ratio", f"{ratio_23:.2f}×", f"Narrowed from {ratio_22:.2f}× (2022-23)")
         with kpi4:
-            render_metric_card("Rural Food Share", f"{food_share_r:.2f}%", "With Imputed Transfers" if is_imputed else "Out-of-Pocket Share")
+            render_metric_card("Rural Food Share", f"{food_share_r_23:.2f}%", f"{food_share_r_22:.2f}% in 2022-23")
         with kpi5:
             render_metric_card("Pipeline Validation", f"{val_score:.1f}%", f"{passed_eval}/{total_eval} Checks Passed")
 
@@ -156,99 +202,92 @@ def main():
 
         # Briefing Card 1: Urban-Rural Divergence & Wallet Gap
         render_insight_card(
-            title="Urban–Rural Divergence: Ratio Compression vs. Expanding Rupee Gap",
-            tag="Macro Spending Dynamics",
-            what_changed=(
-                f"Rural nominal MPCE ({valuation_label.lower()}) grew +{r_growth:.1f}% YoY to ₹{r_val_23:,.0f}/month, outpacing "
-                f"urban nominal growth of +{u_growth:.1f}% YoY (to ₹{u_val_23:,.0f}/month). The national urban-to-rural spending multiple "
-                f"narrowed to {ratio_23:.2f}× (down from {ratio_22:.2f}× in 2022–23 and 1.84× in 2011–12)."
+            title="Urban–Rural Spending Dynamics: Ratio Compression vs. Expanding Absolute Rupee Gap",
+            tag="National Macro Benchmark",
+            finding_text=(
+                f"In 2023–24, national nominal MPCE reached ₹{r_val_23:,.0f}/month in rural areas (+{r_growth:.1f}% YoY) and "
+                f"₹{u_val_23:,.0f}/month in urban areas (+{u_growth:.1f}% YoY) under the {valuation_label.lower()} series. "
+                f"The national urban-to-rural consumption multiple contracted marginally to {ratio_23:.2f}× (down from {ratio_22:.2f}× in 2022–23 "
+                f"and 1.84× in 2011–12). Deflated to constant 2011–12 prices, real rural MPCE stands at ₹{r_real_23:,.0f} and urban at "
+                f"₹{u_real_23:,.0f}, representing cumulative 12-year real consumption growth of approximately +45% rural and +38% urban."
             ),
-            where_visible=(
-                "The multiple compression is visible across rural middle fractiles (40th–80th percentiles), while "
-                "the highest urban premiums remain concentrated in metropolitan states (Telangana 1.79×, Maharashtra 1.72×, West Bengal 1.75×)."
+            implication_text=(
+                f"While rural percentage growth slightly outpaced urban growth, the absolute nominal spending gap widened: "
+                f"urban households spent ₹{abs_gap_23:,.0f} more per capita each month than rural households in 2023–24, up from a "
+                f"₹{abs_gap_22:,.0f} monthly gap in 2022–23 and ₹1,200 in 2011–12. Market sizing analyses must distinguish "
+                f"faster percentage expansion off a low rural baseline from actual monthly wallet addition."
             ),
-            why_matters=(
-                f"Market commentators frequently interpret multiple contraction as rural purchasing power catching up to urban levels. "
-                f"However, in absolute currency terms, the per capita spending gap widened to ₹{abs_gap_23:,.0f}/month in 2023–24 (compared to "
-                f"₹{u_val_22 - r_val_22:,.0f} in 2022–23 and ₹1,200 in 2011–12). Syndicated researchers must distinguish between faster percentage "
-                f"growth off a lower baseline and actual addressable wallet expansion."
-            ),
-            limitation=(
-                "HCES measures household consumption expenditure and in-kind absorption. It does not measure household savings, "
-                "borrowing, or disposable income. A narrowing consumption multiple does not establish income convergence."
+            limitation_text=(
+                "These figures describe national survey benchmarks, distinct from state-level distributions. "
+                "MPCE measures reported household expenditure outlays and in-kind absorption; it does not measure disposable cash income, "
+                "household savings, debt servicing, or net wealth, and does not establish income convergence."
             ),
             border_color="#1e3a8a"
         )
 
         # Briefing Card 2: Welfare Imputation Analysis
         render_insight_card(
-            title="Social Welfare Imputation: Consumption Absorption vs. Cash Liquidity",
-            tag="Policy & Entitlements",
-            what_changed=(
-                "Valuing social welfare entitlements (free foodgrains under PMGKY, school uniforms, textbooks, bicycles, and computers) "
-                "at local market prices adds ₹125/month (+3.03%) to rural per capita consumption and ₹82/month (+1.17%) to urban MPCE."
+            title="Social Welfare Imputation: In-Kind Valuation vs. Liquid Purchasing Power",
+            tag="Public Entitlements Context",
+            finding_text=(
+                "Valuing public in-kind social welfare transfers (free PMGKY foodgrains, school uniforms, textbooks, bicycles, and computers) "
+                "at local market prices adds ₹125/month (+3.03%) to national rural per capita consumption and ₹82/month (+1.17%) to urban MPCE. "
+                "This raises 2023–24 national MPCE from ₹4,122 to ₹4,247 rural, and from ₹6,996 to ₹7,078 urban."
             ),
-            where_visible=(
-                "The welfare uplift is concentrated in bottom-fractile rural households (0–20%), where subsidized foodgrains constitute "
-                "a substantial share of total sustenance, raising bottom 5% rural consumption from ₹1,677 to ₹1,811."
+            implication_text=(
+                "This administrative imputation illustrates that in-kind public provisioning constitutes a larger relative share of total consumption "
+                "in rural areas than in urban centers. However, commercial researchers must avoid conflating estimated in-kind consumption with liquid purchasing power: "
+                "subsidized foodgrain quotas cannot be spent on branded consumer goods, durables, or market services."
             ),
-            why_matters=(
-                "In-kind provisioning insulates household caloric security and frees marginal cash for non-cereal items (conveyance, medical, processed food). "
-                "However, consumer researchers must not conflate imputed consumption with commercial purchasing power: households cannot spend foodgrain entitlements "
-                "on discretionary branded goods, personal care, or electronics."
-            ),
-            limitation=(
-                "Imputed figures reflect administrative market-price estimates applied to physical quotas, not cash transfers. "
-                "MoSPI did not publish item-group category shares with welfare imputation for 2023–24 (Statement 15 was published only for 2022–23)."
+            limitation_text=(
+                "MoSPI Report No. 592 published aggregate imputed values at the national and state levels (Table 2), but did not publish "
+                "separate fractile-class distributions or item-level commodity shares with welfare imputation for 2023–24. "
+                "Any fractile-level welfare impact remains an aggregate inference rather than an officially published fractile series."
             ),
             border_color="#059669"
         )
 
-        # Briefing Card 3: Structural Budget Transition (The Food Pivot)
+        # Briefing Card 3: Food Budget Share Evolution
         render_insight_card(
-            title="Structural Budget Transition: The Sub-50% Rural Food Pivot (Engel's Law)",
-            tag="Consumer Basket Evolution",
-            what_changed=(
-                "For the first time in official NSS survey history, the rural food budget share has decisively fallen below 50% "
-                f"(standing at {food_share_r:.2f}% under the current valuation), down from 52.90% in 2011–12. Urban households allocate 39.70% to food."
+            title="Food Budget Share Dynamics: Long-Term Shifts and Valuation Differences",
+            tag="Consumption Basket Evolution",
+            finding_text=(
+                f"In 2023–24, the all-India rural food budget share was {food_share_r_23:.2f}% under the current {valuation_label.lower()} series "
+                f"(47.04% unimputed, 48.43% imputed), while urban households allocated {food_share_u_23:.2f}% (39.68% category sum / 39.70% published aggregate unimputed; 40.31% imputed). "
+                f"The rural food share had already dropped below 50% in the 2022–23 round (46.38% unimputed, 47.47% imputed). Between 2022–23 and 2023–24, "
+                f"the rural food share actually increased slightly (+0.66 percentage points unimputed; +0.96 pp imputed) alongside modest urban increases (+0.52 pp unimputed; +0.61 pp imputed)."
             ),
-            where_visible=(
-                "Within food, expenditure has shifted away from staple cereals (4.99% rural, 3.76% urban) toward packaged refreshments, beverages, "
-                "and processed food (9.84% rural, 11.09% urban) and dairy (8.44% rural, 7.19% urban). In non-food, conveyance (7.59% rural, 8.46% urban) "
-                "has emerged as the premier spending category."
+            implication_text=(
+                "Over the 12-year horizon since 2011–12 (when food represented 52.90% rural and 42.62% urban expenditure), household budgets have "
+                "shifted toward non-food goods and services. However, short-term year-on-year variations reflect relative price movements across food categories "
+                "and sample variations rather than an uninterrupted downward trajectory."
             ),
-            why_matters=(
-                "This inflection confirms Engel's Law at national scale: as real living standards rise, households dedicate smaller budget shares "
-                "to primary subsistence. The rise of processed foods and personal mobility indicates expanding rural penetration of packaged FMCG and transport services, "
-                "creating viable commercial opportunities beyond Tier-1/2 urban centers."
-            ),
-            limitation=(
-                "Declining budget shares do not imply reduced caloric intake or lower nominal spending; they reflect non-food spending and diversified food categories "
-                "growing substantially faster than basic cereals."
+            limitation_text=(
+                "These survey data describe empirical expenditure shares; they do not establish causal proof of Engel's Law or verify underlying changes in living standards. "
+                "In-kind grain transfers under PMGKY also mechanically raise measured food shares under the imputed series by valuing free grain at local market rates."
             ),
             border_color="#d97706"
         )
 
-        # Briefing Card 4: Distributional Spread & Fractile Dynamics
+        # Briefing Card 4: Fractile Class Disparities
         render_insight_card(
-            title="Distributional Inequality: High Percentage Growth Off an Ultra-Low Base",
-            tag="Distributional Analysis",
-            what_changed=(
-                "The bottom 5% fractile class recorded the highest nominal growth rate (+22.1% YoY in rural areas to ₹1,677; +18.7% YoY in urban areas to ₹2,376). "
-                "However, the absolute increase was modest: +₹304/month per capita rural and +₹375/month urban."
+            title="Distributional Spread: Bottom-Fractile Growth and Upper-Quintile Depth",
+            tag="Fractile Class Dynamics",
+            finding_text=(
+                f"Within the 2023–24 round, average monthly consumption in the bottom 5% was ₹{f23_r_bot:,.0f} rural and ₹{f23_u_bot:,.0f} urban, "
+                f"compared with ₹{f23_r_top:,.0f} rural and ₹{f23_u_top:,.0f} urban in the top 5%. This yields a top-to-bottom consumption ratio of "
+                f"{ratio_frac_r_23:.2f}× in rural areas and {ratio_frac_u_23:.2f}× in urban areas. In 2022–23, the corresponding ratios within that round were "
+                f"{ratio_frac_r_22:.2f}× rural (₹{f22_r_top:,.0f} / ₹{f22_r_bot:,.0f}) and {ratio_frac_u_22:.2f}× urban (₹{f22_u_top:,.0f} / ₹{f22_u_bot:,.0f})."
             ),
-            where_visible=(
-                "Across fractile classes, consumption steepens dramatically above the 80th percentile: the top 5% rural cohort averages ₹10,582/month "
-                "(6.31× the bottom 5%), while the top 5% urban cohort averages ₹20,824/month (8.76× the bottom 5%)."
+            implication_text=(
+                f"Between 2022–23 and 2023–24, the bottom 5% recorded nominal increases of +22.1% rural (+₹304/month) and +18.7% urban (+₹375/month), "
+                f"while top 5% sample averages moderated slightly (-3.5% rural, -2.5% urban). While the top-to-bottom ratio narrowed between rounds, "
+                f"expenditure depth remains concentrated in the upper tiers, where urban top-5% spending exceeds ₹20,000 per person per month."
             ),
-            why_matters=(
-                "While double-digit percentage growth in lower fractiles demonstrates improved baseline consumption, discretionary commercial spending remains "
-                "heavily concentrated. For premium consumer durables, private healthcare, and discretionary services, market depth is anchored almost entirely "
-                "in the top two expenditure quintiles."
-            ),
-            limitation=(
-                "Fractile figures represent nominal monthly spending groups across survey respondents. Without class-specific cost-of-living deflators, "
-                "real volume shifts across deciles cannot be definitively isolated."
+            limitation_text=(
+                "Fractile classes group households by reported monthly per-capita spending within the sample. "
+                "Without class-specific cost-of-living price deflators, real volume shifts across deciles cannot be isolated. "
+                "Aggregate fractile MPCE does not measure category-specific spending preferences, product adoption, or household wealth."
             ),
             border_color="#7c3aed"
         )
@@ -330,20 +369,33 @@ def main():
         st.caption("Scatter distribution of paired Rural vs. Urban MPCE. Frontier outlier states labeled for spatial orientation; hover over any point for complete metrics.")
         st.plotly_chart(create_disparity_scatter_chart(filtered_state_df, selected_round, valuation_col), use_container_width=True)
 
-        st.markdown("### 📌 Regional Research Insights (Spatial Convergence & Divergence)")
-        r_c1, r_c2 = st.columns(2)
-        with r_c1:
-            st.markdown("""
-            **1. Extreme Spatial Polarization in Living Standards:**
-            - **High-Consumption Frontiers:** Sikkim (Rural ₹7,731 | Urban ₹12,105) and Goa (Rural ₹5,388 | Urban ₹7,665) anchor the top of India's spending distribution, driven by tourism, remittances, and smaller household sizes.
-            - **Lagging Agrarian Belts:** Central and eastern states—including Chhattisgarh (Rural ₹2,466 | Urban ₹4,483), Odisha (Rural ₹2,950 | Urban ₹5,187), and Bihar (Rural ₹3,384 | Urban ₹4,768)—exhibit rural spending levels below 60% of national leaders.
-            """)
-        with r_c2:
-            st.markdown("""
-            **2. Commercial Implications of Convergence Ratios:**
-            - **Tight Convergence Clusters (Ratio < 1.45×):** States like Punjab (1.40×), Kerala (1.43×), and Goa (1.42×) display strong rural-urban parity. In these markets, rural retail distribution can support mid-tier and premium SKU assortments comparable to Tier-2/3 cities.
-            - **High-Disparity Clusters (Ratio > 1.70×):** States like Meghalaya (1.96×), Telangana (1.79×), West Bengal (1.75×), and Maharashtra (1.72×) maintain severe urban-to-rural divides. Commercial strategies in these geographies require dedicated low-unit-price value packs for rural markets.
-            """)
+        # Compute dynamic regional observations directly from filtered dataset
+        pivoted_reg = filtered_state_df.pivot(index="state_name", columns="sector", values=valuation_col).dropna().reset_index()
+        if not pivoted_reg.empty and "Rural" in pivoted_reg.columns and "Urban" in pivoted_reg.columns:
+            pivoted_reg["ratio"] = (pivoted_reg["Urban"] / pivoted_reg["Rural"]).round(2)
+            top_r_st = pivoted_reg.sort_values(by="Rural", ascending=False).iloc[0]
+            bot_r_st = pivoted_reg.sort_values(by="Rural", ascending=True).iloc[0]
+            top_u_st = pivoted_reg.sort_values(by="Urban", ascending=False).iloc[0]
+            bot_u_st = pivoted_reg.sort_values(by="Urban", ascending=True).iloc[0]
+            high_disp_st = pivoted_reg.sort_values(by="ratio", ascending=False).iloc[0]
+            low_disp_st = pivoted_reg.sort_values(by="ratio", ascending=True).iloc[0]
+
+            st.markdown(f"### 📌 Regional Analytical Observations ({selected_round}, {valuation_label})")
+            r_c1, r_c2 = st.columns(2)
+            with r_c1:
+                st.markdown(f"""
+                **1. Spatial Polarization Across Selected Geographies ({len(pivoted_reg)} States/UTs):**
+                - **Rural Consumption Extremes:** Highest is **{top_r_st['state_name']}** (₹{top_r_st['Rural']:,.0f}/month); lowest is **{bot_r_st['state_name']}** (₹{bot_r_st['Rural']:,.0f}/month), a range of ₹{top_r_st['Rural'] - bot_r_st['Rural']:,.0f}/month.
+                - **Urban Consumption Extremes:** Highest is **{top_u_st['state_name']}** (₹{top_u_st['Urban']:,.0f}/month); lowest is **{bot_u_st['state_name']}** (₹{bot_u_st['Urban']:,.0f}/month), a range of ₹{top_u_st['Urban'] - bot_u_st['Urban']:,.0f}/month.
+                - **Scope Boundary:** These observations represent reported survey averages in the selected cohort. Cross-state spending variations cannot be attributed to unmeasured drivers such as remittances, household size, or tourism without external demographic data.
+                """)
+            with r_c2:
+                st.markdown(f"""
+                **2. Urban-to-Rural Disparity and Parity Ratios:**
+                - **Highest Disparity Ratio:** **{high_disp_st['state_name']}** exhibits an urban spending multiple of **{high_disp_st['ratio']:.2f}×** (Urban ₹{high_disp_st['Urban']:,.0f} vs. Rural ₹{high_disp_st['Rural']:,.0f}).
+                - **Lowest Disparity Ratio (Closest to Parity):** **{low_disp_st['state_name']}** exhibits a multiple of **{low_disp_st['ratio']:.2f}×** (Urban ₹{low_disp_st['Urban']:,.0f} vs. Rural ₹{low_disp_st['Rural']:,.0f}).
+                - **Commercial Research Hypothesis:** Differences in convergence ratios provide hypotheses for distribution planning: high-parity states may support similar portfolio assortments across sectors, whereas high-disparity states require distinct product tiers. These require verification via local retail audits.
+                """)
 
         with st.expander("🔍 View Raw State Data Table (Harmonized Selection)"):
             pivoted_view = filtered_state_df.pivot(index="state_name", columns="sector", values=valuation_col).reset_index()
@@ -375,17 +427,21 @@ def main():
         col_b1, col_b2 = st.columns(2)
         with col_b1:
             st.markdown("""
-            **1. The Packaged & Processed Food Inflection:**
-            - **Beverages & Processed Foods (9.84% Rural | 11.09% Urban):** Now represents the single largest food expenditure category nationwide, surpassing basic cereals. This reflects rapid adoption of packaged snacks, ready-to-eat items, confectionery, and outside dining.
-            - **Milk & Dairy (8.44% Rural | 7.19% Urban):** Represents the second-largest food category, highlighting strong dietary prioritization of animal protein as incomes expand.
-            - **Cereals Contraction (4.99% Rural | 3.76% Urban):** Continues a multi-decade downward trajectory, partly facilitated by public distribution of subsidized foodgrains under PMGKY.
+            **1. Food Category Allocations and Year-on-Year Movements:**
+            - **Beverages & Processed Foods (9.84% Rural | 11.09% Urban in 2023–24):** Largest single food expenditure category nationwide, rising from 9.62% rural (+0.22 pp) and 10.64% urban (+0.45 pp) in 2022–23.
+            - **Milk & Dairy Products (8.44% Rural | 7.19% Urban in 2023–24):** Second largest food category, edging up from 8.33% rural (+0.11 pp) and remaining stable from 7.22% urban (-0.03 pp) in 2022–23.
+            - **Vegetables (6.03% Rural | 4.12% Urban in 2023–24):** Increased from 5.38% rural (+0.65 pp) and 3.80% urban (+0.32 pp) in 2022–23.
+            - **Cereals & Substitutes (4.99% Rural | 3.76% Urban in 2023–24):** Edged up slightly from 4.91% rural (+0.08 pp) and 3.64% urban (+0.12 pp) in 2022–23. While cereal shares remain far lower than historical 2011–12 levels (10.75% rural, 6.61% urban), they did not contract between the two latest survey rounds.
             """)
         with col_b2:
             st.markdown("""
-            **2. Non-Food Discretionary Expansion:**
-            - **Conveyance / Transport (7.59% Rural | 8.46% Urban):** Has emerged as the leading non-food spending category nationwide, outstripping clothing, footwear, and consumer durables. This highlights expanding two-wheeler mobility, daily commute costs, and fuel expenditure.
-            - **Rent & Accommodation Divergence:** Urban households dedicate ~6.7% of out-of-pocket spending to housing, whereas rural rent spending is nominal (~0.22%) due to near-universal owner-occupancy.
-            - **Medical Care (6.83% Rural | 5.85% Urban):** Remains a significant out-of-pocket burden, consuming a higher relative budget share in rural households due to private healthcare reliance.
+            **2. Non-Food Expenditure Allocations and Category Definitions:**
+            - **Conveyance / Transport (7.59% Rural | 8.46% Urban in 2023–24):** Leading individual non-food category nationwide, compared to 7.55% rural (+0.04 pp) and 8.59% urban (-0.13 pp) in 2022–23.
+            - **Clothing, Bedding & Footwear (6.63% Rural | 5.66% Urban in 2023–24):** Rose from 6.10% rural (+0.53 pp) and 5.41% urban (+0.25 pp).
+            - **Durable Goods (6.48% Rural | 6.87% Urban in 2023–24):** Declined slightly from 6.89% rural (-0.41 pp) and 7.17% urban (-0.30 pp).
+            - **Medical Care (6.83% Rural | 5.85% Urban in 2023–24):** Moderated from 7.13% rural (-0.30 pp) and 5.91% urban (-0.06 pp).
+            - **Rent, Taxes & Other Non-Food (4.61% Rural | 9.26% Urban in 2023–24):** Stood at 4.70% rural (-0.09 pp) and 9.23% urban (+0.03 pp).
+              *Classification Note:* This combined survey category aggregates residential rent, municipal taxes, water charges, and consumer fees rather than isolating standalone residential rent.
             """)
 
     # ==================== SECTION 4: PRICE CONTEXT ====================

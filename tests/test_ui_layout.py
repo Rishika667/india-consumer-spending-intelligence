@@ -1,7 +1,8 @@
 """
-ConsumerLens India — UI Layout & Chart Presentation Regression Tests
+ConsumerLens India — UI Layout, Presentation & Data-Narrative Consistency Regression Tests
 Verifies that visual presentation, chart margins, categorical axes,
-selective scatter labeling, and research briefs meet syndicated standards.
+selective scatter labeling, within-round fractile consistency, food-share anchors,
+and state values strictly adhere to official MoSPI evidence.
 """
 
 import os
@@ -155,16 +156,123 @@ def test_fractile_curve_layout(app_data):
     assert fig.layout.legend.y <= 0
 
 
-def test_narrative_quality_no_ai_cliches():
+def test_fractile_top_to_bottom_ratios_consistency(app_data):
+    """
+    Verifies consistent within-round top-to-bottom fractile ratios:
+    - 2023-24: Rural = 10,137 / 1,677 = 6.04x; Urban = 20,310 / 2,376 = 8.55x
+    - 2022-23: Rural = 10,501 / 1,373 = 7.65x; Urban = 20,824 / 2,001 = 10.41x
+    Never mixes years.
+    """
+    _, _, df_fractile, _, _, _, _ = app_data
+
+    # 2023-24 within-round calculations
+    f23_r_bot = df_fractile[(df_fractile["survey_round"] == "2023-24") & (df_fractile["sector"] == "Rural") & (df_fractile["fractile_class"] == "0-5%")]["avg_mpce"].values[0]
+    f23_r_top = df_fractile[(df_fractile["survey_round"] == "2023-24") & (df_fractile["sector"] == "Rural") & (df_fractile["fractile_class"] == "95-100%")]["avg_mpce"].values[0]
+    f23_u_bot = df_fractile[(df_fractile["survey_round"] == "2023-24") & (df_fractile["sector"] == "Urban") & (df_fractile["fractile_class"] == "0-5%")]["avg_mpce"].values[0]
+    f23_u_top = df_fractile[(df_fractile["survey_round"] == "2023-24") & (df_fractile["sector"] == "Urban") & (df_fractile["fractile_class"] == "95-100%")]["avg_mpce"].values[0]
+
+    assert f23_r_bot == 1677.0
+    assert f23_r_top == 10137.0
+    assert f23_u_bot == 2376.0
+    assert f23_u_top == 20310.0
+
+    r_ratio_23 = round(f23_r_top / f23_r_bot, 2)
+    u_ratio_23 = round(f23_u_top / f23_u_bot, 2)
+    assert r_ratio_23 == 6.04
+    assert u_ratio_23 == 8.55
+
+    # 2022-23 within-round calculations
+    f22_r_bot = df_fractile[(df_fractile["survey_round"] == "2022-23") & (df_fractile["sector"] == "Rural") & (df_fractile["fractile_class"] == "0-5%")]["avg_mpce"].values[0]
+    f22_r_top = df_fractile[(df_fractile["survey_round"] == "2022-23") & (df_fractile["sector"] == "Rural") & (df_fractile["fractile_class"] == "95-100%")]["avg_mpce"].values[0]
+    f22_u_bot = df_fractile[(df_fractile["survey_round"] == "2022-23") & (df_fractile["sector"] == "Urban") & (df_fractile["fractile_class"] == "0-5%")]["avg_mpce"].values[0]
+    f22_u_top = df_fractile[(df_fractile["survey_round"] == "2022-23") & (df_fractile["sector"] == "Urban") & (df_fractile["fractile_class"] == "95-100%")]["avg_mpce"].values[0]
+
+    assert f22_r_bot == 1373.0
+    assert f22_r_top == 10501.0
+    assert f22_u_bot == 2001.0
+    assert f22_u_top == 20824.0
+
+    r_ratio_22 = round(f22_r_top / f22_r_bot, 2)
+    u_ratio_22 = round(f22_u_top / f22_u_bot, 2)
+    assert r_ratio_22 == 7.65
+    assert u_ratio_22 == 10.41
+
+
+def test_food_share_benchmarks_and_valuation_anchors(app_data):
+    """
+    Verifies verified food share benchmarks:
+    - 2022-23 rural was ALREADY below 50% (46.38% unimputed, 47.47% imputed).
+    - 2023-24 rural food share increased to 47.04% unimputed and 48.43% imputed.
+    - 2022-23 urban is 39.16% (category sum) / 39.17% aggregate unimputed, 39.70% imputed.
+    - 2023-24 urban is 39.68% unimputed, 40.31% imputed aggregate.
+    """
+    _, df_category, _, _, _, _, _ = app_data
+
+    # Food sums from category shares dataset
+    f_22_r_unimp = df_category[(df_category["survey_round"] == "2022-23") & (df_category["sector"] == "Rural") & (df_category["valuation"] == "Unimputed") & (df_category["broad_group"] == "Food")]["share_pct"].sum()
+    f_23_r_unimp = df_category[(df_category["survey_round"] == "2023-24") & (df_category["sector"] == "Rural") & (df_category["valuation"] == "Unimputed") & (df_category["broad_group"] == "Food")]["share_pct"].sum()
+    f_22_u_unimp = df_category[(df_category["survey_round"] == "2022-23") & (df_category["sector"] == "Urban") & (df_category["valuation"] == "Unimputed") & (df_category["broad_group"] == "Food")]["share_pct"].sum()
+    f_23_u_unimp = df_category[(df_category["survey_round"] == "2023-24") & (df_category["sector"] == "Urban") & (df_category["valuation"] == "Unimputed") & (df_category["broad_group"] == "Food")]["share_pct"].sum()
+
+    assert round(f_22_r_unimp, 2) == 46.38
+    assert round(f_23_r_unimp, 2) == 47.04
+    assert round(f_22_u_unimp, 2) == 39.16
+    assert round(f_23_u_unimp, 2) == 39.68
+
+    # Assert rural food share was already below 50% in 2022-23
+    assert f_22_r_unimp < 50.0
+    # Assert rural food share rose slightly between rounds
+    assert f_23_r_unimp > f_22_r_unimp
+
+    # Cereal share between rounds
+    cer_22_r = df_category[(df_category["survey_round"] == "2022-23") & (df_category["sector"] == "Rural") & (df_category["category"].str.contains("Cereals"))]["share_pct"].values[0]
+    cer_23_r = df_category[(df_category["survey_round"] == "2023-24") & (df_category["sector"] == "Rural") & (df_category["category"].str.contains("Cereals"))]["share_pct"].values[0]
+    assert cer_22_r == 4.91
+    assert cer_23_r == 4.99
+    # Cereal share rose slightly between 2022-23 and 2023-24
+    assert cer_23_r >= cer_22_r
+
+
+def test_regional_state_mpce_integrity(app_data):
+    """
+    Verifies official 2023-24 state figures in state_mpce.csv match official MoSPI Report 592 Table 1:
+    - Sikkim: Rural 9377, Urban 13927
+    - Goa: Rural 8048, Urban 9726
+    - Chhattisgarh: Rural 2739, Urban 4927
+    - Odisha: Rural 3357, Urban 5825
+    - Bihar: Rural 3670, Urban 5080
+    - Delhi & Chandigarh rural: NaN in 2023-24 unimputed
+    """
+    df_state, _, _, _, _, _, _ = app_data
+    st_23 = df_state[df_state["survey_round"] == "2023-24"]
+
+    def get_val(state, sec):
+        return st_23[(st_23["state_name"] == state) & (st_23["sector"] == sec)]["mpce_unimputed"].values[0]
+
+    assert get_val("Sikkim", "Rural") == 9377.0
+    assert get_val("Sikkim", "Urban") == 13927.0
+    assert get_val("Goa", "Rural") == 8048.0
+    assert get_val("Goa", "Urban") == 9726.0
+    assert get_val("Chhattisgarh", "Rural") == 2739.0
+    assert get_val("Chhattisgarh", "Urban") == 4927.0
+    assert get_val("Odisha", "Rural") == 3357.0
+    assert get_val("Odisha", "Urban") == 5825.0
+    assert get_val("Bihar", "Rural") == 3670.0
+    assert get_val("Bihar", "Urban") == 5080.0
+
+    delhi_r = st_23[(st_23["state_name"] == "Delhi") & (st_23["sector"] == "Rural")]["mpce_unimputed"].values[0]
+    assert pd.isna(delhi_r)
+
+
+def test_narrative_factual_consistency_and_no_cliches():
     """
     Verifies that app.py contains no generic AI reporting clichés,
-    and includes the structured 4-dimension analytical brief cards.
+    no unverified 1811 figure, and no false 'first-time' food share claims.
     """
     app_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "app.py")
     with open(app_path, "r", encoding="utf-8") as f:
         content = f.read()
 
-    # Generic AI cliché phrases that must NOT appear as section headers or titles
     banned_cliches = [
         "Sustained Consumption Momentum",
         "Descriptive Shift in Budget Allocations",
@@ -173,9 +281,17 @@ def test_narrative_quality_no_ai_cliches():
     for cliche in banned_cliches:
         assert cliche not in content, f"Found banned generic AI cliché: '{cliche}' in app.py"
 
-    # Must contain structured insight brief components
+    # Verify unverified 1811 figure is NOT in app.py
+    assert "1811" not in content, "Found unverified figure 1811 in app.py"
+    assert "1,811" not in content, "Found unverified figure 1,811 in app.py"
+
+    # Verify false 'first-time' claim is NOT in app.py
+    assert "first time in official NSS" not in content.lower(), "Found false 'first-time' sub-50% food share claim in app.py"
+    assert "for the first time in official" not in content.lower(), "Found false 'first-time' sub-50% food share claim in app.py"
+
+    # Must contain verified analytical briefing titles
     assert "render_insight_card" in content
-    assert "Urban–Rural Divergence: Ratio Compression vs. Expanding Rupee Gap" in content
-    assert "Social Welfare Imputation: Consumption Absorption vs. Cash Liquidity" in content
-    assert "Structural Budget Transition: The Sub-50% Rural Food Pivot" in content
-    assert "Distributional Inequality: High Percentage Growth Off an Ultra-Low Base" in content
+    assert "Spending Dynamics: Ratio Compression vs. Expanding Absolute Rupee Gap" in content
+    assert "Social Welfare Imputation: In-Kind Valuation vs. Liquid Purchasing Power" in content
+    assert "Food Budget Share Dynamics: Long-Term Shifts and Valuation Differences" in content
+    assert "Distributional Spread: Bottom-Fractile Growth and Upper-Quintile Depth" in content
