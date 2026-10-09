@@ -157,7 +157,7 @@ def main():
             - **Rural Consumption Growth (Out-of-Pocket):** Rural nominal out-of-pocket MPCE reached **₹4,122** (+9.2% YoY vs ₹3,773 in 2022-23), while urban MPCE reached **₹6,996** (+8.3% YoY vs ₹6,459 in 2022-23). The urban-to-rural spending premium narrowed to **{ratio_23:.2f}×** (down from 1.71× in 2022-23 and 1.84× in 2011-12).
             - **Bottom-Fractile Expansion:** The bottom 5% fractile class recorded notable nominal increases, reaching **₹1,677 in rural areas** (+22.1% YoY) and **₹2,376 in urban areas** (+18.7% YoY).
             - **Descriptive Shift in Budget Allocations:** Non-food spending accounts for **52.96% of rural** and **60.30% of urban** budgets. Within food, spending has shifted toward processed refreshments, milk, and vegetables relative to basic cereals.
-            - **Primary Survey Benchmark:** Out-of-pocket expenditure serves as the primary survey benchmark across 35 published states/UTs in 2023-24 (with Delhi retained as an explicit unpublished cell).
+            - **Primary Survey Benchmark:** Out-of-pocket expenditure serves as the primary survey benchmark across 34 published states/UTs in 2023-24 (with Delhi and Chandigarh retained as explicit unpublished cells).
             """)
 
     # ==================== SECTION 2: REGIONAL EXPLORER ====================
@@ -293,23 +293,54 @@ def main():
             st.markdown("#### Transition Series (Base 2024=100) — Latest August 2026 Release (PIB PRID 2310058)")
             st.caption("Derived directly from HCES 2023-24 consumption weights, expanding coverage to 358 items and incorporating online markets.")
 
+            # Compute latest 2024=100 CPI metrics dynamically
+            cpi_2024 = df_cpi[df_cpi["base_year"] == "2024=100"].copy()
+            latest_month = cpi_2024["month_year"].max() if not cpi_2024.empty else "N/A"
+            cpi_latest = cpi_2024[cpi_2024["month_year"] == latest_month]
+
+            # Combined general & food
+            c_comb = cpi_latest[cpi_latest["sector"] == "Combined"]
+            gen_index_val = f"{c_comb['cpi_general'].values[0]:.2f}" if not c_comb.empty and pd.notnull(c_comb['cpi_general'].values[0]) else "N/A"
+            gen_yoy_val = f"{c_comb['inflation_general_pct'].values[0]:.2f}%" if not c_comb.empty and pd.notnull(c_comb['inflation_general_pct'].values[0]) else "N/A"
+            cfpi_index_val = f"{c_comb['cpi_food_cfpi'].values[0]:.2f}" if not c_comb.empty and pd.notnull(c_comb['cpi_food_cfpi'].values[0]) else "N/A"
+            cfpi_yoy_val = f"{c_comb['inflation_food_pct'].values[0]:.2f}%" if not c_comb.empty and pd.notnull(c_comb['inflation_food_pct'].values[0]) else "N/A"
+
+            # Rural
+            r_row = cpi_latest[cpi_latest["sector"] == "Rural"]
+            r_gen_val = f"{r_row['cpi_general'].values[0]:.2f}" if not r_row.empty and pd.notnull(r_row['cpi_general'].values[0]) else "N/A"
+            r_gen_yoy = f"{r_row['inflation_general_pct'].values[0]:.2f}%" if not r_row.empty and pd.notnull(r_row['inflation_general_pct'].values[0]) else "N/A"
+            r_cfpi_yoy = f"{r_row['inflation_food_pct'].values[0]:.2f}%" if not r_row.empty and pd.notnull(r_row['inflation_food_pct'].values[0]) else "N/A"
+
+            # Urban
+            u_row = cpi_latest[cpi_latest["sector"] == "Urban"]
+            u_gen_val = f"{u_row['cpi_general'].values[0]:.2f}" if not u_row.empty and pd.notnull(u_row['cpi_general'].values[0]) else "N/A"
+            u_gen_yoy = f"{u_row['inflation_general_pct'].values[0]:.2f}%" if not u_row.empty and pd.notnull(u_row['inflation_general_pct'].values[0]) else "N/A"
+            u_cfpi_yoy = f"{u_row['inflation_food_pct'].values[0]:.2f}%" if not u_row.empty and pd.notnull(u_row['inflation_food_pct'].values[0]) else "N/A"
+
+            # Dynamic coverage counts
+            num_months_idx = cpi_2024[cpi_2024["cpi_general"].notnull()]["month_year"].nunique()
+            num_months_yoy = cpi_2024[cpi_2024["inflation_general_pct"].notnull()]["month_year"].nunique()
+            num_months_cfpi = cpi_2024[cpi_2024["inflation_food_pct"].notnull()]["month_year"].nunique()
+            min_month = cpi_2024["month_year"].min()
+            max_month = cpi_2024["month_year"].max()
+
             cp1, cp2, cp3, cp4 = st.columns(4)
             with cp1:
-                render_metric_card("General CPI (Aug 2026)", "108.74", "YoY Headline: 4.82% (Combined)")
+                render_metric_card(f"General CPI ({latest_month})", gen_index_val, f"YoY Headline: {gen_yoy_val} (Combined)")
             with cp2:
-                render_metric_card("CFPI Food Inflation", "5.95%", "Food Index: 110.71 (Combined)")
+                render_metric_card("CFPI Food Inflation", cfpi_yoy_val, f"Food Index: {cfpi_index_val} (Combined)")
             with cp3:
-                render_metric_card("Rural General / Food", "5.23% / 6.13%", "General CPI: 109.27")
+                render_metric_card("Rural General / Food", f"{r_gen_yoy} / {r_cfpi_yoy}", f"General CPI: {r_gen_val}")
             with cp4:
-                render_metric_card("Urban General / Food", "4.31% / 5.64%", "General CPI: 108.07")
+                render_metric_card("Urban General / Food", f"{u_gen_yoy} / {u_cfpi_yoy}", f"General CPI: {u_gen_val}")
 
             cov_c1, cov_c2, cov_c3 = st.columns(3)
             with cov_c1:
-                st.info("📅 **Monthly Index:** 20 Months (Jan 2025 – Aug 2026)")
+                st.info(f"📅 **Monthly Index:** {num_months_idx} Months ({min_month} – {max_month})")
             with cov_c2:
-                st.info("📈 **YoY Inflation:** 8 Months (Jan 2026 – Aug 2026)")
+                st.info(f"📈 **YoY Inflation:** {num_months_yoy} Months (Jan 2026 – {max_month})")
             with cov_c3:
-                st.info("🥗 **CFPI Food Inflation:** 2 Months (Jul 2026 – Aug 2026)")
+                st.info(f"🥗 **CFPI Food Inflation:** {num_months_cfpi} Months (Jul 2026 – {max_month})")
 
             st.plotly_chart(create_cpi_trends_chart(df_cpi, "2024=100"), use_container_width=True)
 
@@ -360,27 +391,38 @@ def main():
         st.table(pd.DataFrame(avail_table))
 
         st.subheader("🔍 Primary Source Reconciliation Summary")
-        st.caption("Verifies key curated benchmarks against preserved primary documents in data/raw/ using scripts/reconcile_sources.py.")
+        st.caption("Verifies structured source dataset observations against preserved primary documents in data/raw/ using scripts/reconcile_sources.py.")
         rec_data = validation_report.get("source_reconciliation_summary", {})
+        
+        checked_count = rec_data.get('records_checked', 0)
+        matched_count = rec_data.get('records_matched', 0)
+        mismatch_count = rec_data.get('records_mismatched', 0)
+        unres_count = rec_data.get('unresolved_records', 0)
+        match_rate_str = f"{rec_data.get('match_rate_pct', 0.0):.1f}% Match Rate" if checked_count > 0 else "N/A"
+
         rec_cols = st.columns(4)
         with rec_cols[0]:
-            render_metric_card("Records Checked", f"{rec_data.get('records_checked', 23)}", "Official Primary Citations")
+            render_metric_card("Records Checked", f"{checked_count}", "Official Primary Citations")
         with rec_cols[1]:
-            render_metric_card("Records Matched", f"{rec_data.get('records_matched', 23)}", "100.0% Match Rate")
+            render_metric_card("Records Matched", f"{matched_count}", match_rate_str)
         with rec_cols[2]:
-            render_metric_card("Mismatches", f"{rec_data.get('records_mismatched', 0)}", "Zero Unresolved")
+            render_metric_card("Mismatches", f"{mismatch_count}", "Tolerance Violations")
         with rec_cols[3]:
-            render_metric_card("Unresolved", f"{rec_data.get('unresolved_records', 0)}", "Exact Verification")
+            render_metric_card("Unresolved", f"{unres_count}", "Ambiguous or Missing Source")
 
         # Load reconciliation detail if available
         rec_path = os.path.join(BASE_DIR, "docs", "SOURCE_RECONCILIATION.json")
         if os.path.exists(rec_path):
             with open(rec_path, "r", encoding="utf-8") as f:
                 rec_json = json.load(f)
-                rec_items = rec_json.get("checks", [])
+                rec_items = rec_json.get("reconciliation_checks", [])
                 if rec_items:
-                    with st.expander("📋 View Detailed Primary Source Reconciliation Log (23 Benchmarks)"):
-                        st.dataframe(pd.DataFrame(rec_items)[["check_id", "metric", "target_document", "status", "details"]], use_container_width=True)
+                    with st.expander(f"📋 View Detailed Primary Source Reconciliation Log ({len(rec_items)} Benchmarks)"):
+                        rec_df_display = pd.DataFrame(rec_items)
+                        cols_to_show = [c for c in ["check_id", "metric", "dataset", "observed_value", "primary_source_doc", "table_ref", "status", "source_evidence"] if c in rec_df_display.columns]
+                        st.dataframe(rec_df_display[cols_to_show], use_container_width=True)
+        else:
+            st.warning("⚠️ Source reconciliation file `docs/SOURCE_RECONCILIATION.json` not found. Run `scripts/reconcile_sources.py` to generate the log.")
 
         st.subheader("📋 Comprehensive 28-Rule Audit Log")
         checks_df = pd.DataFrame(validation_report["checks"])

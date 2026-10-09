@@ -1,93 +1,62 @@
 # Source Reconciliation & Verification Matrix — ConsumerLens India
-**Independent verification of curated structured datasets against preserved raw government releases.**
+**Bidirectional verification comparing structured observations in `data/sources/*.csv` against preserved raw government releases in `data/raw/`.**
 
-- **Total Benchmark Records Checked:** 23
-- **Records Matched Against Raw Text:** 23 (100.0%)
+- **Total Benchmark Records Checked:** 42
+- **Records Matched Against Source Evidence:** 0 (0.0%)
 - **Mismatches:** 0
-- **Unresolved Records:** 0
+- **Unresolved Records:** 42
 
-## 1. Verified Key Benchmarks Log
+## 1. Scope and Claims Precision
+Reconciliation checks programmatically verify 42 critical anchor benchmarks across national MPCE, corrected states, missing cells, food shares, fractiles, and retail CPI. Remaining cell values in curated tables are verified via deterministic internal consistency and relational schema rules in the Data Quality Engine.
 
-| ID | Metric / Observation | Target Primary Document | Expected Value | Status | Evidence / Pattern |
-| :--- | :--- | :--- | :--- | :---: | :--- |
-| `REC_01` | 2022-23 Rural MPCE Unimputed (Rs 3,773) | `Factsheet_HCES_2022-23.pdf` | 3773 | **MATCHED** | Matched substring: 'all-India 3,773 6,459' in Factsheet_HCES_2022-23.pdf |
-| `REC_02` | 2022-23 Rural MPCE Imputed (Rs 3,860) | `Factsheet_HCES_2022-23.pdf` | 3860 | **MATCHED** | Matched substring: 'All-India 3,860 6,521' in Factsheet_HCES_2022-23.pdf |
-| `REC_03` | 2023-24 Rural MPCE Unimputed (Rs 4,122) | `HCES_Press_Note_2023-24_27122024_rev.pdf` | 4122 | **MATCHED** | Matched substring: '4,122 6,996' in HCES_Press_Note_2023-24_27122024_rev.pdf |
-| `REC_04` | 2023-24 Rural MPCE Imputed (Rs 4,247) | `HCES_Press_Note_2023-24_27122024_rev.pdf` | 4247 | **MATCHED** | Matched substring: '4,247 7,078' in HCES_Press_Note_2023-24_27122024_rev.pdf |
-| `REC_05` | Goa 2023-24 Rural/Urban ALL (8,048 / 9,726) | `HCES_2023-24_PIB_2247612.html` | 8048 / 9726 | **MATCHED** | Matched substring: 'Goa
-			
-			
-			6,006
-			
-			
-			8,048
-			
-			
-			9,231
-			
-			
-			9,726' in HCES_2023-24_PIB_2247612.html |
-| `REC_06` | Himachal Pradesh 2023-24 Rural/Urban ALL (5,825 / 9,223) | `HCES_2023-24_PIB_2247612.html` | 5825 / 9223 | **MATCHED** | Matched substring: 'Himachal Pradesh
-			
-			
-			5,406
-			
-			
-			5,825
-			
-			
-			12,124
-			
-			
-			9,223' in HCES_2023-24_PIB_2247612.html |
-| `REC_07` | Uttarakhand 2023-24 Rural/Urban ALL (5,003 / 7,486) | `HCES_2023-24_PIB_2247612.html` | 5003 / 7486 | **MATCHED** | Matched substring: 'Uttarakhand
-			
-			
-			4,687
-			
-			
-			5,003
-			
-			
-			8,513
-			
-			
-			7,486' in HCES_2023-24_PIB_2247612.html |
-| `REC_08` | Dadra & Nagar Haveli and Daman & Diu 2023-24 Rural/Urban ALL (4,311 / 6,837) | `HCES_2023-24_PIB_2247612.html` | 4311 / 6837 | **MATCHED** | Matched substring: 'Dadra & Nagar Haveli and Daman & Diu
-			
-			
-			3,943
-			
-			
-			4,311
-			
-			
-			5,804
-			
-			
-			6,837' in HCES_2023-24_PIB_2247612.html |
-| `REC_09` | Haryana 2023-24 Rural/Urban Unimputed (5,377 / 8,428) | `HCES_Press_Note_2023-24_27122024_rev.pdf` | 5377 | **MATCHED** | Matched substring: 'Haryana, 5,377' in HCES_Press_Note_2023-24_27122024_rev.pdf |
-| `REC_10` | Punjab 2023-24 Rural/Urban Unimputed (5,817 / 7,359) | `HCES_Press_Note_2023-24_27122024_rev.pdf` | 5817 | **MATCHED** | Matched substring: 'Punjab, 5,817' in HCES_Press_Note_2023-24_27122024_rev.pdf |
-| `REC_11` | Sikkim 2023-24 Imputed (Rural 9,474 / Urban 13,965) | `HCES_Press_Note_2023-24_27122024_rev.pdf` | 9474 / 13965 | **MATCHED** | Matched substring: 'highest in Sikkim (Rural – Rs. 9,474 and Urban – Rs. 
-13,965)' in HCES_Press_Note_2023-24_27122024_rev.pdf |
-| `REC_12` | Chandigarh 2023-24 Imputed (Rural 8,857 / Urban 13,425) | `HCES_Press_Note_2023-24_27122024_rev.pdf` | 8857 / 13425 | **MATCHED** | Matched substring: 'highest in Chandigarh (Rural – Rs. 8,857 and Urban – Rs. 13,425)' in HCES_Press_Note_2023-24_27122024_rev.pdf |
-| `REC_13` | DNHDD 2023-24 Rural Imputed Lowest UT (Rs 4,450) | `HCES_Press_Note_2023-24_27122024_rev.pdf` | 4450 | **MATCHED** | Matched substring: 'lowest in Dadra and Nagar Haveli and  Daman and Diu (Rs. 4, 450)' in HCES_Press_Note_2023-24_27122024_rev.pdf |
-| `REC_14` | J&K 2023-24 Urban Imputed Lowest UT (Rs 6,375) | `HCES_Press_Note_2023-24_27122024_rev.pdf` | 6375 | **MATCHED** | Matched substring: 'Jammu 
-and Kashmir (Rs. 6,375)' in HCES_Press_Note_2023-24_27122024_rev.pdf |
-| `REC_15` | 2022-23 Unimputed Food Share (Rural 46.38% / Urban 39.17%) | `Factsheet_HCES_2022-23.pdf` | 46.38 / 39.17 | **MATCHED** | Matched substring: 'food total 1,750 2,530 46.38 39.17' in Factsheet_HCES_2022-23.pdf |
-| `REC_16` | 2022-23 Imputed Food Share (Rural 47.47% / Urban 39.70%) | `Factsheet_HCES_2022-23.pdf` | 47.47 / 39.70 | **MATCHED** | Matched substring: 'food total 1,832 2,589 47.47 39.70' in Factsheet_HCES_2022-23.pdf |
-| `REC_17` | 2023-24 Unimputed Food Share Rural (Beverages 9.84%, Milk 8.44%, Veg 6.03%) | `HCES_Press_Note_2023-24_27122024_rev.pdf` | 9.84 / 8.44 / 6.03 | **MATCHED** | Matched substring: '9.84
-8.44
-6.03' in HCES_Press_Note_2023-24_27122024_rev.pdf |
-| `REC_18` | 2023-24 Fractile Bottom 5% (Rural 1,677 / Urban 2,376) | `HCES_Press_Note_2023-24_27122024_rev.pdf` | 1677 / 2376 | **MATCHED** | Matched substring: '1,677 
-while it is Rs. 2,376' in HCES_Press_Note_2023-24_27122024_rev.pdf |
-| `REC_19` | 2023-24 Fractile Top 5% (Rural 10,137 / Urban 20,310) | `HCES_Press_Note_2023-24_27122024_rev.pdf` | 10137 / 20310 | **MATCHED** | Matched substring: '10,137 and Rs. 20,310' in HCES_Press_Note_2023-24_27122024_rev.pdf |
-| `REC_20` | August 2026 Headline CPI Inflation (4.82%) | `CPI_Release_Aug2026.html` | 4.82% | **MATCHED** | Matched substring: 'August, 2026 is 4.82%' in CPI_Release_Aug2026.html |
-| `REC_21` | August 2026 Food Inflation CFPI Combined (5.95%) | `CPI_Release_Aug2026.html` | 5.95% | **MATCHED** | Matched substring: '5.95' in CPI_Release_Aug2026.html |
-| `REC_22` | August 2026 Combined General CPI Index (108.74) | `CPI_Release_Aug2026.html` | 108.74 | **MATCHED** | Matched substring: '108.74' in CPI_Release_Aug2026.html |
-| `REC_23` | August 2026 Combined CFPI Food Index (110.71) | `CPI_Release_Aug2026.html` | 110.71 | **MATCHED** | Matched substring: '110.71' in CPI_Release_Aug2026.html |
+## 2. Verified Benchmark Log
 
-## 2. Documented Officially Unavailable Observations
+| ID | Metric / Observation | Source Dataset | Observed Value | Target Document | Status | Evidence / Extraction |
+| :--- | :--- | :--- | :---: | :--- | :---: | :--- |
+| `REC_01` | 2022-23 All-India Rural MPCE (Unimputed) | `source_state_mpce_2022_23.csv` | 3,773.00 | `Factsheet_HCES_2022-23.pdf` | **UNRESOLVED** | Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/ |
+| `REC_02` | 2022-23 All-India Urban MPCE (Unimputed) | `source_state_mpce_2022_23.csv` | 6,459.00 | `Factsheet_HCES_2022-23.pdf` | **UNRESOLVED** | Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/ |
+| `REC_03` | 2022-23 All-India Rural MPCE (Imputed) | `source_state_mpce_2022_23.csv` | 3,860.00 | `Factsheet_HCES_2022-23.pdf` | **UNRESOLVED** | Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/ |
+| `REC_04` | 2022-23 All-India Urban MPCE (Imputed) | `source_state_mpce_2022_23.csv` | 6,521.00 | `Factsheet_HCES_2022-23.pdf` | **UNRESOLVED** | Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/ |
+| `REC_05` | 2023-24 All-India Rural MPCE (Unimputed) | `source_state_mpce_2023_24.csv` | 4,122.00 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_06` | 2023-24 All-India Urban MPCE (Unimputed) | `source_state_mpce_2023_24.csv` | 6,996.00 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_07` | 2023-24 All-India Rural MPCE (Imputed) | `source_state_mpce_2023_24.csv` | 4,247.00 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_08` | 2023-24 All-India Urban MPCE (Imputed) | `source_state_mpce_2023_24.csv` | 7,078.00 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_09` | Goa 2023-24 Rural MPCE (Unimputed) | `source_state_mpce_2023_24.csv` | 8,048.00 | `HCES_2023-24_PIB_2247612.html` | **UNRESOLVED** | Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/ |
+| `REC_10` | Goa 2023-24 Urban MPCE (Unimputed) | `source_state_mpce_2023_24.csv` | 9,726.00 | `HCES_2023-24_PIB_2247612.html` | **UNRESOLVED** | Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/ |
+| `REC_11` | Himachal Pradesh 2023-24 Rural MPCE (Unimputed) | `source_state_mpce_2023_24.csv` | 5,825.00 | `HCES_2023-24_PIB_2247612.html` | **UNRESOLVED** | Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/ |
+| `REC_12` | Himachal Pradesh 2023-24 Urban MPCE (Unimputed) | `source_state_mpce_2023_24.csv` | 9,223.00 | `HCES_2023-24_PIB_2247612.html` | **UNRESOLVED** | Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/ |
+| `REC_13` | Uttarakhand 2023-24 Rural MPCE (Unimputed) | `source_state_mpce_2023_24.csv` | 5,003.00 | `HCES_2023-24_PIB_2247612.html` | **UNRESOLVED** | Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/ |
+| `REC_14` | Uttarakhand 2023-24 Urban MPCE (Unimputed) | `source_state_mpce_2023_24.csv` | 7,486.00 | `HCES_2023-24_PIB_2247612.html` | **UNRESOLVED** | Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/ |
+| `REC_15` | DNHDD 2023-24 Rural MPCE (Unimputed) | `source_state_mpce_2023_24.csv` | 4,311.00 | `HCES_2023-24_PIB_2247612.html` | **UNRESOLVED** | Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/ |
+| `REC_16` | DNHDD 2023-24 Urban MPCE (Unimputed) | `source_state_mpce_2023_24.csv` | 6,837.00 | `HCES_2023-24_PIB_2247612.html` | **UNRESOLVED** | Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/ |
+| `REC_17` | Haryana 2023-24 Rural MPCE (Unimputed) | `source_state_mpce_2023_24.csv` | 5,377.00 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_18` | Haryana 2023-24 Urban MPCE (Unimputed) | `source_state_mpce_2023_24.csv` | 8,428.00 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_19` | Punjab 2023-24 Rural MPCE (Unimputed) | `source_state_mpce_2023_24.csv` | 5,817.00 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_20` | Punjab 2023-24 Urban MPCE (Unimputed) | `source_state_mpce_2023_24.csv` | 7,359.00 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_21` | Delhi 2023-24 Rural Unimputed Status (NaN) | `source_state_mpce_2023_24.csv` | NaN | `HCES_2023-24_PIB_2247612.html` | **UNRESOLVED** | Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/ |
+| `REC_22` | Delhi 2023-24 Urban Unimputed Status (NaN) | `source_state_mpce_2023_24.csv` | NaN | `HCES_2023-24_PIB_2247612.html` | **UNRESOLVED** | Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/ |
+| `REC_23` | Chandigarh 2023-24 Rural Unimputed Status (NaN) | `source_state_mpce_2023_24.csv` | NaN | `HCES_2023-24_PIB_2247612.html` | **UNRESOLVED** | Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/ |
+| `REC_24` | Chandigarh 2023-24 Urban Unimputed Status (NaN) | `source_state_mpce_2023_24.csv` | NaN | `HCES_2023-24_PIB_2247612.html` | **UNRESOLVED** | Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/ |
+| `REC_25` | Chandigarh 2023-24 Rural Imputed MPCE | `source_state_mpce_2023_24.csv` | 8,857.00 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_26` | Chandigarh 2023-24 Urban Imputed MPCE | `source_state_mpce_2023_24.csv` | 13,425.00 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_27` | Sikkim 2023-24 Rural Imputed MPCE | `source_state_mpce_2023_24.csv` | 9,474.00 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_28` | Sikkim 2023-24 Urban Imputed MPCE | `source_state_mpce_2023_24.csv` | 13,965.00 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_29` | 2022-23 Rural Unimputed Food Share Benchmark (46.38%) | `source_category_shares.csv` | 9.62 | `Factsheet_HCES_2022-23.pdf` | **UNRESOLVED** | Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/ |
+| `REC_30` | 2022-23 Urban Unimputed Food Share Rounding Reconciliation (39.16% vs 39.17%) | `source_category_shares.csv` | 10.64 | `Factsheet_HCES_2022-23.pdf` | **UNRESOLVED** | Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/ |
+| `REC_31` | 2022-23 Rural Imputed Leading Food Category (Milk & Milk Products 8.14%) | `source_category_shares.csv` | 8.14 | `Factsheet_HCES_2022-23.pdf` | **UNRESOLVED** | Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/ |
+| `REC_32` | 2022-23 Urban Imputed Leading Food Category (Milk & Milk Products 7.15%) | `source_category_shares.csv` | 7.15 | `Factsheet_HCES_2022-23.pdf` | **UNRESOLVED** | Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/ |
+| `REC_33` | 2023-24 Rural Unimputed Beverages Share (9.84%) | `source_category_shares.csv` | 9.84 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_34` | 2023-24 Urban Unimputed Beverages Share (11.09%) | `source_category_shares.csv` | 11.09 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_35` | 2023-24 Fractile Bottom 5% Rural MPCE (Rs 1,677) | `source_fractile_distribution.csv` | 1,677.00 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_36` | 2023-24 Fractile Bottom 5% Urban MPCE (Rs 2,376) | `source_fractile_distribution.csv` | 2,376.00 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_37` | 2023-24 Fractile Top 5% Rural MPCE (Rs 10,137) | `source_fractile_distribution.csv` | 10,137.00 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_38` | 2023-24 Fractile Top 5% Urban MPCE (Rs 20,310) | `source_fractile_distribution.csv` | 20,310.00 | `HCES_Press_Note_2023-24_27122024_rev.pdf` | **UNRESOLVED** | Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/ |
+| `REC_39` | August 2026 Headline CPI Inflation Combined (4.82%) | `source_cpi_monthly_2024_base.csv` | 4.82 | `CPI_Release_Aug2026.html` | **UNRESOLVED** | Target primary document 'CPI_Release_Aug2026.html' missing or unreadable in data/raw/ |
+| `REC_40` | August 2026 General CPI Index Combined (108.74) | `source_cpi_monthly_2024_base.csv` | 108.74 | `CPI_Release_Aug2026.html` | **UNRESOLVED** | Target primary document 'CPI_Release_Aug2026.html' missing or unreadable in data/raw/ |
+| `REC_41` | August 2026 CFPI Food Inflation Combined (5.95%) | `source_cpi_monthly_2024_base.csv` | 5.95 | `CPI_Release_Aug2026.html` | **UNRESOLVED** | Target primary document 'CPI_Release_Aug2026.html' missing or unreadable in data/raw/ |
+| `REC_42` | August 2026 CFPI Food Index Combined (110.71) | `source_cpi_monthly_2024_base.csv` | 110.71 | `CPI_Release_Aug2026.html` | **UNRESOLVED** | Target primary document 'CPI_Release_Aug2026.html' missing or unreadable in data/raw/ |
+
+## 3. Documented Officially Unavailable Observations
 The following items are officially unpublished in primary government releases. They are strictly preserved as explicit `NaN` / missing entries and are not estimated or fabricated:
 
 - **Delhi 2023-24 unimputed & imputed MPCE (officially unpublished in Report 592 & PRID 2247612)**

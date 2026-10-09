@@ -454,11 +454,12 @@ class DataQualityEngine:
         # SOURCE RECONCILIATION INTEGRATION
         # ==============================================================================
         rec_summary = {
-            "status": "COMPLETED",
-            "records_checked": 23,
-            "records_matched": 23,
+            "status": "NOT_RUN",
+            "total_records_checked": 0,
+            "records_matched": 0,
             "records_mismatched": 0,
-            "match_rate_pct": 100.0,
+            "match_rate_pct": 0.0,
+            "unresolved_records": 0,
             "verification_engine": "scripts/reconcile_sources.py",
             "documentation": "docs/SOURCE_RECONCILIATION.md"
         }
@@ -501,10 +502,10 @@ class DataQualityEngine:
             "dimension_breakdown": dimension_scores,
             "data_availability_summary": availability_summary,
             "source_reconciliation_summary": {
-                "records_checked": rec_summary.get("total_records_checked", 23),
-                "records_matched": rec_summary.get("records_matched", 23),
+                "records_checked": rec_summary.get("total_records_checked", 0),
+                "records_matched": rec_summary.get("records_matched", 0),
                 "records_mismatched": rec_summary.get("records_mismatched", 0),
-                "match_rate_pct": rec_summary.get("match_rate_pct", 100.0),
+                "match_rate_pct": rec_summary.get("match_rate_pct", 0.0),
                 "unresolved_records": rec_summary.get("unresolved_records", 0)
             },
             "methodological_disclaimer": (

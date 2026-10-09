@@ -44,9 +44,30 @@ def test_chart_generators_render():
 
     fig4 = create_disparity_scatter_chart(df_state, "2023-24", "mpce_unimputed")
     assert fig4 is not None
+    # Verify dynamic ratio trace is present
+    has_ratio_trace = any("Benchmark" in str(tr.name) for tr in fig4.data)
+    assert has_ratio_trace
 
     fig5 = create_category_comparison_chart(df_category, "Rural", "Unimputed")
     assert fig5 is not None
 
     fig6 = create_cpi_trends_chart(df_cpi, "2024=100")
     assert fig6 is not None
+
+
+def test_cpi_dynamic_metrics_extraction():
+    _, _, _, df_cpi, _, _, _ = load_all_datasets()
+    cpi_2024 = df_cpi[df_cpi["base_year"] == "2024=100"]
+    assert not cpi_2024.empty
+
+    latest_month = cpi_2024["month_year"].max()
+    assert latest_month == "2026-08"
+
+    cpi_latest = cpi_2024[cpi_2024["month_year"] == latest_month]
+    c_gen = cpi_latest[cpi_latest["sector"] == "Combined"]
+    assert len(c_gen) == 1
+    assert c_gen["inflation_general_pct"].values[0] == 4.82
+    assert c_gen["cpi_general"].values[0] == 108.74
+    assert c_gen["cpi_food_cfpi"].values[0] == 110.71
+    assert c_gen["inflation_food_pct"].values[0] == 5.95
+

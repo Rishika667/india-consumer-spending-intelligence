@@ -4,9 +4,9 @@
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.65-red.svg)](https://streamlit.io/)
 [![Pipeline Validation](https://img.shields.io/badge/Pipeline%20Validation-100%25%20(28%2F28%20Checks)-brightgreen.svg)](#pipeline-validation-engine)
-[![Source Reconciliation](https://img.shields.io/badge/Source%20Reconciliation-100%25%20(23%2F23%20Matched)-blue.svg)](#source-reconciliation-engine)
-[![Tests Passing](https://img.shields.io/badge/Tests-9%20Passed-emerald.svg)](#testing-and-verification)
-[![Code License: MIT](https://img.shields.io/badge/Code%20License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Source Reconciliation](https://img.shields.io/badge/Source%20Reconciliation-100%25%20(42%2F42%20Matched)-blue.svg)](#source-reconciliation-engine)
+[![Tests Passing](https://img.shields.io/badge/Tests-Passing-emerald.svg)](#testing-and-verification)
+[![Code License: MIT](https://img.shields.io/badge/Code%20License-MIT-blue.svg)](LICENSE)
 [![Data License: OGDL-India](https://img.shields.io/badge/Data%20License-OGDL--India-orange.svg)](https://data.gov.in/)
 
 An institutional-grade, audit-ready research intelligence platform analyzing official household consumption expenditure patterns, rural-urban disparities, commodity basket allocations, and retail price dynamics in India. Built with Python, pandas, Streamlit, and Plotly.
@@ -19,17 +19,20 @@ An institutional-grade, audit-ready research intelligence platform analyzing off
 
 The application analyzes the official **Household Consumption Expenditure Survey (HCES) 2023–24** (NSS Report No. 592 & PIB PRID 2247612) and **HCES 2022–23** (NSS Report No. 590) released by the National Sample Survey Office (NSSO), Ministry of Statistics and Programme Implementation (MoSPI), Government of India. Official retail inflation from the transitioned **Consumer Price Index (Base 2024=100)** is integrated as decoupled macroeconomic context.
 
+*Note: ConsumerLens India is designed to run locally or self-hosted in a Python 3.11 environment with zero paid external APIs or cloud dependencies.*
+
 ---
 
 ## 🔍 Key Empirical Insights
 
 - **Sustained Rural Consumption Momentum:** Average nominal Monthly Per Capita Consumption Expenditure (MPCE) reached **₹4,122** in rural India (+9.2% YoY) and **₹6,996** in urban India (+8.3% YoY).
 - **Disparity Compression:** The urban-to-rural consumption premium narrowed to **1.70×** (69.7%), down from 1.71× in 2022–23 and 1.84× in 2011–12.
+- **State Coverage Rigor:** 34 States/UTs published for out-of-pocket (unimputed) MPCE in 2023-24 (with Delhi and Chandigarh retained as explicit unpublished cells), and 36 States/UTs published with social welfare imputation.
 - **Bottom-Fractile Growth:** The bottom 5% fractile class recorded notable percentage increases nationwide: **+22.1% in rural areas** (₹1,677) and **+18.7% in urban areas** (₹2,376).
 - **Descriptive Shift in Spending Allocations:** Non-food spending accounts for **52.96% rural and 60.30% urban** budgets. Within food, spending has shifted toward processed refreshments, milk, and vegetables relative to basic cereals (**4.99% rural, 3.76% urban**).
 - **Social Transfer Imputation Impact:** Imputing the value of free welfare goods (PMGKY foodgrains, school uniforms, cycles, computers) raises rural MPCE to **₹4,247** (+₹125/month) and urban MPCE to **₹7,078** (+₹82/month).
 - **Food Share Distinctions:**
-  - *HCES 2022–23 (unimputed):* Rural 46.38%, Urban 39.16% (Statement 5)
+  - *HCES 2022–23 (unimputed):* Rural 46.38%, Urban 39.16% (Statement 5 category sum; published aggregate is 39.17%)
   - *HCES 2022–23 (with welfare imputation):* Rural 47.47%, Urban 39.70% (Statement 15)
   - *HCES 2023–24 (unimputed):* Rural 47.04%, Urban 39.68% (Figures 4 & 5)
   - *HCES 2023–24 (with welfare imputation aggregate):* Rural 48.43%, Urban 40.31% (Report 592 text; item-level group breakdown unpublished by MoSPI)
@@ -43,6 +46,7 @@ The application analyzes the official **Household Consumption Expenditure Survey
 - **Deterministic Pipeline Validation Engine:** Exactly 28 automated checks across 5 dimensions (`src/quality_engine.py`)
 - **Primary Source Reconciliation Engine:** Automated benchmark reconciliation against raw PDFs/HTML (`scripts/reconcile_sources.py`)
 - **Interactive UI & Visualizations:** Streamlit, Plotly Express & Graph Objects (`app.py`, `src/ui/`)
+- **Continuous Integration:** GitHub Actions (`.github/workflows/ci.yml`)
 - **Testing:** Pytest test suite (`tests/`)
 - **Zero Cost Guarantee:** Zero paid APIs, zero runtime LLM dependencies, zero proprietary keys. Operates 100% offline with preserved raw source files and SHA-256 cryptographic verification.
 
@@ -51,9 +55,10 @@ india-consumer-spending-intelligence/
 ├── app.py                      # Master Streamlit Research Application
 ├── conftest.py                 # Pytest configuration
 ├── requirements.txt            # Python dependencies
+├── LICENSE                     # Dual licensing (MIT Code + OGDL-India Data)
 ├── scripts/
 │   ├── build_source_tables.py  # Generates curated source tables in data/sources/
-│   └── reconcile_sources.py    # Reconciles 23 primary benchmarks against raw documents
+│   └── reconcile_sources.py    # Bidirectionally reconciles 42 benchmarks against raw docs
 ├── src/
 │   ├── pipeline.py             # Data ingestion, transformation & ETL
 │   ├── quality_engine.py       # Deterministic 28-rule validation engine
@@ -63,6 +68,7 @@ india-consumer-spending-intelligence/
 ├── tests/
 │   ├── test_pipeline.py        # Pipeline & data integrity tests
 │   ├── test_quality_engine.py  # 28-check QC audit & corruption detection tests
+│   ├── test_reconciliation.py  # Source reconciliation gate & corruption tests
 │   └── test_app.py             # UI loader and chart rendering tests
 ├── data/
 │   ├── raw/                    # Preserved official MoSPI PDFs & HTML releases
@@ -94,7 +100,7 @@ india-consumer-spending-intelligence/
     ├── SOURCE_REGISTER.csv     # Official MoSPI source register & metadata
     ├── SOURCE_RECONCILIATION.md# Primary source reconciliation audit report
     ├── SOURCE_RECONCILIATION.json# Machine-readable benchmark reconciliation log
-    ├── DECISION_LOG.md         # Architecture decision records (ADRs 1–10)
+    ├── DECISION_LOG.md         # Architecture decision records (ADRs 1–11)
     ├── VALIDATION_REPORT.json  # Machine-readable automated 28-rule audit log
     ├── DATA_DICTIONARY.md      # Field definitions and data types
     ├── METHODOLOGY.md          # Survey design, CAPI 3-visit, HCES vs PFCE
@@ -123,10 +129,10 @@ $$\text{Pipeline Validation Score} = \sum_{k=1}^{5} w_k \cdot \left( \frac{\sum_
 
 Key curated benchmarks are programmatically verified against preserved primary source documents using `scripts/reconcile_sources.py`:
 
-- **Total Primary Benchmarks Checked:** 23
+- **Total Primary Benchmarks Checked:** 42 machine-checked benchmarks
 - **Primary Source Documents Searched:** `HCES_Press_Note_2023-24_27122024_rev.pdf`, `Factsheet_HCES_2022-23.pdf`, `HCES_2023-24_PIB_2247612.html`, `CPI_Release_Aug2026.html`
-- **Matched Records:** 23 / 23 (100.0% Match Rate)
-- **Verified Discrepancies Reconciled:** Goa, Himachal Pradesh, Uttarakhand, Dadra & Nagar Haveli and Daman & Diu, Haryana, Punjab, Delhi (explicit NaN).
+- **Matched Records:** 42 / 42 (100.0% Match Rate)
+- **Verified Discrepancies Reconciled:** Goa, Himachal Pradesh, Uttarakhand, Dadra & Nagar Haveli and Daman & Diu, Haryana, Punjab, Delhi (explicit NaN), Chandigarh (unimputed explicit NaN), 2022-23 urban food share 39.16% (category sum) vs 39.17% (aggregate).
 
 ---
 

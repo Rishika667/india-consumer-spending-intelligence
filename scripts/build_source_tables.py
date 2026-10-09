@@ -73,9 +73,11 @@ for state, r_unimp, u_unimp, r_imp, u_imp in state_data_2022_23:
         "mpce_unimputed": float(r_unimp),
         "mpce_imputed": float(r_imp),
         "welfare_delta": float(r_imp - r_unimp),
+        "status_unimputed": "PUBLISHED",
+        "status_imputed": "PUBLISHED",
         "source_id": "MoSPI_HCES_2022-23_Report590",
         "table_ref": "Factsheet Statement 8 (unimputed) & Statement 18 (imputed)",
-        "status": "OFFICIAL_PUBLISHED",
+        "status": "FULL_PUBLISHED",
         "notes": "Verified against Report 590 Factsheet Statements 8 and 18"
     })
     rows_22.append({
@@ -85,9 +87,11 @@ for state, r_unimp, u_unimp, r_imp, u_imp in state_data_2022_23:
         "mpce_unimputed": float(u_unimp),
         "mpce_imputed": float(u_imp),
         "welfare_delta": float(u_imp - u_unimp),
+        "status_unimputed": "PUBLISHED",
+        "status_imputed": "PUBLISHED",
         "source_id": "MoSPI_HCES_2022-23_Report590",
         "table_ref": "Factsheet Statement 8 (unimputed) & Statement 18 (imputed)",
-        "status": "OFFICIAL_PUBLISHED",
+        "status": "FULL_PUBLISHED",
         "notes": "Verified against Report 590 Factsheet Statements 8 and 18"
     })
 
@@ -140,8 +144,37 @@ state_data_2023_24 = [
 
 rows_23 = []
 for state, r_unimp, u_unimp, r_imp, u_imp, notes in state_data_2023_24:
+    # Determine precise table_ref
+    if state in ("Haryana", "Punjab"):
+        t_ref = "Report 592 Press Note Fig 2 & 3 (unimputed), Fig 8 & 9 (imputed)"
+    elif state == "All-India":
+        t_ref = "Report 592 Press Note Table 1 (unimputed) & Table 2 (imputed)"
+    elif state == "Chandigarh":
+        t_ref = "Report 592 Press Note Page 9 (imputed); Unimputed officially unpublished"
+    elif state == "Sikkim":
+        t_ref = "PRID 2247612 Statement 1 (unimputed); Report 592 Press Note Page 9 (imputed)"
+    elif state == "Dadra & Nagar Haveli and Daman & Diu":
+        t_ref = "PRID 2247612 Statement 1 (unimputed); Report 592 Press Note Page 9 (Rural imputed only)"
+    elif state == "Jammu & Kashmir":
+        t_ref = "PRID 2247612 Statement 1 (unimputed); Report 592 Press Note Page 9 (Urban imputed only)"
+    elif state == "Delhi":
+        t_ref = "Officially unpublished in PRID 2247612 and Report 592"
+    elif pd.notnull(r_imp) and pd.notnull(u_imp):
+        t_ref = "Report 592 Press Note Fig 2 & 3 (unimputed), Fig 8 & 9 (imputed); PRID 2247612 Statement 1 (unimputed)"
+    else:
+        t_ref = "PRID 2247612 Statement 1 (unimputed); Imputed officially unpublished in Report 592"
+
+    # Rural row
     r_delta = (r_imp - r_unimp) if (pd.notnull(r_imp) and pd.notnull(r_unimp)) else np.nan
-    r_status = "OFFICIAL_PUBLISHED" if pd.notnull(r_unimp) else "OFFICIALLY_UNAVAILABLE"
+    r_stat_unimp = "PUBLISHED" if pd.notnull(r_unimp) else "UNAVAILABLE"
+    r_stat_imp = "PUBLISHED" if pd.notnull(r_imp) else "UNAVAILABLE"
+    if r_stat_unimp == "PUBLISHED" and r_stat_imp == "PUBLISHED":
+        r_overall = "FULL_PUBLISHED"
+    elif r_stat_unimp == "PUBLISHED" or r_stat_imp == "PUBLISHED":
+        r_overall = "PARTIAL_PUBLISHED"
+    else:
+        r_overall = "OFFICIALLY_UNAVAILABLE"
+
     rows_23.append({
         "state_name": state,
         "survey_round": "2023-24",
@@ -149,13 +182,25 @@ for state, r_unimp, u_unimp, r_imp, u_imp, notes in state_data_2023_24:
         "mpce_unimputed": r_unimp,
         "mpce_imputed": r_imp,
         "welfare_delta": r_delta,
+        "status_unimputed": r_stat_unimp,
+        "status_imputed": r_stat_imp,
         "source_id": "MoSPI_HCES_2023-24_Report592_PIB2247612",
-        "table_ref": "PIB PRID 2247612 & Press Note Fig 2,3,8,9, Page 9",
-        "status": r_status,
+        "table_ref": t_ref,
+        "status": r_overall,
         "notes": notes
     })
+
+    # Urban row
     u_delta = (u_imp - u_unimp) if (pd.notnull(u_imp) and pd.notnull(u_unimp)) else np.nan
-    u_status = "OFFICIAL_PUBLISHED" if pd.notnull(u_unimp) else "OFFICIALLY_UNAVAILABLE"
+    u_stat_unimp = "PUBLISHED" if pd.notnull(u_unimp) else "UNAVAILABLE"
+    u_stat_imp = "PUBLISHED" if pd.notnull(u_imp) else "UNAVAILABLE"
+    if u_stat_unimp == "PUBLISHED" and u_stat_imp == "PUBLISHED":
+        u_overall = "FULL_PUBLISHED"
+    elif u_stat_unimp == "PUBLISHED" or u_stat_imp == "PUBLISHED":
+        u_overall = "PARTIAL_PUBLISHED"
+    else:
+        u_overall = "OFFICIALLY_UNAVAILABLE"
+
     rows_23.append({
         "state_name": state,
         "survey_round": "2023-24",
@@ -163,9 +208,11 @@ for state, r_unimp, u_unimp, r_imp, u_imp, notes in state_data_2023_24:
         "mpce_unimputed": u_unimp,
         "mpce_imputed": u_imp,
         "welfare_delta": u_delta,
+        "status_unimputed": u_stat_unimp,
+        "status_imputed": u_stat_imp,
         "source_id": "MoSPI_HCES_2023-24_Report592_PIB2247612",
-        "table_ref": "PIB PRID 2247612 & Press Note Fig 2,3,8,9, Page 9",
-        "status": u_status,
+        "table_ref": t_ref,
+        "status": u_overall,
         "notes": notes
     })
 

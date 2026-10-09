@@ -190,11 +190,30 @@ def create_disparity_scatter_chart(df_state: pd.DataFrame, selected_round: str =
     )
     fig.update_traces(textposition="top center", marker={"size": 10})
     
-    # National 1.70x reference line
+    # Compute dynamic national benchmark ratio for selected round & valuation
+    ai_rows = df_state[(df_state["survey_round"] == selected_round) & (df_state["state_name"] == "All-India")]
+    r_ai = ai_rows[ai_rows["sector"] == "Rural"][valuation_col].values
+    u_ai = ai_rows[ai_rows["sector"] == "Urban"][valuation_col].values
+    
+    if len(r_ai) > 0 and len(u_ai) > 0 and pd.notnull(r_ai[0]) and pd.notnull(u_ai[0]) and r_ai[0] > 0:
+        nat_ratio = u_ai[0] / r_ai[0]
+    else:
+        val_name = "imputed" if "imputed" in valuation_col and "un" not in valuation_col else "unimputed"
+        defaults = {
+            ("2023-24", "unimputed"): 6996.0 / 4122.0,
+            ("2023-24", "imputed"): 7078.0 / 4247.0,
+            ("2022-23", "unimputed"): 6459.0 / 3773.0,
+            ("2022-23", "imputed"): 6521.0 / 3860.0
+        }
+        nat_ratio = defaults.get((selected_round, val_name), 1.70)
+
+    val_label = "With Transfers" if "imputed" in valuation_col and "un" not in valuation_col else "Out-of-Pocket"
+    benchmark_label = f"National {nat_ratio:.2f}× Benchmark ({selected_round}, {val_label})"
+
     max_val = max(pivoted["Rural"].max(), pivoted["Urban"].max()) * 1.05
     fig.add_trace(go.Scatter(
-        x=[0, max_val / 1.70], y=[0, max_val], mode="lines",
-        line={"color": "#94a3b8", "dash": "dot"}, name="National 1.70x Benchmark Line"
+        x=[0, max_val / nat_ratio], y=[0, max_val], mode="lines",
+        line={"color": "#94a3b8", "dash": "dot"}, name=benchmark_label
     ))
     return format_chart_layout(fig, f"Urban-Rural Consumption Disparity & Convergence ({selected_round})", 540)
 

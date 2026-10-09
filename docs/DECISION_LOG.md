@@ -188,7 +188,27 @@ This document records the architectural, methodological, and data engineering de
   - *Alternative B: Extrapolating CPI 2024 inflation backward into 2025.* Rejected to prevent inventing official economic statistics.
 - **Evidence:** `scripts/reconcile_sources.py`, `docs/SOURCE_RECONCILIATION.json`, `docs/VALIDATION_REPORT.json`.
 - **Unresolved Issues:** None.
-- **Fallback:** Regression test suite in `tests/` continuously validates pipeline integrity, chart generators, and quality engine behavior.
+---
+
+## Decision 11: Release Gate Hardening — Bidirectional Source Reconciliation, Dynamic UI Integrity, and OGDL Licensing
+
+- **Status:** APPROVED & IMPLEMENTED
+- **Context:** To satisfy institutional release gating and eliminate static artifacts:
+  1. Primary source reconciliation had to perform bidirectional verification between structured CSVs (`data/sources/*.csv`) and primary documents (`data/raw/`).
+  2. The reconciler must exit with code 1 if data is corrupted or primary documents are missing.
+  3. Dynamic UI values (CPI headline cards, scatter disparity ratios, reconciliation check counts) must compute from data models rather than hardcoded text.
+  4. Out-of-pocket state coverage must accurately report 34 published states/UTs (as both Delhi and Chandigarh are officially unavailable for unimputed MPCE).
+  5. The 2022-23 urban food share discrepancy between category sum (39.16%) and published aggregate (39.17%) must be explicitly tracked.
+  6. Licensing terms needed explicit separation between MIT code and Government of India Open Government Data License (OGDL-India) for MoSPI datasets.
+- **Decision:**
+  1. **Bidirectional Source Reconciler (`scripts/reconcile_sources.py`):** Rewrote the reconciler to compare actual observations read directly from structured CSVs against exact parsed tokens in primary raw HTML and PDF documents. Expanded verification coverage to 42 machine-checked benchmarks across HCES MPCE aggregates, state benchmarks, fractile extremes, food budget shares, and CPI indices. Enforced strict non-zero exit (`sys.exit(1)`) on any mismatch or unresolved item.
+  2. **Harmonized Disparity & CPI Analytics:** Updated `create_disparity_scatter_chart` to dynamically compute national urban-to-rural ratios based on the selected round and valuation basis (e.g. 1.70× for 2023-24 unimputed, 1.67× for 2023-24 imputed, 1.71× for 2022-23 unimputed, 1.69× for 2022-23 imputed). Dynamic CPI metrics and coverage summaries in `app.py` derive directly from `df_cpi`.
+  3. **Coverage & Provenance Rigor:** Documented 34 published states/UTs for 2023-24 unimputed MPCE, distinguishing `status_unimputed` and `status_imputed` in `source_state_mpce_2023_24.csv`. Documented the 0.01% rounding difference between Statement 5 commodity sum (39.16%) and published aggregate (39.17%) in benchmark check `REC_30`.
+  4. **Dual Licensing:** Added root `LICENSE` file granting MIT License for pipeline code and applications, while attributing official Government of India survey data under the Open Government Data License (OGDL-India).
+  5. **Continuous Integration:** Added `.github/workflows/ci.yml` running the source reconciliation gate, pipeline build, and pytest test suite on Python 3.11.
+- **Evidence:** `scripts/reconcile_sources.py`, `tests/test_reconciliation.py`, `LICENSE`, `.github/workflows/ci.yml`.
+- **Unresolved Issues:** None.
+- **Fallback:** Regression tests in `tests/test_reconciliation.py` enforce corruption detection and missing document handling.
 
 ---
 *End of Decision Log.*

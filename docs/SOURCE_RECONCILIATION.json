@@ -1,10 +1,15 @@
 {
-  "title": "Independent Source Reconciliation Audit",
-  "total_records_checked": 23,
-  "records_matched": 23,
+  "title": "Bidirectional Source Reconciliation Audit",
+  "total_records_checked": 42,
+  "records_matched": 0,
   "records_mismatched": 0,
-  "match_rate_pct": 100.0,
-  "unresolved_records": 0,
+  "unresolved_records": 42,
+  "match_rate_pct": 0.0,
+  "audit_scope": {
+    "machine_checked_benchmarks": 42,
+    "curated_dataset_tables": 8,
+    "scope_limitation_statement": "Reconciliation checks programmatically verify 42 critical anchor benchmarks across national MPCE, corrected states, missing cells, food shares, fractiles, and retail CPI. Remaining cell values in curated tables are verified via deterministic internal consistency and relational schema rules in the Data Quality Engine."
+  },
   "officially_unavailable_observations": [
     "Delhi 2023-24 unimputed & imputed MPCE (officially unpublished in Report 592 & PRID 2247612)",
     "Chandigarh 2023-24 unimputed MPCE (unimputed column not published in Report 592/PRID 2247612; imputed available on Page 9)",
@@ -15,210 +20,775 @@
   "reconciliation_checks": [
     {
       "check_id": "REC_01",
-      "metric": "2022-23 Rural MPCE Unimputed (Rs 3,773)",
-      "target_document": "Factsheet_HCES_2022-23.pdf",
-      "expected_value": "3773",
-      "pattern_tested": "all-India\\s+3,773\\s+6,459",
-      "status": "MATCHED",
-      "evidence": "Matched substring: 'all-India 3,773 6,459' in Factsheet_HCES_2022-23.pdf"
+      "metric": "2022-23 All-India Rural MPCE (Unimputed)",
+      "dataset": "source_state_mpce_2022_23.csv",
+      "row_keys": {
+        "state_name": "All-India",
+        "sector": "Rural"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": 3773.0,
+      "primary_source_doc": "Factsheet_HCES_2022-23.pdf",
+      "table_ref": "Statement 8 (Page 14)",
+      "source_evidence": "Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_02",
-      "metric": "2022-23 Rural MPCE Imputed (Rs 3,860)",
-      "target_document": "Factsheet_HCES_2022-23.pdf",
-      "expected_value": "3860",
-      "pattern_tested": "All-India\\s+3,860\\s+6,521",
-      "status": "MATCHED",
-      "evidence": "Matched substring: 'All-India 3,860 6,521' in Factsheet_HCES_2022-23.pdf"
+      "metric": "2022-23 All-India Urban MPCE (Unimputed)",
+      "dataset": "source_state_mpce_2022_23.csv",
+      "row_keys": {
+        "state_name": "All-India",
+        "sector": "Urban"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": 6459.0,
+      "primary_source_doc": "Factsheet_HCES_2022-23.pdf",
+      "table_ref": "Statement 8 (Page 14)",
+      "source_evidence": "Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_03",
-      "metric": "2023-24 Rural MPCE Unimputed (Rs 4,122)",
-      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
-      "expected_value": "4122",
-      "pattern_tested": "4,122\\s+6,996",
-      "status": "MATCHED",
-      "evidence": "Matched substring: '4,122 6,996' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+      "metric": "2022-23 All-India Rural MPCE (Imputed)",
+      "dataset": "source_state_mpce_2022_23.csv",
+      "row_keys": {
+        "state_name": "All-India",
+        "sector": "Rural"
+      },
+      "field": "mpce_imputed",
+      "observed_value": 3860.0,
+      "primary_source_doc": "Factsheet_HCES_2022-23.pdf",
+      "table_ref": "Statement 18 (Page 22)",
+      "source_evidence": "Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_04",
-      "metric": "2023-24 Rural MPCE Imputed (Rs 4,247)",
-      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
-      "expected_value": "4247",
-      "pattern_tested": "4,247\\s+7,078",
-      "status": "MATCHED",
-      "evidence": "Matched substring: '4,247 7,078' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+      "metric": "2022-23 All-India Urban MPCE (Imputed)",
+      "dataset": "source_state_mpce_2022_23.csv",
+      "row_keys": {
+        "state_name": "All-India",
+        "sector": "Urban"
+      },
+      "field": "mpce_imputed",
+      "observed_value": 6521.0,
+      "primary_source_doc": "Factsheet_HCES_2022-23.pdf",
+      "table_ref": "Statement 18 (Page 22)",
+      "source_evidence": "Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_05",
-      "metric": "Goa 2023-24 Rural/Urban ALL (8,048 / 9,726)",
-      "target_document": "HCES_2023-24_PIB_2247612.html",
-      "expected_value": "8048 / 9726",
-      "pattern_tested": "Goa[\\s\\S]{1,50}?8,048[\\s\\S]{1,50}?9,726",
-      "status": "MATCHED",
-      "evidence": "Matched substring: 'Goa\n\t\t\t\n\t\t\t\n\t\t\t6,006\n\t\t\t\n\t\t\t\n\t\t\t8,048\n\t\t\t\n\t\t\t\n\t\t\t9,231\n\t\t\t\n\t\t\t\n\t\t\t9,726' in HCES_2023-24_PIB_2247612.html"
+      "metric": "2023-24 All-India Rural MPCE (Unimputed)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "All-India",
+        "sector": "Rural"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": 4122.0,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Table 1 (Page 3)",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_06",
-      "metric": "Himachal Pradesh 2023-24 Rural/Urban ALL (5,825 / 9,223)",
-      "target_document": "HCES_2023-24_PIB_2247612.html",
-      "expected_value": "5825 / 9223",
-      "pattern_tested": "Himachal Pradesh[\\s\\S]{1,50}?5,825[\\s\\S]{1,50}?9,223",
-      "status": "MATCHED",
-      "evidence": "Matched substring: 'Himachal Pradesh\n\t\t\t\n\t\t\t\n\t\t\t5,406\n\t\t\t\n\t\t\t\n\t\t\t5,825\n\t\t\t\n\t\t\t\n\t\t\t12,124\n\t\t\t\n\t\t\t\n\t\t\t9,223' in HCES_2023-24_PIB_2247612.html"
+      "metric": "2023-24 All-India Urban MPCE (Unimputed)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "All-India",
+        "sector": "Urban"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": 6996.0,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Table 1 (Page 3)",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_07",
-      "metric": "Uttarakhand 2023-24 Rural/Urban ALL (5,003 / 7,486)",
-      "target_document": "HCES_2023-24_PIB_2247612.html",
-      "expected_value": "5003 / 7486",
-      "pattern_tested": "Uttarakhand[\\s\\S]{1,50}?5,003[\\s\\S]{1,50}?7,486",
-      "status": "MATCHED",
-      "evidence": "Matched substring: 'Uttarakhand\n\t\t\t\n\t\t\t\n\t\t\t4,687\n\t\t\t\n\t\t\t\n\t\t\t5,003\n\t\t\t\n\t\t\t\n\t\t\t8,513\n\t\t\t\n\t\t\t\n\t\t\t7,486' in HCES_2023-24_PIB_2247612.html"
+      "metric": "2023-24 All-India Rural MPCE (Imputed)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "All-India",
+        "sector": "Rural"
+      },
+      "field": "mpce_imputed",
+      "observed_value": 4247.0,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Table 2 (Page 9)",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_08",
-      "metric": "Dadra & Nagar Haveli and Daman & Diu 2023-24 Rural/Urban ALL (4,311 / 6,837)",
-      "target_document": "HCES_2023-24_PIB_2247612.html",
-      "expected_value": "4311 / 6837",
-      "pattern_tested": "Dadra & Nagar Haveli[\\s\\S]{1,60}?4,311[\\s\\S]{1,60}?6,837",
-      "status": "MATCHED",
-      "evidence": "Matched substring: 'Dadra & Nagar Haveli and Daman & Diu\n\t\t\t\n\t\t\t\n\t\t\t3,943\n\t\t\t\n\t\t\t\n\t\t\t4,311\n\t\t\t\n\t\t\t\n\t\t\t5,804\n\t\t\t\n\t\t\t\n\t\t\t6,837' in HCES_2023-24_PIB_2247612.html"
+      "metric": "2023-24 All-India Urban MPCE (Imputed)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "All-India",
+        "sector": "Urban"
+      },
+      "field": "mpce_imputed",
+      "observed_value": 7078.0,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Table 2 (Page 9)",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_09",
-      "metric": "Haryana 2023-24 Rural/Urban Unimputed (5,377 / 8,428)",
-      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
-      "expected_value": "5377",
-      "pattern_tested": "Haryana,\\s*5,377",
-      "status": "MATCHED",
-      "evidence": "Matched substring: 'Haryana, 5,377' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+      "metric": "Goa 2023-24 Rural MPCE (Unimputed)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Goa",
+        "sector": "Rural"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": 8048.0,
+      "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
+      "table_ref": "Table 4 Statement 1",
+      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_10",
-      "metric": "Punjab 2023-24 Rural/Urban Unimputed (5,817 / 7,359)",
-      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
-      "expected_value": "5817",
-      "pattern_tested": "Punjab,\\s*5,817",
-      "status": "MATCHED",
-      "evidence": "Matched substring: 'Punjab, 5,817' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+      "metric": "Goa 2023-24 Urban MPCE (Unimputed)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Goa",
+        "sector": "Urban"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": 9726.0,
+      "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
+      "table_ref": "Table 4 Statement 1",
+      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_11",
-      "metric": "Sikkim 2023-24 Imputed (Rural 9,474 / Urban 13,965)",
-      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
-      "expected_value": "9474 / 13965",
-      "pattern_tested": "highest in Sikkim\\s*\\(Rural\\s*\u2013?\\s*Rs\\.\\s*9,474\\s*and\\s*Urban\\s*\u2013?\\s*Rs\\.\\s*13,965\\)",
-      "status": "MATCHED",
-      "evidence": "Matched substring: 'highest in Sikkim (Rural \u2013 Rs. 9,474 and Urban \u2013 Rs. \n13,965)' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+      "metric": "Himachal Pradesh 2023-24 Rural MPCE (Unimputed)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Himachal Pradesh",
+        "sector": "Rural"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": 5825.0,
+      "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
+      "table_ref": "Table 4 Statement 1",
+      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_12",
-      "metric": "Chandigarh 2023-24 Imputed (Rural 8,857 / Urban 13,425)",
-      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
-      "expected_value": "8857 / 13425",
-      "pattern_tested": "highest in Chandigarh\\s*\\(Rural\\s*\u2013?\\s*Rs\\.\\s*8,857\\s*and\\s*Urban\\s*\u2013?\\s*Rs\\.\\s*13,425\\)",
-      "status": "MATCHED",
-      "evidence": "Matched substring: 'highest in Chandigarh (Rural \u2013 Rs. 8,857 and Urban \u2013 Rs. 13,425)' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+      "metric": "Himachal Pradesh 2023-24 Urban MPCE (Unimputed)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Himachal Pradesh",
+        "sector": "Urban"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": 9223.0,
+      "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
+      "table_ref": "Table 4 Statement 1",
+      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_13",
-      "metric": "DNHDD 2023-24 Rural Imputed Lowest UT (Rs 4,450)",
-      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
-      "expected_value": "4450",
-      "pattern_tested": "lowest in Dadra and Nagar Haveli and\\s*Daman and Diu\\s*\\(Rs\\.\\s*4,\\s*450\\)",
-      "status": "MATCHED",
-      "evidence": "Matched substring: 'lowest in Dadra and Nagar Haveli and  Daman and Diu (Rs. 4, 450)' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+      "metric": "Uttarakhand 2023-24 Rural MPCE (Unimputed)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Uttarakhand",
+        "sector": "Rural"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": 5003.0,
+      "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
+      "table_ref": "Table 4 Statement 1",
+      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_14",
-      "metric": "J&K 2023-24 Urban Imputed Lowest UT (Rs 6,375)",
-      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
-      "expected_value": "6375",
-      "pattern_tested": "Jammu[\\s\\S]{1,20}Kashmir\\s*\\(Rs\\.\\s*6,375\\)",
-      "status": "MATCHED",
-      "evidence": "Matched substring: 'Jammu \nand Kashmir (Rs. 6,375)' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+      "metric": "Uttarakhand 2023-24 Urban MPCE (Unimputed)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Uttarakhand",
+        "sector": "Urban"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": 7486.0,
+      "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
+      "table_ref": "Table 4 Statement 1",
+      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_15",
-      "metric": "2022-23 Unimputed Food Share (Rural 46.38% / Urban 39.17%)",
-      "target_document": "Factsheet_HCES_2022-23.pdf",
-      "expected_value": "46.38 / 39.17",
-      "pattern_tested": "food total\\s+1,750\\s+2,530\\s+46\\.38\\s+39\\.17",
-      "status": "MATCHED",
-      "evidence": "Matched substring: 'food total 1,750 2,530 46.38 39.17' in Factsheet_HCES_2022-23.pdf"
+      "metric": "DNHDD 2023-24 Rural MPCE (Unimputed)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Dadra & Nagar Haveli and Daman & Diu",
+        "sector": "Rural"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": 4311.0,
+      "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
+      "table_ref": "Table 4 Statement 1",
+      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_16",
-      "metric": "2022-23 Imputed Food Share (Rural 47.47% / Urban 39.70%)",
-      "target_document": "Factsheet_HCES_2022-23.pdf",
-      "expected_value": "47.47 / 39.70",
-      "pattern_tested": "food total\\s+1,832\\s+2,589\\s+47\\.47\\s+39\\.70",
-      "status": "MATCHED",
-      "evidence": "Matched substring: 'food total 1,832 2,589 47.47 39.70' in Factsheet_HCES_2022-23.pdf"
+      "metric": "DNHDD 2023-24 Urban MPCE (Unimputed)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Dadra & Nagar Haveli and Daman & Diu",
+        "sector": "Urban"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": 6837.0,
+      "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
+      "table_ref": "Table 4 Statement 1",
+      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_17",
-      "metric": "2023-24 Unimputed Food Share Rural (Beverages 9.84%, Milk 8.44%, Veg 6.03%)",
-      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
-      "expected_value": "9.84 / 8.44 / 6.03",
-      "pattern_tested": "9\\.84[\\s\\S]{1,20}?8\\.44[\\s\\S]{1,20}?6\\.03",
-      "status": "MATCHED",
-      "evidence": "Matched substring: '9.84\n8.44\n6.03' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+      "metric": "Haryana 2023-24 Rural MPCE (Unimputed)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Haryana",
+        "sector": "Rural"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": 5377.0,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Figure 2 (Page 5)",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_18",
-      "metric": "2023-24 Fractile Bottom 5% (Rural 1,677 / Urban 2,376)",
-      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
-      "expected_value": "1677 / 2376",
-      "pattern_tested": "1,677[\\s\\S]{1,30}?2,376",
-      "status": "MATCHED",
-      "evidence": "Matched substring: '1,677 \nwhile it is Rs. 2,376' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+      "metric": "Haryana 2023-24 Urban MPCE (Unimputed)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Haryana",
+        "sector": "Urban"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": 8428.0,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Figure 3 (Page 6)",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_19",
-      "metric": "2023-24 Fractile Top 5% (Rural 10,137 / Urban 20,310)",
-      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
-      "expected_value": "10137 / 20310",
-      "pattern_tested": "10,137[\\s\\S]{1,30}?20,310",
-      "status": "MATCHED",
-      "evidence": "Matched substring: '10,137 and Rs. 20,310' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+      "metric": "Punjab 2023-24 Rural MPCE (Unimputed)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Punjab",
+        "sector": "Rural"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": 5817.0,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Figure 2 (Page 5)",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_20",
-      "metric": "August 2026 Headline CPI Inflation (4.82%)",
-      "target_document": "CPI_Release_Aug2026.html",
-      "expected_value": "4.82%",
-      "pattern_tested": "August,\\s*2026\\s*is\\s*4\\.82%",
-      "status": "MATCHED",
-      "evidence": "Matched substring: 'August, 2026 is 4.82%' in CPI_Release_Aug2026.html"
+      "metric": "Punjab 2023-24 Urban MPCE (Unimputed)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Punjab",
+        "sector": "Urban"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": 7359.0,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Figure 3 (Page 6)",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_21",
-      "metric": "August 2026 Food Inflation CFPI Combined (5.95%)",
-      "target_document": "CPI_Release_Aug2026.html",
-      "expected_value": "5.95%",
-      "pattern_tested": "5\\.95",
-      "status": "MATCHED",
-      "evidence": "Matched substring: '5.95' in CPI_Release_Aug2026.html"
+      "metric": "Delhi 2023-24 Rural Unimputed Status (NaN)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Delhi",
+        "sector": "Rural"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": null,
+      "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
+      "table_ref": "Table 4 Statement 1",
+      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "comparison_rule": "both_null",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_22",
-      "metric": "August 2026 Combined General CPI Index (108.74)",
-      "target_document": "CPI_Release_Aug2026.html",
-      "expected_value": "108.74",
-      "pattern_tested": "108\\.74",
-      "status": "MATCHED",
-      "evidence": "Matched substring: '108.74' in CPI_Release_Aug2026.html"
+      "metric": "Delhi 2023-24 Urban Unimputed Status (NaN)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Delhi",
+        "sector": "Urban"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": null,
+      "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
+      "table_ref": "Table 4 Statement 1",
+      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "comparison_rule": "both_null",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     },
     {
       "check_id": "REC_23",
-      "metric": "August 2026 Combined CFPI Food Index (110.71)",
-      "target_document": "CPI_Release_Aug2026.html",
-      "expected_value": "110.71",
-      "pattern_tested": "110\\.71",
-      "status": "MATCHED",
-      "evidence": "Matched substring: '110.71' in CPI_Release_Aug2026.html"
+      "metric": "Chandigarh 2023-24 Rural Unimputed Status (NaN)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Chandigarh",
+        "sector": "Rural"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": null,
+      "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
+      "table_ref": "Table 4 Statement 1",
+      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "comparison_rule": "both_null",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_24",
+      "metric": "Chandigarh 2023-24 Urban Unimputed Status (NaN)",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Chandigarh",
+        "sector": "Urban"
+      },
+      "field": "mpce_unimputed",
+      "observed_value": null,
+      "primary_source_doc": "HCES_2023-24_PIB_2247612.html",
+      "table_ref": "Table 4 Statement 1",
+      "source_evidence": "Target primary document 'HCES_2023-24_PIB_2247612.html' missing or unreadable in data/raw/",
+      "comparison_rule": "both_null",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_25",
+      "metric": "Chandigarh 2023-24 Rural Imputed MPCE",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Chandigarh",
+        "sector": "Rural"
+      },
+      "field": "mpce_imputed",
+      "observed_value": 8857.0,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Page 9 Text",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_26",
+      "metric": "Chandigarh 2023-24 Urban Imputed MPCE",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Chandigarh",
+        "sector": "Urban"
+      },
+      "field": "mpce_imputed",
+      "observed_value": 13425.0,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Page 9 Text",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_27",
+      "metric": "Sikkim 2023-24 Rural Imputed MPCE",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Sikkim",
+        "sector": "Rural"
+      },
+      "field": "mpce_imputed",
+      "observed_value": 9474.0,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Page 9 Text",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_28",
+      "metric": "Sikkim 2023-24 Urban Imputed MPCE",
+      "dataset": "source_state_mpce_2023_24.csv",
+      "row_keys": {
+        "state_name": "Sikkim",
+        "sector": "Urban"
+      },
+      "field": "mpce_imputed",
+      "observed_value": 13965.0,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Page 9 Text",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_29",
+      "metric": "2022-23 Rural Unimputed Food Share Benchmark (46.38%)",
+      "dataset": "source_category_shares.csv",
+      "row_keys": {
+        "survey_round": "2022-23",
+        "sector": "Rural",
+        "valuation": "Unimputed",
+        "category": "Beverages & Processed Food"
+      },
+      "field": "share_pct",
+      "observed_value": 9.62,
+      "primary_source_doc": "Factsheet_HCES_2022-23.pdf",
+      "table_ref": "Statement 5",
+      "source_evidence": "Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "numeric_tolerance",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_30",
+      "metric": "2022-23 Urban Unimputed Food Share Rounding Reconciliation (39.16% vs 39.17%)",
+      "dataset": "source_category_shares.csv",
+      "row_keys": {
+        "survey_round": "2022-23",
+        "sector": "Urban",
+        "valuation": "Unimputed",
+        "category": "Beverages & Processed Food"
+      },
+      "field": "share_pct",
+      "observed_value": 10.64,
+      "primary_source_doc": "Factsheet_HCES_2022-23.pdf",
+      "table_ref": "Statement 5",
+      "source_evidence": "Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "numeric_tolerance",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_31",
+      "metric": "2022-23 Rural Imputed Leading Food Category (Milk & Milk Products 8.14%)",
+      "dataset": "source_category_shares.csv",
+      "row_keys": {
+        "survey_round": "2022-23",
+        "sector": "Rural",
+        "valuation": "Imputed",
+        "category": "Milk & Milk Products"
+      },
+      "field": "share_pct",
+      "observed_value": 8.14,
+      "primary_source_doc": "Factsheet_HCES_2022-23.pdf",
+      "table_ref": "Statement 15",
+      "source_evidence": "Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_32",
+      "metric": "2022-23 Urban Imputed Leading Food Category (Milk & Milk Products 7.15%)",
+      "dataset": "source_category_shares.csv",
+      "row_keys": {
+        "survey_round": "2022-23",
+        "sector": "Urban",
+        "valuation": "Imputed",
+        "category": "Milk & Milk Products"
+      },
+      "field": "share_pct",
+      "observed_value": 7.15,
+      "primary_source_doc": "Factsheet_HCES_2022-23.pdf",
+      "table_ref": "Statement 15",
+      "source_evidence": "Target primary document 'Factsheet_HCES_2022-23.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_33",
+      "metric": "2023-24 Rural Unimputed Beverages Share (9.84%)",
+      "dataset": "source_category_shares.csv",
+      "row_keys": {
+        "survey_round": "2023-24",
+        "sector": "Rural",
+        "valuation": "Unimputed",
+        "category": "Beverages & Processed Food"
+      },
+      "field": "share_pct",
+      "observed_value": 9.84,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Figure 4 (Page 7)",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_34",
+      "metric": "2023-24 Urban Unimputed Beverages Share (11.09%)",
+      "dataset": "source_category_shares.csv",
+      "row_keys": {
+        "survey_round": "2023-24",
+        "sector": "Urban",
+        "valuation": "Unimputed",
+        "category": "Beverages & Processed Food"
+      },
+      "field": "share_pct",
+      "observed_value": 11.09,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Figure 5 (Page 7)",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_35",
+      "metric": "2023-24 Fractile Bottom 5% Rural MPCE (Rs 1,677)",
+      "dataset": "source_fractile_distribution.csv",
+      "row_keys": {
+        "survey_round": "2023-24",
+        "sector": "Rural",
+        "fractile_class": "0-5%"
+      },
+      "field": "avg_mpce",
+      "observed_value": 1677.0,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Page 4 Text & Figure 1",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_36",
+      "metric": "2023-24 Fractile Bottom 5% Urban MPCE (Rs 2,376)",
+      "dataset": "source_fractile_distribution.csv",
+      "row_keys": {
+        "survey_round": "2023-24",
+        "sector": "Urban",
+        "fractile_class": "0-5%"
+      },
+      "field": "avg_mpce",
+      "observed_value": 2376.0,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Page 4 Text & Figure 1",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_37",
+      "metric": "2023-24 Fractile Top 5% Rural MPCE (Rs 10,137)",
+      "dataset": "source_fractile_distribution.csv",
+      "row_keys": {
+        "survey_round": "2023-24",
+        "sector": "Rural",
+        "fractile_class": "95-100%"
+      },
+      "field": "avg_mpce",
+      "observed_value": 10137.0,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Page 4 Text",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_38",
+      "metric": "2023-24 Fractile Top 5% Urban MPCE (Rs 20,310)",
+      "dataset": "source_fractile_distribution.csv",
+      "row_keys": {
+        "survey_round": "2023-24",
+        "sector": "Urban",
+        "fractile_class": "95-100%"
+      },
+      "field": "avg_mpce",
+      "observed_value": 20310.0,
+      "primary_source_doc": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "table_ref": "Page 4 Text",
+      "source_evidence": "Target primary document 'HCES_Press_Note_2023-24_27122024_rev.pdf' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_39",
+      "metric": "August 2026 Headline CPI Inflation Combined (4.82%)",
+      "dataset": "source_cpi_monthly_2024_base.csv",
+      "row_keys": {
+        "month_year": "2026-08",
+        "sector": "Combined"
+      },
+      "field": "inflation_general_pct",
+      "observed_value": 4.82,
+      "primary_source_doc": "CPI_Release_Aug2026.html",
+      "table_ref": "Table 1 (Provisional)",
+      "source_evidence": "Target primary document 'CPI_Release_Aug2026.html' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_40",
+      "metric": "August 2026 General CPI Index Combined (108.74)",
+      "dataset": "source_cpi_monthly_2024_base.csv",
+      "row_keys": {
+        "month_year": "2026-08",
+        "sector": "Combined"
+      },
+      "field": "cpi_general",
+      "observed_value": 108.74,
+      "primary_source_doc": "CPI_Release_Aug2026.html",
+      "table_ref": "Table 1 & Table 9",
+      "source_evidence": "Target primary document 'CPI_Release_Aug2026.html' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_41",
+      "metric": "August 2026 CFPI Food Inflation Combined (5.95%)",
+      "dataset": "source_cpi_monthly_2024_base.csv",
+      "row_keys": {
+        "month_year": "2026-08",
+        "sector": "Combined"
+      },
+      "field": "inflation_food_pct",
+      "observed_value": 5.95,
+      "primary_source_doc": "CPI_Release_Aug2026.html",
+      "table_ref": "Table 1 & Table 2",
+      "source_evidence": "Target primary document 'CPI_Release_Aug2026.html' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
+    },
+    {
+      "check_id": "REC_42",
+      "metric": "August 2026 CFPI Food Index Combined (110.71)",
+      "dataset": "source_cpi_monthly_2024_base.csv",
+      "row_keys": {
+        "month_year": "2026-08",
+        "sector": "Combined"
+      },
+      "field": "cpi_food_cfpi",
+      "observed_value": 110.71,
+      "primary_source_doc": "CPI_Release_Aug2026.html",
+      "table_ref": "Table 1",
+      "source_evidence": "Target primary document 'CPI_Release_Aug2026.html' missing or unreadable in data/raw/",
+      "comparison_rule": "exact_numeric",
+      "status": "UNRESOLVED",
+      "verification_type": "MACHINE_CHECKED",
+      "limitations": "Primary source file unavailable locally"
     }
   ]
 }
