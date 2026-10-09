@@ -1,6 +1,6 @@
 """
 ConsumerLens India — Reusable UI Components and Styling
-Institutional, editorial styling for Streamlit.
+Institutional, editorial styling for Streamlit with responsive layout helpers.
 """
 
 import streamlit as st
@@ -11,9 +11,9 @@ def inject_custom_css():
     <style>
     /* Global Container Adjustments */
     .block-container {
-        padding-top: 1.5rem;
+        padding-top: 1.25rem;
         padding-bottom: 3rem;
-        max-width: 1250px;
+        max-width: 1280px;
     }
     
     /* Institutional Metric Card */
@@ -23,10 +23,10 @@ def inject_custom_css():
         border-radius: 8px;
         padding: 1.1rem;
         margin-bottom: 0.75rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
     }
     .metric-title {
-        font-size: 0.85rem;
+        font-size: 0.82rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         color: #64748b;
@@ -70,7 +70,7 @@ def inject_custom_css():
         font-size: 0.85rem;
     }
     
-    /* Warning Box */
+    /* Warning & Methodology Box */
     .methodology-alert {
         background-color: #fffbeb;
         border-left: 4px solid #f59e0b;
@@ -79,7 +79,7 @@ def inject_custom_css():
         margin-bottom: 1.25rem;
         color: #92400e;
         font-size: 0.88rem;
-        line-height: 1.45;
+        line-height: 1.5;
     }
     
     /* Section Headers */
@@ -87,13 +87,61 @@ def inject_custom_css():
         font-size: 1.35rem;
         font-weight: 700;
         color: #1e293b;
-        margin-top: 1.5rem;
-        margin-bottom: 0.5rem;
+        margin-top: 1.25rem;
+        margin-bottom: 0.4rem;
     }
     .section-subtitle {
         font-size: 0.92rem;
         color: #64748b;
         margin-bottom: 1.25rem;
+        line-height: 1.45;
+    }
+
+    /* Analytical Research Brief Card */
+    .insight-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-left: 4px solid #1e3a8a;
+        border-radius: 6px;
+        padding: 1.2rem 1.35rem;
+        margin-bottom: 1.1rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+    .insight-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 0.65rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    .insight-title {
+        font-size: 1.02rem;
+        font-weight: 700;
+        color: #0f172a;
+    }
+    .insight-tag {
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        background-color: #f1f5f9;
+        color: #475569;
+        padding: 0.2rem 0.55rem;
+        border-radius: 4px;
+    }
+    .insight-body {
+        font-size: 0.91rem;
+        color: #334155;
+        line-height: 1.6;
+    }
+    .insight-dim-label {
+        font-weight: 600;
+        color: #1e3a8a;
+    }
+    .insight-lim-label {
+        font-weight: 600;
+        color: #b45309;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -113,5 +161,37 @@ def render_disclaimer_banner(title: str, text: str):
     st.markdown(f"""
     <div class="methodology-alert">
         <strong>⚠️ {title}:</strong> {text}
+    </div>
+    """, unsafe_allow_html=True)
+
+
+def render_insight_card(
+    title: str,
+    tag: str,
+    what_changed: str,
+    where_visible: str,
+    why_matters: str,
+    limitation: str,
+    border_color: str = "#1e3a8a"
+):
+    """
+    Renders a structured 4-dimension syndicated research insight card answering:
+    1. What changed/differs?
+    2. Where is it most visible?
+    3. Why does it matter commercially?
+    4. What is the empirical limitation?
+    """
+    st.markdown(f"""
+    <div class="insight-card" style="border-left-color: {border_color};">
+        <div class="insight-header">
+            <span class="insight-title">{title}</span>
+            <span class="insight-tag">{tag}</span>
+        </div>
+        <div class="insight-body">
+            <p><strong><span class="insight-dim-label">1. Measured Comparison:</span></strong> {what_changed}</p>
+            <p><strong><span class="insight-dim-label">2. Geographic & Cohort Concentration:</span></strong> {where_visible}</p>
+            <p><strong><span class="insight-dim-label">3. Commercial & Strategic Implication:</span></strong> {why_matters}</p>
+            <p style="margin-bottom: 0;"><strong><span class="insight-lim-label">4. Boundary & Limitation:</span></strong> {limitation}</p>
+        </div>
     </div>
     """, unsafe_allow_html=True)
