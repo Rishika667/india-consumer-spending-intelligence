@@ -54,8 +54,10 @@ Crucially, modern official economic releases require deep methodological precisi
    - Transition series (Base 2024=100, latest release August 2026: General 108.74, CFPI 110.71) detailing the revised weighting diagram and updated item basket (358 items).
 4. **National Accounts (PFCE) Educational Benchmark:**
    - Macroeconomic aggregate context illustrating the structural divergence between PFCE domestic absorption and HCES household spending.
-5. **Deterministic Data Quality & Validation Engine:**
-   - 25+ automated checks spanning Completeness (25%), Validity (25%), Uniqueness (15%), Internal Consistency (20%), and Provenance (15%).
+5. **Deterministic Pipeline Validation & Quality Engine:**
+   - Exactly 28 automated checks spanning Completeness (25%), Validity (25%), Uniqueness (15%), Internal Consistency (20%), and Provenance (15%).
+   - Produces a defensible **Pipeline Validation Score** (100.0%, 28/28 passed) asserting data pipeline hygiene without claiming survey sampling precision.
+   - Supported by an independent **Source Reconciliation Engine** (`scripts/reconcile_sources.py`) matching 23 primary benchmarks against preserved raw source texts with 100.0% verification.
 
 ### 3.2 What is OUT of Scope (Anti-Goals)
 - **NO Stock Market or Commodity Price Prediction:** This is an economic intelligence application, not an algorithmic trading tool.
@@ -63,6 +65,7 @@ Crucially, modern official economic releases require deep methodological precisi
 - **NO Runtime LLM Dependency or Autonomous Chatbots:** Avoid hallucinations, latency, and recurring API costs. All commentary is data-driven, deterministic, and verifiable.
 - **NO Ad-hoc Spatial Deflation:** State-level MPCE will not be mechanically divided by state CPI indices, as MoSPI explicitly warns against spatial price equivalence assumptions.
 - **NO Unauthorized Scraping or Authentication Bypassing:** Unauthenticated microdata downloads requiring NADA credentials will not be simulated or bypassed.
+- **NO Fabrication of Unpublished Data:** Official missing observations (e.g. Delhi in 2023-24, non-major state imputations, 2023-24 category shares with imputation) are retained as explicit NaNs.
 
 ---
 
@@ -81,21 +84,23 @@ flowchart TD
 
     subgraph Data Tier ["Data Tier (Reproducible & Immutable)"]
         Raw["data/raw/ (Preserved Source Files + SHA-256 Checksums)"]
-        Proc["data/processed/ (Normalized Analytical Parquet & CSVs)"]
+        Src["data/sources/ (Curated Tabular Source CSVs)"]
+        Proc["data/processed/ (Normalized Analytical CSVs)"]
     end
 
-    subgraph Pipeline ["ETL & Quality Engine (src/)"]
-        Ingest["pipeline.py (Ingestion & Normalization)"]
-        QC["quality_engine.py (25+ Deterministic Rule Checks)"]
-        Audit["docs/VALIDATION_REPORT.json (Quality Audit Log)"]
+    subgraph Pipeline ["ETL, Reconciliation & Quality Engine (src/ & scripts/)"]
+        Ingest["src/pipeline.py (Ingestion & Normalization)"]
+        Reconcile["scripts/reconcile_sources.py (23 Primary Source Checks)"]
+        QC["src/quality_engine.py (28 Deterministic Rule Checks)"]
+        Audit["docs/VALIDATION_REPORT.json & docs/SOURCE_RECONCILIATION.json"]
     end
 
     subgraph App Tier ["Streamlit Application (app.py & src/ui/)"]
-        S_Overview["1. Overview (KPIs & Trends)"]
-        S_Regional["2. Regional Explorer (State/UT & Rural-Urban)"]
-        S_Basket["3. Consumption Basket (Item Shares)"]
-        S_Price["4. Price Context (CPI 2012 & 2024)"]
-        S_QC["5. Data Quality & Sources (Audit Matrix)"]
+        S_Overview["1. Overview (KPIs, Trajectory & Fractile)"]
+        S_Regional["2. Regional Explorer (Harmonized State Filters)"]
+        S_Basket["3. Consumption Basket (17 Categories)"]
+        S_Price["4. Price Context (CPI 2024 & 2012 Decoupled)"]
+        S_QC["5. Data Quality & Sources (Audit Matrix & Reconciliation)"]
         S_Method["6. Methodology & Downloads (Exports)"]
     end
 
@@ -103,10 +108,13 @@ flowchart TD
     S2 --> Raw
     S3 --> Raw
     S4 --> Raw
-    Raw --> Ingest
+    Raw --> Reconcile
+    Raw --> Src
+    Src --> Ingest
     Ingest --> QC
     QC --> Audit
-    QC --> Proc
+    Reconcile --> Audit
+    Ingest --> Proc
     Proc --> S_Overview
     Proc --> S_Regional
     Proc --> S_Basket

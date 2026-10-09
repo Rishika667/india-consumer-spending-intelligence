@@ -1,6 +1,16 @@
 """
-Script to generate documented structured source CSVs in data/sources/
-derived exclusively from verified official MoSPI releases.
+ConsumerLens India — Curated Structured Source Tables Builder
+Generates documented, transcribed source tables in data/sources/
+derived faithfully from verified official MoSPI releases:
+- MoSPI HCES Report No. 590 (Factsheet, 2022-23)
+- MoSPI HCES Report No. 592 (Press Note, Dec 2024, 2023-24)
+- MoSPI Parliamentary Rajya Sabha Statement (PIB PRID 2247612, Aug 2025)
+- MoSPI CPI Release August 2026 (PIB PRID 2310058, Base 2024=100)
+- MoSPI National Accounts Statistics (PFCE, Base 2011-12)
+
+Note: This script writes curated tabular transcriptions with precise table/statement references.
+For automated verification of these values against preserved raw HTML/PDF text,
+see scripts/reconcile_sources.py.
 """
 
 import os
@@ -12,7 +22,7 @@ SOURCES_DIR = os.path.join(BASE_DIR, "data", "sources")
 os.makedirs(SOURCES_DIR, exist_ok=True)
 
 # ==============================================================================
-# 1. STATE MPCE 2022-23 (Official MoSPI HCES Factsheet Report 590: Statements 8 & 18)
+# 1. STATE MPCE 2022-23 (Report 590: Statements 8 & 18)
 # ==============================================================================
 state_data_2022_23 = [
     ("Andhra Pradesh", 4870, 6782, 4996, 6877),
@@ -64,9 +74,9 @@ for state, r_unimp, u_unimp, r_imp, u_imp in state_data_2022_23:
         "mpce_imputed": float(r_imp),
         "welfare_delta": float(r_imp - r_unimp),
         "source_id": "MoSPI_HCES_2022-23_Report590",
-        "table_ref": "Statement 8 & Statement 18",
+        "table_ref": "Factsheet Statement 8 (unimputed) & Statement 18 (imputed)",
         "status": "OFFICIAL_PUBLISHED",
-        "notes": "Verified against NSS Report 590 Factsheet Statements 8 and 18"
+        "notes": "Verified against Report 590 Factsheet Statements 8 and 18"
     })
     rows_22.append({
         "state_name": state,
@@ -76,64 +86,60 @@ for state, r_unimp, u_unimp, r_imp, u_imp in state_data_2022_23:
         "mpce_imputed": float(u_imp),
         "welfare_delta": float(u_imp - u_unimp),
         "source_id": "MoSPI_HCES_2022-23_Report590",
-        "table_ref": "Statement 8 & Statement 18",
+        "table_ref": "Factsheet Statement 8 (unimputed) & Statement 18 (imputed)",
         "status": "OFFICIAL_PUBLISHED",
-        "notes": "Verified against NSS Report 590 Factsheet Statements 8 and 18"
+        "notes": "Verified against Report 590 Factsheet Statements 8 and 18"
     })
 
 df_state_22 = pd.DataFrame(rows_22)
 df_state_22.to_csv(os.path.join(SOURCES_DIR, "source_state_mpce_2022_23.csv"), index=False)
-print(f"Saved source_state_mpce_2022_23.csv with {len(df_state_22)} rows")
 
 # ==============================================================================
-# 2. STATE MPCE 2023-24 (MoSPI PIB PRID 2247612 & Press Note Report 592 Figures 2,3,8,9)
+# 2. STATE MPCE 2023-24 (PIB PRID 2247612 & Report 592 Press Note)
 # ==============================================================================
-# Complete reconciliation across all 36 States/UTs + All-India:
-# (state_name, rural_unimputed, urban_unimputed, rural_imputed, urban_imputed, notes)
 state_data_2023_24 = [
-    # 18 Major States (Both unimputed & imputed fully published in Press Note Figures 2, 3, 8, 9 & PRID 2247612)
+    # 18 Major States (Both unimputed & imputed published in Press Note Figures 2, 3, 8, 9 & PRID 2247612)
     ("Andhra Pradesh", 5327.0, 7182.0, 5539.0, 7341.0, "PRID 2247612 & Press Note Fig 2,3,8,9"),
     ("Arunachal Pradesh", 5995.0, 9832.0, np.nan, np.nan, "PRID 2247612; Imputed not published in Report 592"),
     ("Assam", 3793.0, 6794.0, 3961.0, 6913.0, "PRID 2247612 & Press Note Fig 2,3,8,9"),
     ("Bihar", 3670.0, 5080.0, 3788.0, 5165.0, "PRID 2247612 & Press Note Fig 2,3,8,9"),
     ("Chhattisgarh", 2739.0, 4927.0, 2927.0, 5114.0, "PRID 2247612 & Press Note Fig 2,3,8,9 & Page 9"),
-    ("Goa", 8048.0, 9726.0, np.nan, np.nan, "PRID 2247612; Corrected verified discrepancy; Imputed not published"),
+    ("Goa", 8048.0, 9726.0, np.nan, np.nan, "PRID 2247612; Corrected; Imputed not published in Report 592"),
     ("Gujarat", 4116.0, 7175.0, 4190.0, 7198.0, "PRID 2247612 & Press Note Fig 2,3,8,9"),
     ("Haryana", 5377.0, 8428.0, 5449.0, 8462.0, "Press Note Fig 2,3,8,9 (Major state); Corrected"),
-    ("Himachal Pradesh", 5825.0, 9223.0, np.nan, np.nan, "PRID 2247612; Corrected verified discrepancy; Imputed not published"),
+    ("Himachal Pradesh", 5825.0, 9223.0, np.nan, np.nan, "PRID 2247612; Corrected; Imputed not published in Report 592"),
     ("Jharkhand", 2946.0, 5393.0, 3056.0, 5455.0, "PRID 2247612 & Press Note Fig 2,3,8,9"),
     ("Karnataka", 4903.0, 8076.0, 5068.0, 8169.0, "PRID 2247612 & Press Note Fig 2,3,8,9"),
     ("Kerala", 6611.0, 7783.0, 6673.0, 7834.0, "PRID 2247612 & Press Note Fig 2,3,8,9"),
     ("Madhya Pradesh", 3441.0, 5538.0, 3522.0, 5589.0, "PRID 2247612 & Press Note Fig 2,3,8,9"),
     ("Maharashtra", 4145.0, 7363.0, 4249.0, 7415.0, "PRID 2247612 & Press Note Fig 2,3,8,9"),
-    ("Manipur", 4531.0, 5945.0, np.nan, np.nan, "PRID 2247612; Imputed not published"),
-    ("Meghalaya", 3852.0, 7839.0, np.nan, np.nan, "PRID 2247612; Imputed not published"),
-    ("Mizoram", 5963.0, 8709.0, np.nan, np.nan, "PRID 2247612; Imputed not published"),
-    ("Nagaland", 5155.0, 8022.0, np.nan, np.nan, "PRID 2247612; Imputed not published"),
+    ("Manipur", 4531.0, 5945.0, np.nan, np.nan, "PRID 2247612; Imputed not published in Report 592"),
+    ("Meghalaya", 3852.0, 7839.0, np.nan, np.nan, "PRID 2247612; Imputed not published in Report 592"),
+    ("Mizoram", 5963.0, 8709.0, np.nan, np.nan, "PRID 2247612; Imputed not published in Report 592"),
+    ("Nagaland", 5155.0, 8022.0, np.nan, np.nan, "PRID 2247612; Imputed not published in Report 592"),
     ("Odisha", 3357.0, 5825.0, 3509.0, 5925.0, "PRID 2247612 & Press Note Fig 2,3,8,9"),
     ("Punjab", 5817.0, 7359.0, 5874.0, 7383.0, "Press Note Fig 2,3,8,9 (Major state)"),
     ("Rajasthan", 4510.0, 6574.0, 4626.0, 6640.0, "PRID 2247612 & Press Note Fig 2,3,8,9"),
     ("Sikkim", 9377.0, 13927.0, 9474.0, 13965.0, "PRID 2247612 (unimputed) & Press Note Page 9 (imputed)"),
     ("Tamil Nadu", 5701.0, 8165.0, 5872.0, 8325.0, "PRID 2247612 & Press Note Fig 2,3,8,9"),
     ("Telangana", 5435.0, 8978.0, 5675.0, 9131.0, "PRID 2247612 & Press Note Fig 2,3,8,9"),
-    ("Tripura", 6259.0, 8034.0, np.nan, np.nan, "PRID 2247612; Imputed not published"),
-    ("Uttarakhand", 5003.0, 7486.0, np.nan, np.nan, "PRID 2247612; Corrected verified discrepancy; Imputed not published"),
+    ("Tripura", 6259.0, 8034.0, np.nan, np.nan, "PRID 2247612; Imputed not published in Report 592"),
+    ("Uttarakhand", 5003.0, 7486.0, np.nan, np.nan, "PRID 2247612; Corrected; Imputed not published in Report 592"),
     ("Uttar Pradesh", 3481.0, 5395.0, 3578.0, 5474.0, "PRID 2247612 & Press Note Fig 2,3,8,9"),
     ("West Bengal", 3620.0, 5775.0, 3815.0, 5903.0, "PRID 2247612 & Press Note Fig 2,3,8,9"),
-    ("Andaman & N Islands", 7771.0, 10453.0, np.nan, np.nan, "PRID 2247612; Imputed not published"),
+    ("Andaman & N Islands", 7771.0, 10453.0, np.nan, np.nan, "PRID 2247612; Imputed not published in Report 592"),
     ("Chandigarh", np.nan, np.nan, 8857.0, 13425.0, "Press Note Page 9 (imputed highest UT); Unimputed officially unpublished"),
     ("Dadra & Nagar Haveli and Daman & Diu", 4311.0, 6837.0, 4450.0, np.nan, "PRID 2247612; Corrected; Imputed rural 4450 from Page 9; urban imputed unpublished"),
     ("Jammu & Kashmir", 4774.0, 6327.0, np.nan, 6375.0, "PRID 2247612; Corrected; Imputed urban 6375 from Page 9; rural imputed unpublished"),
-    ("Ladakh", 5010.0, 7533.0, np.nan, np.nan, "PRID 2247612; Imputed not published"),
-    ("Lakshadweep", 6350.0, 6377.0, np.nan, np.nan, "PRID 2247612; Imputed not published"),
-    ("Puducherry", 7598.0, 8637.0, np.nan, np.nan, "PRID 2247612; Imputed not published"),
+    ("Ladakh", 5010.0, 7533.0, np.nan, np.nan, "PRID 2247612; Imputed not published in Report 592"),
+    ("Lakshadweep", 6350.0, 6377.0, np.nan, np.nan, "PRID 2247612; Imputed not published in Report 592"),
+    ("Puducherry", 7598.0, 8637.0, np.nan, np.nan, "PRID 2247612; Imputed not published in Report 592"),
     ("Delhi", np.nan, np.nan, np.nan, np.nan, "Officially unpublished in PRID 2247612 and Press Note Report 592"),
     ("All-India", 4122.0, 6996.0, 4247.0, 7078.0, "Press Note Table 1 & Table 2 & PRID 2247612")
 ]
 
 rows_23 = []
 for state, r_unimp, u_unimp, r_imp, u_imp, notes in state_data_2023_24:
-    # Rural
     r_delta = (r_imp - r_unimp) if (pd.notnull(r_imp) and pd.notnull(r_unimp)) else np.nan
     r_status = "OFFICIAL_PUBLISHED" if pd.notnull(r_unimp) else "OFFICIALLY_UNAVAILABLE"
     rows_23.append({
@@ -148,7 +154,6 @@ for state, r_unimp, u_unimp, r_imp, u_imp, notes in state_data_2023_24:
         "status": r_status,
         "notes": notes
     })
-    # Urban
     u_delta = (u_imp - u_unimp) if (pd.notnull(u_imp) and pd.notnull(u_unimp)) else np.nan
     u_status = "OFFICIAL_PUBLISHED" if pd.notnull(u_unimp) else "OFFICIALLY_UNAVAILABLE"
     rows_23.append({
@@ -166,14 +171,36 @@ for state, r_unimp, u_unimp, r_imp, u_imp, notes in state_data_2023_24:
 
 df_state_23 = pd.DataFrame(rows_23)
 df_state_23.to_csv(os.path.join(SOURCES_DIR, "source_state_mpce_2023_24.csv"), index=False)
-print(f"Saved source_state_mpce_2023_24.csv with {len(df_state_23)} rows")
 
 # ==============================================================================
-# 3. CATEGORY SHARES (MoSPI Statement 5, Statement 15, and Press Note Figures 4,5,6,7)
+# 3. NATIONAL SPENDING TRAJECTORY (Decoupled from chart code)
+# ==============================================================================
+# Derived from Report 592 Table 1 (unimputed) and Table 2 (imputed)
+trajectory_records = [
+    # 2011-12 Benchmark (68th Round)
+    {"survey_round": "2011-12", "valuation": "Unimputed", "sector": "Rural", "mpce_current_inr": 1430.0, "mpce_constant_2011_12_inr": 1430.0, "source_id": "MoSPI_Report592", "table_ref": "Table 1 (Page 4)"},
+    {"survey_round": "2011-12", "valuation": "Unimputed", "sector": "Urban", "mpce_current_inr": 2630.0, "mpce_constant_2011_12_inr": 2630.0, "source_id": "MoSPI_Report592", "table_ref": "Table 1 (Page 4)"},
+    {"survey_round": "2011-12", "valuation": "Imputed", "sector": "Rural", "mpce_current_inr": 1430.0, "mpce_constant_2011_12_inr": 1430.0, "source_id": "MoSPI_Report592", "table_ref": "Table 2 (Page 9)"},
+    {"survey_round": "2011-12", "valuation": "Imputed", "sector": "Urban", "mpce_current_inr": 2630.0, "mpce_constant_2011_12_inr": 2630.0, "source_id": "MoSPI_Report592", "table_ref": "Table 2 (Page 9)"},
+    # 2022-23 (HCES Round 1)
+    {"survey_round": "2022-23", "valuation": "Unimputed", "sector": "Rural", "mpce_current_inr": 3773.0, "mpce_constant_2011_12_inr": 2008.0, "source_id": "MoSPI_Report592", "table_ref": "Table 1 (Page 4)"},
+    {"survey_round": "2022-23", "valuation": "Unimputed", "sector": "Urban", "mpce_current_inr": 6459.0, "mpce_constant_2011_12_inr": 3510.0, "source_id": "MoSPI_Report592", "table_ref": "Table 1 (Page 4)"},
+    {"survey_round": "2022-23", "valuation": "Imputed", "sector": "Rural", "mpce_current_inr": 3860.0, "mpce_constant_2011_12_inr": 2054.0, "source_id": "MoSPI_Report592", "table_ref": "Table 2 (Page 9)"},
+    {"survey_round": "2022-23", "valuation": "Imputed", "sector": "Urban", "mpce_current_inr": 6521.0, "mpce_constant_2011_12_inr": 3544.0, "source_id": "MoSPI_Report592", "table_ref": "Table 2 (Page 9)"},
+    # 2023-24 (HCES Round 2)
+    {"survey_round": "2023-24", "valuation": "Unimputed", "sector": "Rural", "mpce_current_inr": 4122.0, "mpce_constant_2011_12_inr": 2079.0, "source_id": "MoSPI_Report592", "table_ref": "Table 1 (Page 4)"},
+    {"survey_round": "2023-24", "valuation": "Unimputed", "sector": "Urban", "mpce_current_inr": 6996.0, "mpce_constant_2011_12_inr": 3632.0, "source_id": "MoSPI_Report592", "table_ref": "Table 1 (Page 4)"},
+    {"survey_round": "2023-24", "valuation": "Imputed", "sector": "Rural", "mpce_current_inr": 4247.0, "mpce_constant_2011_12_inr": 2142.0, "source_id": "MoSPI_Report592", "table_ref": "Table 2 (Page 9)"},
+    {"survey_round": "2023-24", "valuation": "Imputed", "sector": "Urban", "mpce_current_inr": 7078.0, "mpce_constant_2011_12_inr": 3674.0, "source_id": "MoSPI_Report592", "table_ref": "Table 2 (Page 9)"}
+]
+df_traj = pd.DataFrame(trajectory_records)
+df_traj.to_csv(os.path.join(SOURCES_DIR, "source_national_trajectory.csv"), index=False)
+
+# ==============================================================================
+# 4. CATEGORY SHARES (Statement 5, Statement 15, Figures 4, 5, 6, 7)
 # ==============================================================================
 category_records = [
-    # Food categories (Figures 4 & 5 of 2023-24 Press Note; Statements 5 & 15 of 2022-23 Factsheet)
-    # (Category, BroadGroup, R22_unimp, U22_unimp, R22_imp, U22_imp, R23_unimp, U23_unimp)
+    # (Category, BroadGroup, R22_u, U22_u, R22_i, U22_i, R23_u, U23_u)
     ("Beverages & Processed Food", "Food", 9.62, 10.64, 9.41, 10.53, 9.84, 11.09),
     ("Milk & Milk Products", "Food", 8.33, 7.22, 8.14, 7.15, 8.44, 7.19),
     ("Vegetables", "Food", 5.38, 3.80, 5.26, 3.76, 6.03, 4.12),
@@ -182,7 +209,6 @@ category_records = [
     ("Fruits", "Food", 3.71, 3.80, 3.63, 3.77, 3.85, 3.87),
     ("Edible Oil", "Food", 3.59, 2.37, 3.52, 2.35, 2.77, 1.82),
     ("Other Food Items (Pulses, Sugar, Spices)", "Food", 5.93, 4.12, 5.79, 4.09, 6.20, 4.27),
-    # Non-Food categories (Figures 6 & 7 of 2023-24 Press Note; Statements 5 & 15 of 2022-23 Factsheet)
     ("Conveyance / Transport", "Non-Food", 7.55, 8.59, 7.38, 8.51, 7.59, 8.46),
     ("Clothing, Bedding & Footwear", "Non-Food", 6.10, 5.41, 6.03, 5.38, 6.63, 5.66),
     ("Durable Goods", "Non-Food", 6.89, 7.17, 6.79, 7.13, 6.48, 6.87),
@@ -196,25 +222,20 @@ category_records = [
 
 cat_rows = []
 for cat, broad, r22_u, u22_u, r22_i, u22_i, r23_u, u23_u in category_records:
-    # 2022-23 Unimputed
     cat_rows.append({"category": cat, "broad_group": broad, "survey_round": "2022-23", "sector": "Rural", "valuation": "Unimputed", "share_pct": r22_u, "source_id": "MoSPI_Report590", "table_ref": "Statement 5"})
     cat_rows.append({"category": cat, "broad_group": broad, "survey_round": "2022-23", "sector": "Urban", "valuation": "Unimputed", "share_pct": u22_u, "source_id": "MoSPI_Report590", "table_ref": "Statement 5"})
-    # 2022-23 Imputed
     cat_rows.append({"category": cat, "broad_group": broad, "survey_round": "2022-23", "sector": "Rural", "valuation": "Imputed", "share_pct": r22_i, "source_id": "MoSPI_Report590", "table_ref": "Statement 15"})
     cat_rows.append({"category": cat, "broad_group": broad, "survey_round": "2022-23", "sector": "Urban", "valuation": "Imputed", "share_pct": u22_i, "source_id": "MoSPI_Report590", "table_ref": "Statement 15"})
-    # 2023-24 Unimputed
     cat_rows.append({"category": cat, "broad_group": broad, "survey_round": "2023-24", "sector": "Rural", "valuation": "Unimputed", "share_pct": r23_u, "source_id": "MoSPI_Report592", "table_ref": "Figures 4, 5, 6, 7"})
     cat_rows.append({"category": cat, "broad_group": broad, "survey_round": "2023-24", "sector": "Urban", "valuation": "Unimputed", "share_pct": u23_u, "source_id": "MoSPI_Report592", "table_ref": "Figures 4, 5, 6, 7"})
 
 df_cat = pd.DataFrame(cat_rows)
 df_cat.to_csv(os.path.join(SOURCES_DIR, "source_category_shares.csv"), index=False)
-print(f"Saved source_category_shares.csv with {len(df_cat)} rows")
 
 # ==============================================================================
-# 4. FRACTILE DISTRIBUTION (Statement 4 of 2022-23 & Figure 1 / Text of 2023-24)
+# 5. FRACTILE DISTRIBUTION (Statement 4 of 2022-23 & Figure 1 of 2023-24)
 # ==============================================================================
 fractile_data = [
-    # (fractile_class, r22, u22, r23, u23)
     ("0-5%", 1373, 2001, 1677, 2376),
     ("5-10%", 1782, 2607, 2085, 2980),
     ("10-20%", 2112, 3157, 2410, 3510),
@@ -238,12 +259,13 @@ for fc, r22, u22, r23, u23 in fractile_data:
 
 df_frac = pd.DataFrame(frac_rows)
 df_frac.to_csv(os.path.join(SOURCES_DIR, "source_fractile_distribution.csv"), index=False)
-print(f"Saved source_fractile_distribution.csv with {len(df_frac)} rows")
 
 # ==============================================================================
-# 5. CPI 2024 BASE COMPLETE MONTHLY TIME SERIES (CPI_Release_Aug2026 Table 10 & 2)
+# 6. CPI 2024 BASE MONTHLY TIME SERIES (Table 10, Table 2 & Table 19)
 # ==============================================================================
-# Jan-2025 to Aug-2026: 20 consecutive months from Table 10 of PIB PRID 2310058 / CPI August 2026 release
+# Jan-2025 to Aug-2026: 20 consecutive months from Table 10 of PIB PRID 2310058
+# Note: YoY inflation is officially published for Jan-2026 to Aug-2026 (8 months).
+# YoY inflation for 2025 is officially unavailable because 2024 monthly indices are unpublished.
 cpi_table_10 = [
     # (month_year, r_idx, u_idx, c_idx, r_inf, u_inf, c_inf, status)
     ("2025-01", 101.81, 101.49, 101.67, np.nan, np.nan, np.nan, "Final"),
@@ -292,17 +314,15 @@ for m, r_idx, u_idx, c_idx, r_inf, u_inf, c_inf, status in cpi_table_10:
             "inflation_food_pct": cfpi_inf,
             "release_status": status,
             "source_id": "MoSPI_CPI_Release_Aug2026",
-            "table_ref": "Table 10 & Table 2 / Table 19"
+            "table_ref": "Table 10 (indices & inflation) & Table 2 / Table 19 (CFPI)"
         })
 
 df_cpi_2024 = pd.DataFrame(cpi_rows)
 df_cpi_2024.to_csv(os.path.join(SOURCES_DIR, "source_cpi_monthly_2024_base.csv"), index=False)
-print(f"Saved source_cpi_monthly_2024_base.csv with {len(df_cpi_2024)} rows")
 
 # ==============================================================================
-# 6. CPI 2012 BASE DISCONTINUED HISTORICAL BENCHMARKS (Discontinued Feb 2026)
+# 7. CPI 2012 BASE HISTORICAL BENCHMARKS (Discontinued Feb 2026)
 # ==============================================================================
-# Labeled explicitly as benchmark reference snapshots during HCES survey periods
 cpi_2012_benchmarks = [
     {"month_year": "2023-08", "base_year": "2012=100", "sector": "Combined", "cpi_general": 186.2, "cpi_food_cfpi": 188.4, "inflation_general_pct": 6.83, "inflation_food_pct": 9.94, "release_status": "Final", "source_id": "MoSPI_CPI_Archive", "table_ref": "Press Release Aug 2023"},
     {"month_year": "2023-12", "base_year": "2012=100", "sector": "Combined", "cpi_general": 185.7, "cpi_food_cfpi": 189.0, "inflation_general_pct": 5.69, "inflation_food_pct": 9.53, "release_status": "Final", "source_id": "MoSPI_CPI_Archive", "table_ref": "Press Release Dec 2023"},
@@ -313,10 +333,9 @@ cpi_2012_benchmarks = [
 ]
 df_cpi_2012 = pd.DataFrame(cpi_2012_benchmarks)
 df_cpi_2012.to_csv(os.path.join(SOURCES_DIR, "source_cpi_historical_2012_base_snapshot.csv"), index=False)
-print(f"Saved source_cpi_historical_2012_base_snapshot.csv with {len(df_cpi_2012)} rows")
 
 # ==============================================================================
-# 7. MACRO PFCE BENCHMARKS (National Accounts Statistics FY 2011-12 to FY 2023-24)
+# 8. MACRO PFCE BENCHMARKS (National Accounts Statistics FY 2011-12 to FY 2023-24)
 # ==============================================================================
 pfce_records = [
     {"fiscal_year": "2011-12", "pfce_current_inr_cr": 4914108, "pfce_constant_inr_cr": 4914108, "share_of_gdp_pct": 56.2, "source_id": "MoSPI_NAS", "table_ref": "NAS Statement 1"},
@@ -327,4 +346,5 @@ pfce_records = [
 ]
 df_pfce = pd.DataFrame(pfce_records)
 df_pfce.to_csv(os.path.join(SOURCES_DIR, "source_macro_pfce.csv"), index=False)
-print(f"Saved source_macro_pfce.csv with {len(df_pfce)} rows")
+
+print("Successfully generated all 8 curated structured source CSVs in data/sources/")

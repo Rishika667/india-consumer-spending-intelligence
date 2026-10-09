@@ -1,0 +1,224 @@
+{
+  "title": "Independent Source Reconciliation Audit",
+  "total_records_checked": 23,
+  "records_matched": 23,
+  "records_mismatched": 0,
+  "match_rate_pct": 100.0,
+  "unresolved_records": 0,
+  "officially_unavailable_observations": [
+    "Delhi 2023-24 unimputed & imputed MPCE (officially unpublished in Report 592 & PRID 2247612)",
+    "Chandigarh 2023-24 unimputed MPCE (unimputed column not published in Report 592/PRID 2247612; imputed available on Page 9)",
+    "17 Non-Major States/UTs 2023-24 welfare-imputed MPCE (imputation published only for 18 major states + 4 extreme callouts)",
+    "2023-24 Commodity category shares with welfare imputation (Report 592 published only aggregate food/non-food shares, not item groups)",
+    "2025 Calendar Year YoY CPI Inflation (Base 2024=100 monthly release starts at Jan-25; 2024 monthly indices not published in release)"
+  ],
+  "reconciliation_checks": [
+    {
+      "check_id": "REC_01",
+      "metric": "2022-23 Rural MPCE Unimputed (Rs 3,773)",
+      "target_document": "Factsheet_HCES_2022-23.pdf",
+      "expected_value": "3773",
+      "pattern_tested": "all-India\\s+3,773\\s+6,459",
+      "status": "MATCHED",
+      "evidence": "Matched substring: 'all-India 3,773 6,459' in Factsheet_HCES_2022-23.pdf"
+    },
+    {
+      "check_id": "REC_02",
+      "metric": "2022-23 Rural MPCE Imputed (Rs 3,860)",
+      "target_document": "Factsheet_HCES_2022-23.pdf",
+      "expected_value": "3860",
+      "pattern_tested": "All-India\\s+3,860\\s+6,521",
+      "status": "MATCHED",
+      "evidence": "Matched substring: 'All-India 3,860 6,521' in Factsheet_HCES_2022-23.pdf"
+    },
+    {
+      "check_id": "REC_03",
+      "metric": "2023-24 Rural MPCE Unimputed (Rs 4,122)",
+      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "expected_value": "4122",
+      "pattern_tested": "4,122\\s+6,996",
+      "status": "MATCHED",
+      "evidence": "Matched substring: '4,122 6,996' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+    },
+    {
+      "check_id": "REC_04",
+      "metric": "2023-24 Rural MPCE Imputed (Rs 4,247)",
+      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "expected_value": "4247",
+      "pattern_tested": "4,247\\s+7,078",
+      "status": "MATCHED",
+      "evidence": "Matched substring: '4,247 7,078' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+    },
+    {
+      "check_id": "REC_05",
+      "metric": "Goa 2023-24 Rural/Urban ALL (8,048 / 9,726)",
+      "target_document": "HCES_2023-24_PIB_2247612.html",
+      "expected_value": "8048 / 9726",
+      "pattern_tested": "Goa[\\s\\S]{1,50}?8,048[\\s\\S]{1,50}?9,726",
+      "status": "MATCHED",
+      "evidence": "Matched substring: 'Goa\n\t\t\t\n\t\t\t\n\t\t\t6,006\n\t\t\t\n\t\t\t\n\t\t\t8,048\n\t\t\t\n\t\t\t\n\t\t\t9,231\n\t\t\t\n\t\t\t\n\t\t\t9,726' in HCES_2023-24_PIB_2247612.html"
+    },
+    {
+      "check_id": "REC_06",
+      "metric": "Himachal Pradesh 2023-24 Rural/Urban ALL (5,825 / 9,223)",
+      "target_document": "HCES_2023-24_PIB_2247612.html",
+      "expected_value": "5825 / 9223",
+      "pattern_tested": "Himachal Pradesh[\\s\\S]{1,50}?5,825[\\s\\S]{1,50}?9,223",
+      "status": "MATCHED",
+      "evidence": "Matched substring: 'Himachal Pradesh\n\t\t\t\n\t\t\t\n\t\t\t5,406\n\t\t\t\n\t\t\t\n\t\t\t5,825\n\t\t\t\n\t\t\t\n\t\t\t12,124\n\t\t\t\n\t\t\t\n\t\t\t9,223' in HCES_2023-24_PIB_2247612.html"
+    },
+    {
+      "check_id": "REC_07",
+      "metric": "Uttarakhand 2023-24 Rural/Urban ALL (5,003 / 7,486)",
+      "target_document": "HCES_2023-24_PIB_2247612.html",
+      "expected_value": "5003 / 7486",
+      "pattern_tested": "Uttarakhand[\\s\\S]{1,50}?5,003[\\s\\S]{1,50}?7,486",
+      "status": "MATCHED",
+      "evidence": "Matched substring: 'Uttarakhand\n\t\t\t\n\t\t\t\n\t\t\t4,687\n\t\t\t\n\t\t\t\n\t\t\t5,003\n\t\t\t\n\t\t\t\n\t\t\t8,513\n\t\t\t\n\t\t\t\n\t\t\t7,486' in HCES_2023-24_PIB_2247612.html"
+    },
+    {
+      "check_id": "REC_08",
+      "metric": "Dadra & Nagar Haveli and Daman & Diu 2023-24 Rural/Urban ALL (4,311 / 6,837)",
+      "target_document": "HCES_2023-24_PIB_2247612.html",
+      "expected_value": "4311 / 6837",
+      "pattern_tested": "Dadra & Nagar Haveli[\\s\\S]{1,60}?4,311[\\s\\S]{1,60}?6,837",
+      "status": "MATCHED",
+      "evidence": "Matched substring: 'Dadra & Nagar Haveli and Daman & Diu\n\t\t\t\n\t\t\t\n\t\t\t3,943\n\t\t\t\n\t\t\t\n\t\t\t4,311\n\t\t\t\n\t\t\t\n\t\t\t5,804\n\t\t\t\n\t\t\t\n\t\t\t6,837' in HCES_2023-24_PIB_2247612.html"
+    },
+    {
+      "check_id": "REC_09",
+      "metric": "Haryana 2023-24 Rural/Urban Unimputed (5,377 / 8,428)",
+      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "expected_value": "5377",
+      "pattern_tested": "Haryana,\\s*5,377",
+      "status": "MATCHED",
+      "evidence": "Matched substring: 'Haryana, 5,377' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+    },
+    {
+      "check_id": "REC_10",
+      "metric": "Punjab 2023-24 Rural/Urban Unimputed (5,817 / 7,359)",
+      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "expected_value": "5817",
+      "pattern_tested": "Punjab,\\s*5,817",
+      "status": "MATCHED",
+      "evidence": "Matched substring: 'Punjab, 5,817' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+    },
+    {
+      "check_id": "REC_11",
+      "metric": "Sikkim 2023-24 Imputed (Rural 9,474 / Urban 13,965)",
+      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "expected_value": "9474 / 13965",
+      "pattern_tested": "highest in Sikkim\\s*\\(Rural\\s*\u2013?\\s*Rs\\.\\s*9,474\\s*and\\s*Urban\\s*\u2013?\\s*Rs\\.\\s*13,965\\)",
+      "status": "MATCHED",
+      "evidence": "Matched substring: 'highest in Sikkim (Rural \u2013 Rs. 9,474 and Urban \u2013 Rs. \n13,965)' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+    },
+    {
+      "check_id": "REC_12",
+      "metric": "Chandigarh 2023-24 Imputed (Rural 8,857 / Urban 13,425)",
+      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "expected_value": "8857 / 13425",
+      "pattern_tested": "highest in Chandigarh\\s*\\(Rural\\s*\u2013?\\s*Rs\\.\\s*8,857\\s*and\\s*Urban\\s*\u2013?\\s*Rs\\.\\s*13,425\\)",
+      "status": "MATCHED",
+      "evidence": "Matched substring: 'highest in Chandigarh (Rural \u2013 Rs. 8,857 and Urban \u2013 Rs. 13,425)' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+    },
+    {
+      "check_id": "REC_13",
+      "metric": "DNHDD 2023-24 Rural Imputed Lowest UT (Rs 4,450)",
+      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "expected_value": "4450",
+      "pattern_tested": "lowest in Dadra and Nagar Haveli and\\s*Daman and Diu\\s*\\(Rs\\.\\s*4,\\s*450\\)",
+      "status": "MATCHED",
+      "evidence": "Matched substring: 'lowest in Dadra and Nagar Haveli and  Daman and Diu (Rs. 4, 450)' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+    },
+    {
+      "check_id": "REC_14",
+      "metric": "J&K 2023-24 Urban Imputed Lowest UT (Rs 6,375)",
+      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "expected_value": "6375",
+      "pattern_tested": "Jammu[\\s\\S]{1,20}Kashmir\\s*\\(Rs\\.\\s*6,375\\)",
+      "status": "MATCHED",
+      "evidence": "Matched substring: 'Jammu \nand Kashmir (Rs. 6,375)' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+    },
+    {
+      "check_id": "REC_15",
+      "metric": "2022-23 Unimputed Food Share (Rural 46.38% / Urban 39.17%)",
+      "target_document": "Factsheet_HCES_2022-23.pdf",
+      "expected_value": "46.38 / 39.17",
+      "pattern_tested": "food total\\s+1,750\\s+2,530\\s+46\\.38\\s+39\\.17",
+      "status": "MATCHED",
+      "evidence": "Matched substring: 'food total 1,750 2,530 46.38 39.17' in Factsheet_HCES_2022-23.pdf"
+    },
+    {
+      "check_id": "REC_16",
+      "metric": "2022-23 Imputed Food Share (Rural 47.47% / Urban 39.70%)",
+      "target_document": "Factsheet_HCES_2022-23.pdf",
+      "expected_value": "47.47 / 39.70",
+      "pattern_tested": "food total\\s+1,832\\s+2,589\\s+47\\.47\\s+39\\.70",
+      "status": "MATCHED",
+      "evidence": "Matched substring: 'food total 1,832 2,589 47.47 39.70' in Factsheet_HCES_2022-23.pdf"
+    },
+    {
+      "check_id": "REC_17",
+      "metric": "2023-24 Unimputed Food Share Rural (Beverages 9.84%, Milk 8.44%, Veg 6.03%)",
+      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "expected_value": "9.84 / 8.44 / 6.03",
+      "pattern_tested": "9\\.84[\\s\\S]{1,20}?8\\.44[\\s\\S]{1,20}?6\\.03",
+      "status": "MATCHED",
+      "evidence": "Matched substring: '9.84\n8.44\n6.03' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+    },
+    {
+      "check_id": "REC_18",
+      "metric": "2023-24 Fractile Bottom 5% (Rural 1,677 / Urban 2,376)",
+      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "expected_value": "1677 / 2376",
+      "pattern_tested": "1,677[\\s\\S]{1,30}?2,376",
+      "status": "MATCHED",
+      "evidence": "Matched substring: '1,677 \nwhile it is Rs. 2,376' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+    },
+    {
+      "check_id": "REC_19",
+      "metric": "2023-24 Fractile Top 5% (Rural 10,137 / Urban 20,310)",
+      "target_document": "HCES_Press_Note_2023-24_27122024_rev.pdf",
+      "expected_value": "10137 / 20310",
+      "pattern_tested": "10,137[\\s\\S]{1,30}?20,310",
+      "status": "MATCHED",
+      "evidence": "Matched substring: '10,137 and Rs. 20,310' in HCES_Press_Note_2023-24_27122024_rev.pdf"
+    },
+    {
+      "check_id": "REC_20",
+      "metric": "August 2026 Headline CPI Inflation (4.82%)",
+      "target_document": "CPI_Release_Aug2026.html",
+      "expected_value": "4.82%",
+      "pattern_tested": "August,\\s*2026\\s*is\\s*4\\.82%",
+      "status": "MATCHED",
+      "evidence": "Matched substring: 'August, 2026 is 4.82%' in CPI_Release_Aug2026.html"
+    },
+    {
+      "check_id": "REC_21",
+      "metric": "August 2026 Food Inflation CFPI Combined (5.95%)",
+      "target_document": "CPI_Release_Aug2026.html",
+      "expected_value": "5.95%",
+      "pattern_tested": "5\\.95",
+      "status": "MATCHED",
+      "evidence": "Matched substring: '5.95' in CPI_Release_Aug2026.html"
+    },
+    {
+      "check_id": "REC_22",
+      "metric": "August 2026 Combined General CPI Index (108.74)",
+      "target_document": "CPI_Release_Aug2026.html",
+      "expected_value": "108.74",
+      "pattern_tested": "108\\.74",
+      "status": "MATCHED",
+      "evidence": "Matched substring: '108.74' in CPI_Release_Aug2026.html"
+    },
+    {
+      "check_id": "REC_23",
+      "metric": "August 2026 Combined CFPI Food Index (110.71)",
+      "target_document": "CPI_Release_Aug2026.html",
+      "expected_value": "110.71",
+      "pattern_tested": "110\\.71",
+      "status": "MATCHED",
+      "evidence": "Matched substring: '110.71' in CPI_Release_Aug2026.html"
+    }
+  ]
+}

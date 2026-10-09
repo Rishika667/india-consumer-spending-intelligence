@@ -3,6 +3,7 @@ ConsumerLens India — High-Quality Plotly Chart Generators
 Engineered for syndicated research reports: restrained palette, clean formatting, and legible typography.
 """
 
+import os
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
@@ -33,23 +34,32 @@ def format_chart_layout(fig, title: str = "", height: int = 450):
     return fig
 
 
-def create_trend_trajectory_chart(valuation_mode: str = "Unimputed") -> go.Figure:
+def create_trend_trajectory_chart(df_traj=None, valuation_mode: str = "Unimputed") -> go.Figure:
     """
     Shows national consumption trajectory across survey rounds (2011-12, 2022-23, 2023-24).
-    Compares current prices vs constant (2011-12) prices.
+    Compares current prices vs constant (2011-12) prices using official Table 1 & Table 2.
+    Built directly from structured dataset national_trajectory.csv.
     """
-    years = ["2011-12", "2022-23", "2023-24"]
+    if isinstance(df_traj, str):
+        valuation_mode = df_traj
+        df_traj = None
+    if df_traj is None or (isinstance(df_traj, pd.DataFrame) and df_traj.empty):
+        traj_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "processed", "national_trajectory.csv")
+        if os.path.exists(traj_path):
+            df_traj = pd.read_csv(traj_path)
+
+    val_filter = "Imputed" if "imputed" in valuation_mode.lower() and "un" not in valuation_mode.lower() else "Unimputed"
+    sub = df_traj[df_traj["valuation"] == val_filter] if df_traj is not None and not df_traj.empty else pd.DataFrame()
     
-    if valuation_mode == "Unimputed":
-        rural_curr = [1430, 3773, 4122]
-        rural_const = [1430, 2008, 2079]
-        urban_curr = [2630, 6459, 6996]
-        urban_const = [2630, 3510, 3632]
-    else:
-        rural_curr = [1430, 3860, 4247]
-        rural_const = [1430, 2054, 2142]
-        urban_curr = [2630, 6521, 7078]
-        urban_const = [2630, 3544, 3674]
+    if sub.empty:
+        fig = go.Figure()
+        return format_chart_layout(fig, f"All-India MPCE Growth ({val_filter})", 440)
+
+    years = sub[sub["sector"] == "Urban"]["survey_round"].tolist()
+    urban_curr = sub[sub["sector"] == "Urban"]["mpce_current_inr"].tolist()
+    rural_curr = sub[sub["sector"] == "Rural"]["mpce_current_inr"].tolist()
+    urban_const = sub[sub["sector"] == "Urban"]["mpce_constant_2011_12_inr"].tolist()
+    rural_const = sub[sub["sector"] == "Rural"]["mpce_constant_2011_12_inr"].tolist()
 
     fig = go.Figure()
     
@@ -72,31 +82,39 @@ def create_trend_trajectory_chart(valuation_mode: str = "Unimputed") -> go.Figur
         hovertemplate="Rural Constant: ₹%{y:,.0f}<extra></extra>"
     ))
 
-    return format_chart_layout(fig, f"All-India MPCE Growth: Current vs Constant (2011-12) Prices ({valuation_mode})", 440)
+    return format_chart_layout(fig, f"All-India MPCE Growth: Current vs Constant (2011-12) Prices ({val_filter})", 440)
 
 
-def create_fractile_curve_chart(df_fractile: pd.DataFrame) -> go.Figure:
+def create_fractile_curve_chart(df_fractile: pd.DataFrame, selected_round: str = "2023-24") -> go.Figure:
     """
-    Renders the fractile distribution across 12 decile classes for 2022-23 and 2023-24.
+    Renders the fractile distribution across 12 fractile classes / percentile groups (0-5% to 95-100%).
+    Dynamic across selected survey round.
     """
-    df_23 = df_fractile[df_fractile["survey_round"] == "2023-24"]
-    
+    df_rnd = df_fractile[df_fractile["survey_round"] == selected_round]
+    if df_rnd.empty:
+        df_rnd = df_fractile[df_fractile["survey_round"] == "2023-24"]
+        selected_round = "2023-24"
+
     fig = px.line(
-        df_23,
+        df_rnd,
         x="fractile_class",
         y="avg_mpce",
         color="sector",
         markers=True,
         color_discrete_map={"Rural": "#10b981", "Urban": "#2563eb"},
-        labels={"fractile_class": "Fractile Class (Percentiles)", "avg_mpce": "Average MPCE (₹/month)", "sector": "Sector"}
+        labels={"fractile_class": "Fractile Class (Percentile Group)", "avg_mpce": "Average MPCE (₹/month)", "sector": "Sector"}
     )
     fig.update_traces(line={"width": 3}, marker={"size": 7})
-    fig.add_annotation(
-        x="0-5%", y=2376, text="Bottom 5%: Rural ₹1,677 (+22%), Urban ₹2,376 (+19%)",
-        showarrow=True, arrowhead=2, ax=40, ay=-40, font={"size": 11, "color": "#0f172a"},
-        bgcolor="#f1f5f9", bordercolor="#cbd5e1"
-    )
-    return format_chart_layout(fig, "Consumption Expenditure Distribution across Fractile Classes (2023-24)", 420)
+
+    if selected_round == "2023-24":
+        bot_r = df_rnd[(df_rnd["sector"] == "Rural") & (df_rnd["fractile_class"] == "0-5%")]["avg_mpce"].values[0]
+        bot_u = df_rnd[(df_rnd["sector"] == "Urban") & (df_rnd["fractile_class"] == "0-5%")]["avg_mpce"].values[0]
+        fig.add_annotation(
+            x="0-5%", y=bot_u, text=f"Bottom 5%: Rural ₹{bot_r:,.0f} (+22.1% YoY), Urban ₹{bot_u:,.0f} (+18.7% YoY)",
+            showarrow=True, arrowhead=2, ax=40, ay=-40, font={"size": 11, "color": "#0f172a"},
+            bgcolor="#f1f5f9", bordercolor="#cbd5e1"
+        )
+    return format_chart_layout(fig, f"Consumption Distribution across Fractile Classes ({selected_round})", 420)
 
 
 def create_state_bar_chart(df_state: pd.DataFrame, selected_round: str = "2023-24", valuation_col: str = "mpce_unimputed", sector_view: str = "Both") -> go.Figure:

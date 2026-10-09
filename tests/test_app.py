@@ -16,20 +16,25 @@ from src.ui.charts import (
 
 
 def test_app_data_loading():
-    df_state, df_category, df_fractile, df_cpi, df_pfce, val_report = load_all_datasets()
+    df_state, df_category, df_fractile, df_cpi, df_pfce, df_traj, val_report = load_all_datasets()
     assert not df_state.empty
     assert not df_category.empty
     assert not df_fractile.empty
     assert not df_cpi.empty
     assert not df_pfce.empty
-    assert "composite_score" in val_report
+    assert not df_traj.empty
+    assert "composite_score" in val_report or "pipeline_validation_score" in val_report
 
 
 def test_chart_generators_render():
-    df_state, df_category, df_fractile, df_cpi, df_pfce, _ = load_all_datasets()
+    df_state, df_category, df_fractile, df_cpi, df_pfce, df_traj, _ = load_all_datasets()
 
-    fig1 = create_trend_trajectory_chart("Unimputed")
-    assert fig1 is not None
+    # Test both with explicit dataframe and string mode
+    fig1a = create_trend_trajectory_chart(df_traj, "Unimputed")
+    assert fig1a is not None
+
+    fig1b = create_trend_trajectory_chart("Imputed")
+    assert fig1b is not None
 
     fig2 = create_fractile_curve_chart(df_fractile)
     assert fig2 is not None

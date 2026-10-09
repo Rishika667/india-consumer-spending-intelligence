@@ -1,8 +1,10 @@
 {
+  "score_type": "Pipeline Validation Score",
   "total_evaluated": 28,
   "expected_total_checks": 28,
   "passed": 28,
   "failed": 0,
+  "pipeline_validation_score": 100.0,
   "composite_score": 100.0,
   "dimension_breakdown": {
     "Completeness": {
@@ -37,13 +39,23 @@
     }
   },
   "data_availability_summary": {
-    "hces_2022_23_state_coverage": "36/36 States/UTs published (100% complete)",
-    "hces_2023_24_unimputed_coverage": "35/37 tracked geographies (34/36 States/UTs + All-India; Delhi & Chandigarh unimputed officially unpublished)",
-    "hces_2023_24_imputed_coverage": "22/37 tracked rural, 22/37 tracked urban (18 major states + Sikkim/Chandigarh/extremes; remaining 17 UTs/smaller states officially unpublished for imputation in Report 592)",
-    "hces_2023_24_category_imputation": "Officially unpublished by MoSPI (comparison restricted to unimputed series)",
-    "cpi_2024_base_monthly_coverage": "20 months (Jan-2025 to Aug-2026; complete official monthly series)",
-    "cpi_2012_base_status": "Discontinued Feb 2026; preserved as reference period benchmark snapshots"
+    "hces_2022_23_state_coverage": "36/36 States/UTs published (100.0% complete)",
+    "hces_2023_24_unimputed_coverage": "35/37 tracked geographies (34/36 States/UTs + All-India; Delhi & Chandigarh unimputed officially unpublished in Report 592/PRID 2247612)",
+    "hces_2023_24_imputed_coverage": "22/37 rural, 22/37 urban (18 major states + Sikkim/Chandigarh/extremes; 17 smaller states/UTs officially unpublished for imputation in Report 592)",
+    "hces_2023_24_category_imputation": "Officially unpublished by MoSPI (cross-year comparisons restricted to unimputed series)",
+    "cpi_2024_base_monthly_index": "20 consecutive months (January 2025 \u2013 August 2026; complete official monthly series)",
+    "cpi_2024_base_yoy_inflation": "8 consecutive months (January 2026 \u2013 August 2026; 2025 YoY inflation officially unavailable due to unpublished 2024 monthly indices)",
+    "cpi_2024_base_cfpi_food_inflation": "2 months snapshot (July 2026 & August 2026 from official Tables 2 & 19)",
+    "cpi_2012_base_status": "Discontinued February 2026; 6 benchmark reference-period snapshots preserved"
   },
+  "source_reconciliation_summary": {
+    "records_checked": 23,
+    "records_matched": 23,
+    "records_mismatched": 0,
+    "match_rate_pct": 100.0,
+    "unresolved_records": 0
+  },
+  "methodological_disclaimer": "The pipeline validation score evaluates automated data pipeline integrity, deterministic formatting constraints, aggregation consistency, and cryptographic file matching. It does not assert statistical sampling precision, representativeness, or absolute accuracy of the underlying MoSPI NSSO survey design.",
   "checks": [
     {
       "check_id": "C01",
@@ -52,7 +64,7 @@
       "description": "Zero null values in primary keys (state_name, survey_round, sector)",
       "status": "PASS",
       "actual_value": "0 null keys",
-      "details": "Mandatory identification attributes must be populated for all rows."
+      "details": "Mandatory identification attributes must be populated for all records."
     },
     {
       "check_id": "C02",
@@ -60,7 +72,7 @@
       "target": "state_mpce",
       "description": "Full geographic coverage for 2022-23 (36 States/UTs + All-India)",
       "status": "PASS",
-      "actual_value": "37 geographies tracked",
+      "actual_value": "37 geographies tracked (36 States/UTs + All-India)",
       "details": "Report 590 Factsheet provides 36 States/UTs plus All-India."
     },
     {
@@ -103,10 +115,10 @@
       "check_id": "V01",
       "dimension": "Validity",
       "target": "state_mpce",
-      "description": "All published MPCE expenditure amounts strictly greater than zero",
+      "description": "Published MPCE values strictly positive and within realistic macroeconomic bounds [Rs 1,000, Rs 50,000]",
       "status": "PASS",
-      "actual_value": "Min observed MPCE: Rs 2,466.00",
-      "details": "Household per capita consumption expenditure cannot be negative or zero."
+      "actual_value": "Range: [Rs 2,466.00, Rs 13,927.00]",
+      "details": "Household per capita consumption expenditure adheres to realistic economic limits."
     },
     {
       "check_id": "V02",
@@ -268,7 +280,7 @@
       "description": "Cryptographic SHA-256 integrity match for preserved raw source files",
       "status": "PASS",
       "actual_value": "6/6 source files verified",
-      "details": "Verifies pipeline input preservation; does not assert statistical accuracy of underlying surveys."
+      "details": "Verifies pipeline input file preservation; does not assert statistical accuracy of underlying surveys."
     },
     {
       "check_id": "P03",

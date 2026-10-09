@@ -168,5 +168,29 @@ This document records the architectural, methodological, and data engineering de
 - **Fallback:** Automated unit tests in `tests/test_pipeline.py` and `tests/test_quality_engine.py` enforce non-regression on verified figures.
 
 ---
+
+## Decision 10: Final Gap Closure — Defensible Pipeline Validation Score, Practical Source Reconciliation, and UI Polish
+
+- **Status:** APPROVED & IMPLEMENTED
+- **Context:** To ensure the highest institutional research standard, the project required:
+  1. Renaming the quality score to avoid false certainty (asserting pipeline hygiene rather than survey sampling representativeness).
+  2. Demonstrating practical source reconciliation without fragile PDF web scrapers.
+  3. Accurately characterizing the 2024-base CPI monthly series and inflation windows.
+  4. Fully harmonizing UI state filters with quick cohort selectors and dynamic commentary.
+- **Decision:**
+  1. **Score Naming & Methodological Disclaimer:** Renamed the composite metric to **Pipeline Validation Score** (100.0%, 28/28 checks passed). Added explicit disclaimers across the UI and JSON reports stating that the validation score measures deterministic pipeline hygiene, schema constraints, and aggregation consistency, and does not assert statistical sampling precision or representativeness of NSSO surveys.
+  2. **Practical Source Reconciliation Engine (`scripts/reconcile_sources.py`):** Implemented an automated reconciliation script verifying 23 key curated benchmarks directly against the extracted text of preserved primary source PDFs and HTML documents in `data/raw/`. Achieved a 100.0% match rate (23/23 benchmarks verified), outputting `docs/SOURCE_RECONCILIATION.json` and `docs/SOURCE_RECONCILIATION.md`.
+  3. **CPI 2024-Base Coverage Transparency:** Documented the exact official availability: 20 months of general price index (January 2025 – August 2026), 8 months of YoY general inflation (January 2026 – August 2026), and 2 months of CFPI food inflation (July & August 2026). Clarified that 2024 monthly indices were not published by MoSPI in Table 10 of PIB PRID 2310058, strictly preventing false claims of complete historical inflation.
+  4. **Harmonized UI & Quick Selectors:** Enhanced the Regional Explorer in `app.py` with quick cohort buttons ("All 36 Geographies", "18 Major States", "Clear All") synchronizing the multiselect, bar chart, disparity scatter plot, and data table. Connected dynamic commentary in Section 1 to the valuation toggle, ensuring all textual findings match the active data mode.
+  5. **Data Decoupling & Downloads:** Decoupled national growth trajectory visualization into `data/sources/source_national_trajectory.csv` and `data/processed/national_trajectory.csv`, and provided download buttons for all datasets and audit artifacts in Section 6.
+- **Rejected Alternatives:**
+  - *Alternative A: Claiming automated end-to-end PDF scraping.* Rejected because government PDF layouts vary across tables and fragile heuristic scrapers break easily. Transparent curated source tables backed by deterministic text reconciliation offer far higher analytical integrity.
+  - *Alternative B: Extrapolating CPI 2024 inflation backward into 2025.* Rejected to prevent inventing official economic statistics.
+- **Evidence:** `scripts/reconcile_sources.py`, `docs/SOURCE_RECONCILIATION.json`, `docs/VALIDATION_REPORT.json`.
+- **Unresolved Issues:** None.
+- **Fallback:** Regression test suite in `tests/` continuously validates pipeline integrity, chart generators, and quality engine behavior.
+
+---
 *End of Decision Log.*
+
 

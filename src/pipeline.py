@@ -112,6 +112,18 @@ def build_macro_pfce_dataset() -> pd.DataFrame:
     return df_pfce
 
 
+def build_national_trajectory_dataset() -> pd.DataFrame:
+    """
+    Builds the multi-year national spending trajectory dataset from data/sources/source_national_trajectory.csv.
+    Decoupled from visualization code; captures 2011-12, 2022-23, and 2023-24 at current and constant prices.
+    """
+    f_traj = os.path.join(SOURCES_DIR, "source_national_trajectory.csv")
+    df_traj = pd.read_csv(f_traj)
+    df_traj["mpce_current_inr"] = pd.to_numeric(df_traj["mpce_current_inr"], errors="coerce")
+    df_traj["mpce_constant_2011_12_inr"] = pd.to_numeric(df_traj["mpce_constant_2011_12_inr"], errors="coerce")
+    return df_traj
+
+
 def run_pipeline() -> Dict[str, Any]:
     """
     Executes the ingestion, transformation, and validation sequence.
@@ -125,6 +137,7 @@ def run_pipeline() -> Dict[str, Any]:
     df_fractile = build_fractile_distribution_dataset()
     df_cpi = build_cpi_series_dataset()
     df_pfce = build_macro_pfce_dataset()
+    df_traj = build_national_trajectory_dataset()
 
     print("[3/5] Saving analytical outputs to data/processed/...")
     df_state.to_csv(os.path.join(PROCESSED_DIR, "state_mpce.csv"), index=False)
@@ -132,6 +145,7 @@ def run_pipeline() -> Dict[str, Any]:
     df_fractile.to_csv(os.path.join(PROCESSED_DIR, "fractile_distribution.csv"), index=False)
     df_cpi.to_csv(os.path.join(PROCESSED_DIR, "cpi_series.csv"), index=False)
     df_pfce.to_csv(os.path.join(PROCESSED_DIR, "macro_pfce.csv"), index=False)
+    df_traj.to_csv(os.path.join(PROCESSED_DIR, "national_trajectory.csv"), index=False)
 
     print("[4/5] Executing Data Quality Engine...")
     from src.quality_engine import DataQualityEngine
@@ -141,7 +155,8 @@ def run_pipeline() -> Dict[str, Any]:
         df_category=df_category,
         df_fractile=df_fractile,
         df_cpi=df_cpi,
-        df_pfce=df_pfce
+        df_pfce=df_pfce,
+        df_traj=df_traj
     )
 
     report_path = os.path.join(DOCS_DIR, "VALIDATION_REPORT.json")

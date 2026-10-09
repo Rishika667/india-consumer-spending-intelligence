@@ -1,0 +1,13 @@
+survey_round,valuation,sector,mpce_current_inr,mpce_constant_2011_12_inr,source_id,table_ref
+2011-12,Unimputed,Rural,1430.0,1430.0,MoSPI_Report592,Table 1 (Page 4)
+2011-12,Unimputed,Urban,2630.0,2630.0,MoSPI_Report592,Table 1 (Page 4)
+2011-12,Imputed,Rural,1430.0,1430.0,MoSPI_Report592,Table 2 (Page 9)
+2011-12,Imputed,Urban,2630.0,2630.0,MoSPI_Report592,Table 2 (Page 9)
+2022-23,Unimputed,Rural,3773.0,2008.0,MoSPI_Report592,Table 1 (Page 4)
+2022-23,Unimputed,Urban,6459.0,3510.0,MoSPI_Report592,Table 1 (Page 4)
+2022-23,Imputed,Rural,3860.0,2054.0,MoSPI_Report592,Table 2 (Page 9)
+2022-23,Imputed,Urban,6521.0,3544.0,MoSPI_Report592,Table 2 (Page 9)
+2023-24,Unimputed,Rural,4122.0,2079.0,MoSPI_Report592,Table 1 (Page 4)
+2023-24,Unimputed,Urban,6996.0,3632.0,MoSPI_Report592,Table 1 (Page 4)
+2023-24,Imputed,Rural,4247.0,2142.0,MoSPI_Report592,Table 2 (Page 9)
+2023-24,Imputed,Urban,7078.0,3674.0,MoSPI_Report592,Table 2 (Page 9)
