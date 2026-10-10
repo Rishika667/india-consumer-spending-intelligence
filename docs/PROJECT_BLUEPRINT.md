@@ -169,59 +169,64 @@ Where:
 
 ---
 
-### Section 1: Overview (Executive KPI Cards & Macro Trajectory)
-- **KPI Metric Strip:**
-  1. **All-India Rural MPCE:** ₹4,122 (Unimputed) / ₹4,247 (Imputed) | $+9.2\%$ vs. 2022–23
-  2. **All-India Urban MPCE:** ₹6,996 (Unimputed) / ₹7,078 (Imputed) | $+8.3\%$ vs. 2022–23
-  3. **Urban/Rural Consumption Ratio:** $1.70\times$ (Narrowed from $1.71\times$ in 2022–23 and $1.84\times$ in 2011–12)
+### Section 1: Overview (Executive KPI Cards, Macro Trajectory & Distribution)
+- **Headline Consumption Indicators:**
+  1. **All-India Rural MPCE:** ₹4,122 (Unimputed) / ₹4,247 (Imputed) | $+9.2\%$ nominal YoY vs. 2022–23
+  2. **All-India Urban MPCE:** ₹6,996 (Unimputed) / ₹7,078 (Imputed) | $+8.3\%$ nominal YoY vs. 2022–23
+  3. **Urban/Rural Consumption Ratio:** $1.70\times$ (₹2,874/mo absolute gap; narrowed from $1.71\times$ in 2022–23 and $1.84\times$ in 2011–12)
   4. **Rural Food Budget Share:** $47.04\%$ (Unimputed) / $48.43\%$ (Imputed) vs. $46.38\%$ in 2022–23
-  5. **Data Engine Health Score:** $100.0/100$ (Deterministic CQS | 28/28 checks passed)
+  *(Note: Pipeline Quality Score of 100.0% / 28 checks is positioned as a secondary status indicator in the sidebar and Data Quality section)*
+- **Executive Synthesis:** Evidence-based takeaway summarizing national expansion, ratio compression vs. expanding wallet gap, and food share dynamics.
 - **Visualizations:**
-  - *Chart 1.1: Long-term Consumption Trajectory (2011-12 to 2023-24 at Current & Constant 2011-12 Prices).*
-  - *Chart 1.2: Fractile Class Spending Distribution (Deciles 0-5% to 95-100%).* Highlighting bottom 5% growth ($+22.1\%$ rural, $+18.7\%$ urban).
+  - *Chart 1.1: Long-term Consumption Trajectory (2011-12, 2022-23, 2023-24 at Current & Constant 2011-12 Prices).*
+  - *Chart 1.2: Fractile Class Spending Distribution (0-5% to 95-100%).* Highlighting bottom 5% baseline and top-tier depth.
+- **Analytical Briefings:** 4 syndicated research briefing cards covering macro trends, welfare transfers, food budget shifts, and fractile disparities.
 
 ---
 
 ### Section 2: Regional Explorer (State/UT Comparisons & Urban-Rural Disparities)
-- **Interactive Filters:**
-  - State/UT Multi-Select with quick-selection buttons (All States, Major 18, Southern, Northern, etc.).
-  - Sector View: *Rural*, *Urban*, or *Both Side-by-Side*.
-  - Metric Sorting: *By Total MPCE*, *By Rural MPCE*, *By Urban-Rural Ratio*.
+- **Interactive Controls (Implemented):**
+  - Cohort quick-selection buttons: **All Geographies**, **Major States**, and **Clear**.
+  - Harmonized State/UT Multi-Select synchronizing bar chart, scatter plot, and data table.
+  - Survey Round selector: *2023-24* vs. *2022-23*.
+  - Sector Breakdown: *Both*, *Rural*, *Urban*.
+  *(Roadmap Note: Sub-regional presets such as Northern/Southern and secondary ranking toggles are conceptual extensions).*
 - **Visualizations:**
-  - *Chart 2.1: Ranked Bar Chart of State MPCE.* Highlighting highest (Sikkim, Chandigarh, Goa) and lowest (Chhattisgarh, Jharkhand, Odisha).
-  - *Chart 2.2: Urban-to-Rural Expenditure Ratio Scatter / Divergence Plot.*
-- **State Data Table:** Interactive table with search, sort, and percentage delta columns.
+  - *Chart 2.1: Ranked Horizontal Bar Chart of State/UT MPCE.* Clean sorting with generous margin for state names.
+  - *Chart 2.2: Spatial Convergence & Disparity Scatter Plot.* Paired Rural vs. Urban MPCE with dynamic national benchmark, 1.00× parity line, and selective anchor labels.
+- **State Data Table:** Expandable harmonized table with sector columns and computed Urban-to-Rural ratio.
 
 ---
 
 ### Section 3: Consumption Basket (Expenditure Categories & Shares)
-- **Interactive Controls:**
+- **Interactive Controls (Implemented):**
   - Sector Selector: *Rural* vs. *Urban*.
-  - Valuation Mode: *Without Imputation* vs. *With Imputation*.
+  - Valuation Mode Alignment: Cross-round comparison is evaluated on the official Unimputed series (since 2023–24 item-level imputation was not published by MoSPI in Report 592), with an explicit methodological boundary banner when global imputation is active.
 - **Visualizations:**
-  - *Chart 3.1: Commodity Group Share Comparison (2022-23 vs. 2023-24).*
-  - *Chart 3.2: Rural vs. Urban Consumption Allocation Donut / Bar Chart.* Highlighting top categories: Beverages & Processed Food ($9.84\%$ rural, $11.09\%$ urban), Milk & Milk Products ($8.44\%$ rural, $7.19\%$ urban), Conveyance ($7.59\%$ rural, $8.46\%$ urban), Clothing, Medical, Rent.
+  - *Chart 3.1: Commodity Group Share Comparison (2022-23 vs. 2023-24).* Grouped horizontal bar chart across 17 commodity categories with generous left margins.
+  *(Roadmap Note: A secondary donut visualization was considered during planning but omitted in favor of direct cross-round bar comparison).*
+- **Dynamic Research Insights:** Programmatically calculated category shares and YoY percentage-point shifts for the active sector.
 
 ---
 
-### Section 4: Price Context (Official MoSPI CPI Trends — Separate Economic Context)
+### Section 4: Price Context (Official MoSPI CPI Trends — Decoupled Economic Context)
 - **Mandatory Disclaimers & Alerts:**
-  - *Prominent Banner:* **"Separate Macroeconomic Price Context — Not Spatial Deflators for Survey MPCE."**
+  - *Prominent Banner:* **"Strict Methodological Decoupling — MoSPI CPI price indices measure fixed market basket changes across time and must NOT be used as spatial deflators for survey MPCE."**
 - **Sub-Tabs:**
-  1. *Sub-Tab 4A: Revised Series (Base 2024=100, August 2026 Release):*
-     - Headline CPI: 108.74 (YoY Inflation: 4.82%).
+  1. *Sub-Tab 4A: Transition Series (Base 2024=100, August 2026 Release):*
+     - Headline General CPI: 108.74 (YoY Inflation: 4.82%).
      - Rural CPI: 109.27 (Inflation: 5.23%); Urban CPI: 108.07 (Inflation: 4.31%).
      - Consumer Food Price Index (CFPI): 110.71 (Inflation: 5.95%).
-     - Explanation of expanded basket (358 items) and COICOP 2018.
-  2. *Sub-Tab 4B: Historical Series (Base 2012=100, 2014–2025):*
-     - Multi-year trend in headline inflation vs food inflation.
+     - Trajectory line chart across 20 months of index and 8 months of YoY inflation.
+  2. *Sub-Tab 4B: Historical Baseline (Base 2012=100 Snapshots):*
+     - Preserved benchmark reference periods.
 
 ---
 
-### Section 5: Data Quality & Sources (Validation Results, Exceptions & Lineage)
-- **Quality Scorecard:** Composite Quality Score (CQS) gauge with dimension breakdowns.
-- **Automated Audit Matrix (25+ Rule Checks):** Filterable table with Rule ID, Dimension, Description, Actual Value, and Status (PASS/WARN/FAIL).
-- **Cryptographic Lineage Manifest:** Raw file filenames, SHA-256 hashes, source URLs, and retrieval timestamps.
+### Section 5: Data Quality & Sources (Validation Results, Audit Matrix & Lineage)
+- **Quality Scorecard:** Deterministic Pipeline Validation Score (100.0%, 28/28 checks passed) across 5 weighted dimensions.
+- **Audit Matrix & Availability Register:** Dimension breakdown table and Official Data Availability & Missingness Register detailing 2022–23 and 2023–24 coverage and official unpublished cells.
+- **Cryptographic Lineage Manifest:** Automated source reconciliation summary verifying 42/42 matched primary benchmarks against preserved official documents.
 
 ---
 

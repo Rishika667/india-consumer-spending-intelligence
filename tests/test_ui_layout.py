@@ -236,11 +236,17 @@ def test_food_share_benchmarks_and_valuation_anchors(app_data):
 def test_regional_state_mpce_integrity(app_data):
     """
     Verifies official 2023-24 state figures in state_mpce.csv match official MoSPI Report 592 Table 1:
-    - Sikkim: Rural 9377, Urban 13927
-    - Goa: Rural 8048, Urban 9726
-    - Chhattisgarh: Rural 2739, Urban 4927
-    - Odisha: Rural 3357, Urban 5825
-    - Bihar: Rural 3670, Urban 5080
+    - Sikkim: Rural 9377, Urban 13927 (Ratio: 1.49x)
+    - Goa: Rural 8048, Urban 9726 (Ratio: 1.21x)
+    - Andaman & N Islands: Rural 7771, Urban 10453 (Ratio: 1.35x)
+    - Arunachal Pradesh: Rural 5995, Urban 9832 (Ratio: 1.64x)
+    - Kerala: Rural 6611, Urban 7783 (Ratio: 1.18x)
+    - Jharkhand: Rural 2946, Urban 5393 (Ratio: 1.83x)
+    - Meghalaya: Rural 3852, Urban 7839 (Ratio: 2.04x)
+    - Punjab: Rural 5817, Urban 7359 (Ratio: 1.27x)
+    - Chhattisgarh: Rural 2739, Urban 4927 (Ratio: 1.80x)
+    - Odisha: Rural 3357, Urban 5825 (Ratio: 1.74x)
+    - Bihar: Rural 3670, Urban 5080 (Ratio: 1.38x)
     - Delhi & Chandigarh rural: NaN in 2023-24 unimputed
     """
     df_state, _, _, _, _, _, _ = app_data
@@ -253,12 +259,29 @@ def test_regional_state_mpce_integrity(app_data):
     assert get_val("Sikkim", "Urban") == 13927.0
     assert get_val("Goa", "Rural") == 8048.0
     assert get_val("Goa", "Urban") == 9726.0
+    assert get_val("Andaman & N Islands", "Rural") == 7771.0
+    assert get_val("Andaman & N Islands", "Urban") == 10453.0
+    assert get_val("Arunachal Pradesh", "Rural") == 5995.0
+    assert get_val("Arunachal Pradesh", "Urban") == 9832.0
+    assert get_val("Kerala", "Rural") == 6611.0
+    assert get_val("Kerala", "Urban") == 7783.0
+    assert get_val("Jharkhand", "Rural") == 2946.0
+    assert get_val("Jharkhand", "Urban") == 5393.0
+    assert get_val("Meghalaya", "Rural") == 3852.0
+    assert get_val("Meghalaya", "Urban") == 7839.0
+    assert get_val("Punjab", "Rural") == 5817.0
+    assert get_val("Punjab", "Urban") == 7359.0
     assert get_val("Chhattisgarh", "Rural") == 2739.0
     assert get_val("Chhattisgarh", "Urban") == 4927.0
     assert get_val("Odisha", "Rural") == 3357.0
     assert get_val("Odisha", "Urban") == 5825.0
     assert get_val("Bihar", "Rural") == 3670.0
     assert get_val("Bihar", "Urban") == 5080.0
+
+    # Ratios
+    assert round(get_val("Meghalaya", "Urban") / get_val("Meghalaya", "Rural"), 2) == 2.04
+    assert round(get_val("Kerala", "Urban") / get_val("Kerala", "Rural"), 2) == 1.18
+    assert round(get_val("Punjab", "Urban") / get_val("Punjab", "Rural"), 2) == 1.27
 
     delhi_r = st_23[(st_23["state_name"] == "Delhi") & (st_23["sector"] == "Rural")]["mpce_unimputed"].values[0]
     assert pd.isna(delhi_r)
@@ -295,3 +318,64 @@ def test_narrative_factual_consistency_and_no_cliches():
     assert "Social Welfare Imputation: In-Kind Valuation vs. Liquid Purchasing Power" in content
     assert "Food Budget Share Dynamics: Long-Term Shifts and Valuation Differences" in content
     assert "Distributional Spread: Bottom-Fractile Growth and Upper-Quintile Depth" in content
+
+
+def test_chart_tickformat_formatting_integrity(app_data):
+    """
+    Verifies that all charts in src/ui/charts.py use valid single-comma tickformat=",.0f"
+    and that no malformed ',,.0f' remains in the codebase.
+    """
+    df_state, df_category, df_fractile, _, _, df_traj, _ = app_data
+    charts_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "src", "ui", "charts.py")
+    with open(charts_path, "r", encoding="utf-8") as f:
+        charts_code = f.read()
+
+    assert ",,.0f" not in charts_code, "Found malformed tickformat ',,.0f' in src/ui/charts.py"
+
+    fig_traj = create_trend_trajectory_chart(df_traj, "Unimputed")
+    assert fig_traj.layout.yaxis.tickformat == ",.0f"
+
+    fig_frac = create_fractile_curve_chart(df_fractile, "2023-24")
+    assert fig_frac.layout.yaxis.tickformat == ",.0f"
+
+    fig_state = create_state_bar_chart(df_state, "2023-24", "mpce_unimputed", "Both")
+    assert fig_state.layout.xaxis.tickformat == ",.0f"
+
+    fig_disp = create_disparity_scatter_chart(df_state, "2023-24", "mpce_unimputed")
+    assert fig_disp.layout.xaxis.tickformat == ",.0f"
+    assert fig_disp.layout.yaxis.tickformat == ",.0f"
+
+
+def test_overview_layout_and_button_labels():
+    """
+    Verifies that app.py uses 4 KPI columns for consumption indicators,
+    includes the executive takeaway, and provides clean quick-selection button labels.
+    """
+    app_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "app.py")
+    with open(app_path, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    # 4 columns for consumption KPIs
+    assert "st.columns(4)" in content, "Overview must use 4 KPI columns for consumption indicators"
+    assert "render_executive_takeaway" in content, "Overview must include executive takeaway callout"
+
+    # Clean button labels (no emoji prefixes)
+    assert 'qc1.button("All Geographies"' in content, "Expected 'All Geographies' button"
+    assert 'qc2.button("Major States"' in content, "Expected 'Major States' button"
+    assert 'qc3.button("Clear"' in content, "Expected 'Clear' button"
+
+
+def test_category_comparison_cross_round_preservation(app_data):
+    """
+    Verifies that create_category_comparison_chart preserves cross-round comparison
+    (both 2022-23 and 2023-24 present) even when called with 'Imputed' valuation.
+    """
+    _, df_category, _, _, _, _, _ = app_data
+    for sec in ["Rural", "Urban"]:
+        fig_unimp = create_category_comparison_chart(df_category, sec, "Unimputed")
+        rounds_unimp = {tr.name for tr in fig_unimp.data if hasattr(tr, "name")}
+        assert "2022-23" in rounds_unimp and "2023-24" in rounds_unimp
+
+        fig_imp = create_category_comparison_chart(df_category, sec, "Imputed")
+        rounds_imp = {tr.name for tr in fig_imp.data if hasattr(tr, "name")}
+        assert "2022-23" in rounds_imp and "2023-24" in rounds_imp

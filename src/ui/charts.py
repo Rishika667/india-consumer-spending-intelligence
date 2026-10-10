@@ -155,15 +155,16 @@ def create_trend_trajectory_chart(df_traj=None, valuation_mode: str = "Unimputed
     )
     fig.update_yaxes(
         title_text="Monthly Per Capita Expenditure (₹)",
-        tickformat=",,.0f",
+        tickformat=",.0f",
         automargin=True
     )
 
-    val_desc = "With In-Kind Welfare Transfers" if val_filter == "Imputed" else "Out-of-Pocket"
+    val_desc = "With Transfers" if val_filter == "Imputed" else "Out-of-Pocket"
     return format_chart_layout(
         fig,
-        f"All-India MPCE Growth: Current vs. Constant (2011-12) Prices ({val_desc})",
+        f"National MPCE Trajectory ({val_desc})",
         height=450,
+        margin={"l": 65, "r": 30, "t": 45, "b": 75},
         legend_pos="bottom"
     )
 
@@ -213,7 +214,7 @@ def create_fractile_curve_chart(df_fractile: pd.DataFrame, selected_round: str =
     )
     fig.update_yaxes(
         title_text="Average MPCE (₹/month)",
-        tickformat=",,.0f",
+        tickformat=",.0f",
         automargin=True
     )
 
@@ -224,14 +225,14 @@ def create_fractile_curve_chart(df_fractile: pd.DataFrame, selected_round: str =
             fig.add_annotation(
                 x="0-5%",
                 y=float(u_bot[0]),
-                text=f"Bottom 5%: Rural ₹{r_bot[0]:,.0f} (+22.1% YoY) | Urban ₹{u_bot[0]:,.0f} (+18.7% YoY)",
+                text=f"Bottom 5%: Rural ₹{r_bot[0]:,.0f} | Urban ₹{u_bot[0]:,.0f}",
                 showarrow=True,
                 arrowhead=2,
                 arrowsize=1,
                 arrowwidth=1.5,
                 arrowcolor="#64748b",
-                ax=55,
-                ay=-55,
+                ax=40,
+                ay=-45,
                 font={"size": 10, "color": "#0f172a"},
                 bgcolor="rgba(248, 250, 252, 0.95)",
                 bordercolor="#cbd5e1",
@@ -240,8 +241,9 @@ def create_fractile_curve_chart(df_fractile: pd.DataFrame, selected_round: str =
 
     return format_chart_layout(
         fig,
-        f"Consumption Distribution across Fractile Classes ({selected_round})",
+        f"Fractile Class Distribution ({selected_round})",
         height=450,
+        margin={"l": 65, "r": 30, "t": 45, "b": 75},
         legend_pos="bottom"
     )
 
@@ -301,7 +303,7 @@ def create_state_bar_chart(
             hovertemplate="<b>%{y}</b> (%{data.name})<br>MPCE: ₹%{x:,.0f}/month<extra></extra>"
         )
 
-    fig.update_xaxes(title_text="Monthly Per Capita Expenditure (₹/month)", tickformat=",,.0f", automargin=True)
+    fig.update_xaxes(title_text="Monthly Per Capita Expenditure (₹/month)", tickformat=",.0f", automargin=True)
     fig.update_yaxes(title_text="State / Union Territory", automargin=True)
 
     val_label = "With Welfare Transfers" if "imputed" in valuation_col and "un" not in valuation_col else "Out-of-Pocket"
@@ -433,12 +435,12 @@ def create_disparity_scatter_chart(
 
     fig.update_xaxes(
         title_text="Rural MPCE (₹/month)",
-        tickformat=",,.0f",
+        tickformat=",.0f",
         automargin=True
     )
     fig.update_yaxes(
         title_text="Urban MPCE (₹/month)",
-        tickformat=",,.0f",
+        tickformat=",.0f",
         automargin=True
     )
 
@@ -459,38 +461,16 @@ def create_category_comparison_chart(
     """
     Plots commodity shares comparing 2022-23 vs 2023-24.
     Reserves generous left margin for category labels and positions notes cleanly.
+    Maintains cross-round comparison on the official Unimputed series if 2023-24 imputed data is absent.
     """
     filtered = df_category[(df_category["sector"] == selected_sector) & (df_category["valuation"] == valuation_filter)]
+    is_fallback = False
 
     if filtered[filtered["survey_round"] == "2023-24"].empty:
-        # Only 2022-23 available for this valuation (e.g. Imputed series)
-        order = filtered.sort_values(by="share_pct", ascending=True)["category"].tolist()
-        fig = px.bar(
-            filtered,
-            y="category",
-            x="share_pct",
-            color="survey_round",
-            orientation="h",
-            category_orders={"category": order},
-            color_discrete_map={"2022-23": "#0284c7"},
-            labels={"category": "Commodity Group", "share_pct": "Share of MPCE (%)", "survey_round": "Survey Round"}
-        )
-        fig.update_traces(
-            hovertemplate="<b>%{y}</b><br>2022-23 Share: %{x:.2f}% of MPCE<extra></extra>"
-        )
-        fig.update_xaxes(
-            title_text="Share of Monthly Per Capita Expenditure (% of MPCE)",
-            automargin=True
-        )
-        fig.update_yaxes(title_text="Commodity Group", automargin=True)
-
-        return format_chart_layout(
-            fig,
-            f"Commodity Budget Allocation: 2022-23 ({selected_sector}, {valuation_filter})",
-            height=640,
-            margin={"l": 210, "r": 35, "t": 60, "b": 60},
-            legend_pos="top"
-        )
+        # MoSPI Report 592 did not publish item-level imputed breakdown for 2023-24.
+        # Fall back to official Unimputed series so cross-round comparison is preserved.
+        filtered = df_category[(df_category["sector"] == selected_sector) & (df_category["valuation"] == "Unimputed")]
+        is_fallback = True
 
     order = filtered[filtered["survey_round"] == "2023-24"].sort_values(by="share_pct", ascending=True)["category"].tolist()
 
@@ -514,9 +494,10 @@ def create_category_comparison_chart(
     )
     fig.update_yaxes(title_text="Commodity Group", automargin=True)
 
+    series_label = "Unimputed" if not is_fallback else "Unimputed (Cross-Round Baseline)"
     return format_chart_layout(
         fig,
-        f"Commodity Budget Allocation: 2022-23 vs 2023-24 ({selected_sector}, {valuation_filter})",
+        f"Commodity Budget Allocation: 2022-23 vs 2023-24 ({selected_sector}, {series_label})",
         height=640,
         margin={"l": 210, "r": 35, "t": 65, "b": 60},
         legend_pos="top"

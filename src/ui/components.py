@@ -1,6 +1,6 @@
 """
 ConsumerLens India — Reusable UI Components and Styling
-Institutional, editorial styling for Streamlit with responsive layout helpers.
+Editorial, research-grade styling for Streamlit with responsive layout helpers.
 """
 
 import streamlit as st
@@ -16,47 +16,81 @@ def inject_custom_css():
         max-width: 1280px;
     }
     
-    /* Institutional Metric Card */
+    /* Research-Grade KPI Card */
     .metric-card {
-        background: #f8fafc;
+        background: #ffffff;
         border: 1px solid #e2e8f0;
+        border-top: 3px solid #1e3a8a;
         border-radius: 8px;
-        padding: 1.1rem;
+        padding: 1.15rem 1.25rem;
         margin-bottom: 0.75rem;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+        min-height: 128px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
     .metric-title {
-        font-size: 0.82rem;
+        font-size: 0.80rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         color: #64748b;
         font-weight: 600;
-        margin-bottom: 0.35rem;
+        margin-bottom: 0.25rem;
     }
     .metric-value {
         font-size: 1.85rem;
         font-weight: 700;
         color: #0f172a;
         line-height: 1.2;
+        white-space: nowrap;
     }
     .metric-subtitle {
         font-size: 0.82rem;
         color: #059669;
         font-weight: 500;
-        margin-top: 0.35rem;
+        margin-top: 0.25rem;
     }
     
-    /* Editorial Callout Pill */
-    .editorial-badge {
+    /* Active Valuation Status Banner */
+    .valuation-badge {
+        display: inline-flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        color: #334155;
+        padding: 0.35rem 0.85rem;
+        border-radius: 6px;
+        font-size: 0.83rem;
+        font-weight: 500;
+        margin-top: 0.4rem;
+        margin-bottom: 1.1rem;
+    }
+    .valuation-badge-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #2563eb;
         display: inline-block;
-        background-color: #e0f2fe;
-        color: #0369a1;
-        padding: 0.25rem 0.65rem;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        letter-spacing: 0.025em;
-        margin-bottom: 0.5rem;
+    }
+
+    /* Executive Takeaway Callout */
+    .executive-takeaway {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-left: 4px solid #1e3a8a;
+        border-radius: 6px;
+        padding: 1.1rem 1.35rem;
+        margin: 1.1rem 0 1.5rem 0;
+        color: #334155;
+        font-size: 0.93rem;
+        line-height: 1.6;
+    }
+    .executive-takeaway strong {
+        color: #0f172a;
+        font-size: 0.97rem;
     }
     
     /* Quality Score Banner */
@@ -86,9 +120,9 @@ def inject_custom_css():
     .section-title {
         font-size: 1.35rem;
         font-weight: 700;
-        color: #1e293b;
-        margin-top: 1.25rem;
-        margin-bottom: 0.4rem;
+        color: #0f172a;
+        margin-top: 1.15rem;
+        margin-bottom: 0.35rem;
     }
     .section-subtitle {
         font-size: 0.92rem;
@@ -156,6 +190,23 @@ def render_metric_card(title: str, value: str, delta: str = "", delta_color: str
         <div class="metric-title">{title}</div>
         <div class="metric-value">{value}</div>
         <div class="metric-subtitle" style="color: {delta_color};">{delta}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+def render_valuation_badge(label: str, details: str):
+    st.markdown(f"""
+    <div class="valuation-badge">
+        <span class="valuation-badge-dot"></span>
+        <strong style="color: #0f172a;">Active Valuation Basis:</strong> {label} &nbsp;•&nbsp; <span>{details}</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+def render_executive_takeaway(title: str, text: str):
+    st.markdown(f"""
+    <div class="executive-takeaway">
+        <strong>{title}</strong><br>{text}
     </div>
     """, unsafe_allow_html=True)
 

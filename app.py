@@ -15,7 +15,7 @@ st.set_page_config(
     page_title="ConsumerLens India | MoSPI Consumption Intelligence",
     page_icon="📊",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="auto"
 )
 
 # Ensure src modules are resolvable
@@ -26,6 +26,8 @@ if BASE_DIR not in sys.path:
 from src.ui.components import (
     inject_custom_css,
     render_metric_card,
+    render_valuation_badge,
+    render_executive_takeaway,
     render_disclaimer_banner,
     render_insight_card
 )
@@ -112,19 +114,18 @@ def main():
         )
 
     # ==================== HEADER STRIP ====================
-    col_hdr1, col_hdr2 = st.columns([3, 1])
-    with col_hdr1:
-        st.title("ConsumerLens India")
-        st.markdown(
-            "**Official Household Consumption Expenditure & Price Intelligence Engine** • "
-            "Primary Benchmark: NSS Report No. 592 & PIB Factsheets (August 2023 – July 2024)"
-        )
-    with col_hdr2:
-        st.metric(
-            label="Valuation Basis",
-            value="With Transfers" if is_imputed else "Out-of-Pocket",
-            delta="+₹125/mo Welfare Effect (Rural)" if is_imputed else "Base Survey Values"
-        )
+    st.title("ConsumerLens India")
+    st.markdown(
+        "**India Household Consumption & Regional Spending Intelligence**<br>"
+        "<span style='color: #64748b; font-size: 0.88rem;'>"
+        "Primary Benchmarks: MoSPI HCES 2023–24 (Report 592), HCES 2022–23 (Report 590) & CPI Transition Series (Base 2024=100)"
+        "</span>",
+        unsafe_allow_html=True
+    )
+    render_valuation_badge(
+        valuation_option,
+        "+₹125/mo Rural Welfare Valuation" if is_imputed else "Base Survey Values (Out-of-Pocket)"
+    )
 
     # ==================== SECTION 1: OVERVIEW ====================
     if selected_tab == "1. Overview":
@@ -176,25 +177,37 @@ def main():
         ratio_frac_r_22 = f22_r_top / f22_r_bot
         ratio_frac_u_22 = f22_u_top / f22_u_bot
 
-        # Render top KPI cards
-        kpi1, kpi2, kpi3, kpi4, kpi5 = st.columns(5)
+        # Render top 4 national consumption KPI cards
+        kpi1, kpi2, kpi3, kpi4 = st.columns(4)
         with kpi1:
-            render_metric_card("Rural MPCE", f"₹{r_val_23:,.0f}", f"+{r_growth:.1f}% vs 2022-23")
+            render_metric_card("Rural MPCE", f"₹{r_val_23:,.0f}", f"+{r_growth:.1f}% nominal YoY vs 2022–23")
         with kpi2:
-            render_metric_card("Urban MPCE", f"₹{u_val_23:,.0f}", f"+{u_growth:.1f}% vs 2022-23")
+            render_metric_card("Urban MPCE", f"₹{u_val_23:,.0f}", f"+{u_growth:.1f}% nominal YoY vs 2022–23")
         with kpi3:
-            render_metric_card("Urban/Rural Ratio", f"{ratio_23:.2f}×", f"Narrowed from {ratio_22:.2f}× (2022-23)")
+            render_metric_card("Urban/Rural Ratio", f"{ratio_23:.2f}×", f"₹{abs_gap_23:,.0f}/mo gap (narrowed from {ratio_22:.2f}×)")
         with kpi4:
-            render_metric_card("Rural Food Share", f"{food_share_r_23:.2f}%", f"{food_share_r_22:.2f}% in 2022-23")
-        with kpi5:
-            render_metric_card("Pipeline Validation", f"{val_score:.1f}%", f"{passed_eval}/{total_eval} Checks Passed")
+            render_metric_card(f"Rural Food Share ({valuation_label})", f"{food_share_r_23:.2f}%", f"{food_share_r_22:.2f}% in 2022–23")
+
+        # Executive Takeaway Callout (2023-24 National Synthesis)
+        render_executive_takeaway(
+            "Executive Takeaway — National Consumption Dynamics (2023–24 Benchmark):",
+            f"In 2023–24, average monthly per-capita spending reached ₹{r_val_23:,.0f} in rural areas (+{r_growth:.1f}% nominal YoY) and "
+            f"₹{u_val_23:,.0f} in urban centers (+{u_growth:.1f}% YoY) under the {valuation_label.lower()} series. While faster rural percentage growth "
+            f"compressed the urban-to-rural consumption multiple marginally from {ratio_22:.2f}× to {ratio_23:.2f}×, the absolute monthly gap widened to "
+            f"₹{abs_gap_23:,.0f} per person. Food spending represented {food_share_r_23:.2f}% of rural budgets (already sub-50% in 2022–23 at {food_share_r_22:.2f}%), "
+            f"reflecting ongoing non-food diversification alongside notable spatial and fractile dispersion across states."
+        )
 
         st.markdown("---")
 
         c1, c2 = st.columns([1, 1])
         with c1:
+            st.markdown("#### National MPCE Trajectory (Current vs Constant Prices)")
+            st.caption("Historical survey rounds comparing nominal outlays with real MPCE at 2011–12 base prices.")
             st.plotly_chart(create_trend_trajectory_chart(df_traj, valuation_label), use_container_width=True)
         with c2:
+            st.markdown("#### Fractile Class Spending Distribution (0–5% to 95–100%)")
+            st.caption("Distributional spending curve across 12 percentile fractile cohorts from official Table 14.")
             st.plotly_chart(create_fractile_curve_chart(df_fractile), use_container_width=True)
 
         st.markdown("### 📌 Executive Research Findings (Syndicated Brief)")
@@ -319,9 +332,9 @@ def main():
         # Quick selectors row
         st.markdown("**Quick Geographic Cohort Selectors:**")
         qc1, qc2, qc3, _ = st.columns([1, 1, 1, 3])
-        qc1.button("🌐 All 36 Geographies", on_click=select_all_states, use_container_width=True)
-        qc2.button("🏛️ 18 Major States", on_click=select_major_states, use_container_width=True)
-        qc3.button("🧹 Clear Selection", on_click=select_clear_states, use_container_width=True)
+        qc1.button("All Geographies", on_click=select_all_states, use_container_width=True)
+        qc2.button("Major States", on_click=select_major_states, use_container_width=True)
+        qc3.button("Clear", on_click=select_clear_states, use_container_width=True)
 
         # Filters row
         fcol1, fcol2, fcol3 = st.columns([2, 1, 1])
@@ -347,7 +360,7 @@ def main():
 
         # Empty selection helper
         if total_in_selection == 0:
-            st.info("ℹ️ No states currently selected. Click **'All 36 Geographies'** or **'18 Major States'** above, or select specific states from the dropdown to render comparative charts.")
+            st.info("ℹ️ No states currently selected. Click **'All Geographies'** or **'Major States'** above, or select specific states from the dropdown to render comparative charts.")
 
         # Check for officially unpublished records in the selection
         missing_records = filtered_state_df[filtered_state_df[valuation_col].isnull()]
@@ -362,11 +375,12 @@ def main():
         elif total_in_selection > 0:
             st.caption(f"✓ All {total_in_selection} selected geographies have officially published figures for {selected_round} ({valuation_label}).")
 
+        st.markdown(f"#### State & UT Consumption Ranking — {selected_round} ({valuation_label})")
         st.plotly_chart(create_state_bar_chart(filtered_state_df, selected_round, valuation_col, sector_view), use_container_width=True)
 
         st.markdown("---")
-        st.subheader("Spatial Convergence: Rural vs. Urban Disparity")
-        st.caption("Scatter distribution of paired Rural vs. Urban MPCE. Frontier outlier states labeled for spatial orientation; hover over any point for complete metrics.")
+        st.markdown(f"#### Spatial Convergence: Rural vs. Urban Disparity ({selected_round})")
+        st.caption("Scatter distribution of paired Rural vs. Urban MPCE. Key anchor states labeled for spatial orientation; hover over any point for complete metrics.")
         st.plotly_chart(create_disparity_scatter_chart(filtered_state_df, selected_round, valuation_col), use_container_width=True)
 
         # Compute dynamic regional observations directly from filtered dataset
@@ -380,21 +394,21 @@ def main():
             high_disp_st = pivoted_reg.sort_values(by="ratio", ascending=False).iloc[0]
             low_disp_st = pivoted_reg.sort_values(by="ratio", ascending=True).iloc[0]
 
-            st.markdown(f"### 📌 Regional Analytical Observations ({selected_round}, {valuation_label})")
+            st.markdown(f"### Regional Analytical Observations ({selected_round}, {valuation_label})")
             r_c1, r_c2 = st.columns(2)
             with r_c1:
                 st.markdown(f"""
-                **1. Spatial Polarization Across Selected Geographies ({len(pivoted_reg)} States/UTs):**
-                - **Rural Consumption Extremes:** Highest is **{top_r_st['state_name']}** (₹{top_r_st['Rural']:,.0f}/month); lowest is **{bot_r_st['state_name']}** (₹{bot_r_st['Rural']:,.0f}/month), a range of ₹{top_r_st['Rural'] - bot_r_st['Rural']:,.0f}/month.
-                - **Urban Consumption Extremes:** Highest is **{top_u_st['state_name']}** (₹{top_u_st['Urban']:,.0f}/month); lowest is **{bot_u_st['state_name']}** (₹{bot_u_st['Urban']:,.0f}/month), a range of ₹{top_u_st['Urban'] - bot_u_st['Urban']:,.0f}/month.
-                - **Scope Boundary:** These observations represent reported survey averages in the selected cohort. Cross-state spending variations cannot be attributed to unmeasured drivers such as remittances, household size, or tourism without external demographic data.
+                **Spatial Polarization Across Selected Geographies ({len(pivoted_reg)} States/UTs):**
+                - **Rural Consumption Extremes:** Highest is **{top_r_st['state_name']}** (₹{top_r_st['Rural']:,.0f}/month); lowest is **{bot_r_st['state_name']}** (₹{bot_r_st['Rural']:,.0f}/month), establishing an inter-state rural spread of ₹{top_r_st['Rural'] - bot_r_st['Rural']:,.0f}/month.
+                - **Urban Consumption Extremes:** Highest is **{top_u_st['state_name']}** (₹{top_u_st['Urban']:,.0f}/month); lowest is **{bot_u_st['state_name']}** (₹{bot_u_st['Urban']:,.0f}/month), an inter-state urban spread of ₹{top_u_st['Urban'] - bot_u_st['Urban']:,.0f}/month.
+                - **Methodological Boundary:** Reported figures reflect cross-sectional survey sample averages. Spending differentials cannot be attributed to unmeasured drivers (such as remittances, household size, or tourism) without auxiliary demographic datasets.
                 """)
             with r_c2:
                 st.markdown(f"""
-                **2. Urban-to-Rural Disparity and Parity Ratios:**
-                - **Highest Disparity Ratio:** **{high_disp_st['state_name']}** exhibits an urban spending multiple of **{high_disp_st['ratio']:.2f}×** (Urban ₹{high_disp_st['Urban']:,.0f} vs. Rural ₹{high_disp_st['Rural']:,.0f}).
-                - **Lowest Disparity Ratio (Closest to Parity):** **{low_disp_st['state_name']}** exhibits a multiple of **{low_disp_st['ratio']:.2f}×** (Urban ₹{low_disp_st['Urban']:,.0f} vs. Rural ₹{low_disp_st['Rural']:,.0f}).
-                - **Commercial Research Hypothesis:** Differences in convergence ratios provide hypotheses for distribution planning: high-parity states may support similar portfolio assortments across sectors, whereas high-disparity states require distinct product tiers. These require verification via local retail audits.
+                **Urban-to-Rural Disparity and Parity Benchmarks:**
+                - **Widest Disparity Ratio:** **{high_disp_st['state_name']}** exhibits an urban spending multiple of **{high_disp_st['ratio']:.2f}×** (Urban ₹{high_disp_st['Urban']:,.0f} vs. Rural ₹{high_disp_st['Rural']:,.0f}).
+                - **Closest to Parity:** **{low_disp_st['state_name']}** exhibits an urban-to-rural multiple of **{low_disp_st['ratio']:.2f}×** (Urban ₹{low_disp_st['Urban']:,.0f} vs. Rural ₹{low_disp_st['Rural']:,.0f}).
+                - **Commercial Research Hypothesis:** Contrasting convergence ratios suggest distinct commercial strategies: high-parity states may support unified product assortments across rural and urban channels, whereas high-disparity states indicate demand for tiered product portfolios. These hypotheses require verification through local trade audits.
                 """)
 
         with st.expander("🔍 View Raw State Data Table (Harmonized Selection)"):
@@ -415,32 +429,51 @@ def main():
             st.info(f"Currently viewing **{valuation_option}** (Controlled via sidebar)")
 
         if is_imputed:
-            st.warning(
-                "⚠️ **Methodological Boundary Notice:** MoSPI published item-level commodity shares with welfare imputation "
-                "for **2022–23** (Statement 15), but did **NOT** publish item-group category breakdown with welfare imputation for **2023–24** "
-                "in Report 592. To maintain empirical integrity, cross-year category comparisons are evaluated on the official **Unimputed** series."
+            render_disclaimer_banner(
+                "Methodological Boundary Notice (Category Valuation)",
+                "The global valuation filter is currently set to 'Including Social Welfare Imputation'. "
+                "However, while MoSPI published item-level commodity shares with welfare imputation for 2022–23 (Statement 15), "
+                "it did NOT publish item-group category allocations with welfare imputation for 2023–24 in Report 592. "
+                "To maintain strict cross-round empirical comparability, the category chart and detailed allocation analysis below "
+                "are evaluated on the official Unimputed (Out-of-Pocket) series."
             )
 
-        st.plotly_chart(create_category_comparison_chart(df_category, basket_sector, valuation_label), use_container_width=True)
+        st.plotly_chart(create_category_comparison_chart(df_category, basket_sector, "Unimputed"), use_container_width=True)
 
-        st.markdown("### 📊 Budget Allocation Insights (Official Unimputed Series)")
+        # Dynamic computation of commodity category shares and YoY movements for selected sector
+        cat_sec = df_category[(df_category["sector"] == basket_sector) & (df_category["valuation"] == "Unimputed")]
+        piv_cat = cat_sec.pivot(index="category", columns="survey_round", values="share_pct")
+        piv_cat["delta_pp"] = piv_cat["2023-24"] - piv_cat["2022-23"]
+
+        def cat_stat(cat_name):
+            if cat_name in piv_cat.index:
+                s23 = piv_cat.loc[cat_name, "2023-24"]
+                s22 = piv_cat.loc[cat_name, "2022-23"]
+                d = piv_cat.loc[cat_name, "delta_pp"]
+                sgn = "+" if d >= 0 else ""
+                return f"**{s23:.2f}%** (vs {s22:.2f}% in 2022–23, {sgn}{d:.2f} pp)"
+            return "N/A"
+
+        st.markdown(f"### Budget Allocation Insights ({basket_sector} Households — Official Unimputed Series)")
+        st.caption(f"Year-on-year expenditure shifts across commodity categories between 2022–23 and 2023–24 from MoSPI Report No. 592 for {basket_sector.lower()} households.")
+
         col_b1, col_b2 = st.columns(2)
         with col_b1:
-            st.markdown("""
-            **1. Food Category Allocations and Year-on-Year Movements:**
-            - **Beverages & Processed Foods (9.84% Rural | 11.09% Urban in 2023–24):** Largest single food expenditure category nationwide, rising from 9.62% rural (+0.22 pp) and 10.64% urban (+0.45 pp) in 2022–23.
-            - **Milk & Dairy Products (8.44% Rural | 7.19% Urban in 2023–24):** Second largest food category, edging up from 8.33% rural (+0.11 pp) and remaining stable from 7.22% urban (-0.03 pp) in 2022–23.
-            - **Vegetables (6.03% Rural | 4.12% Urban in 2023–24):** Increased from 5.38% rural (+0.65 pp) and 3.80% urban (+0.32 pp) in 2022–23.
-            - **Cereals & Substitutes (4.99% Rural | 3.76% Urban in 2023–24):** Edged up slightly from 4.91% rural (+0.08 pp) and 3.64% urban (+0.12 pp) in 2022–23. While cereal shares remain far lower than historical 2011–12 levels (10.75% rural, 6.61% urban), they did not contract between the two latest survey rounds.
+            st.markdown(f"""
+            **Food Category Allocations & Year-on-Year Movements ({basket_sector}):**
+            - **Beverages & Processed Foods:** {cat_stat("Beverages & Processed Food")}. Leading individual food spending component nationwide.
+            - **Milk & Dairy Products:** {cat_stat("Milk & Milk Products")}. Second largest food category nationwide.
+            - **Vegetables:** {cat_stat("Vegetables")}. Reflects seasonal and perishable fresh produce outlays.
+            - **Cereals & Substitutes:** {cat_stat("Cereals & Substitutes")}. While cereal shares remain far lower than historical 2011–12 levels (10.75% rural, 6.61% urban), they edged up slightly between the two latest survey rounds.
             """)
         with col_b2:
-            st.markdown("""
-            **2. Non-Food Expenditure Allocations and Category Definitions:**
-            - **Conveyance / Transport (7.59% Rural | 8.46% Urban in 2023–24):** Leading individual non-food category nationwide, compared to 7.55% rural (+0.04 pp) and 8.59% urban (-0.13 pp) in 2022–23.
-            - **Clothing, Bedding & Footwear (6.63% Rural | 5.66% Urban in 2023–24):** Rose from 6.10% rural (+0.53 pp) and 5.41% urban (+0.25 pp).
-            - **Durable Goods (6.48% Rural | 6.87% Urban in 2023–24):** Declined slightly from 6.89% rural (-0.41 pp) and 7.17% urban (-0.30 pp).
-            - **Medical Care (6.83% Rural | 5.85% Urban in 2023–24):** Moderated from 7.13% rural (-0.30 pp) and 5.91% urban (-0.06 pp).
-            - **Rent, Taxes & Other Non-Food (4.61% Rural | 9.26% Urban in 2023–24):** Stood at 4.70% rural (-0.09 pp) and 9.23% urban (+0.03 pp).
+            st.markdown(f"""
+            **Non-Food Expenditure Allocations & Category Definitions ({basket_sector}):**
+            - **Conveyance / Transport:** {cat_stat("Conveyance / Transport")}. Leading individual non-food outlay, underscoring mobility expenditure across households.
+            - **Clothing, Bedding & Footwear:** {cat_stat("Clothing, Bedding & Footwear")}. Core essential apparel spending.
+            - **Durable Goods:** {cat_stat("Durable Goods")}. Capital and semi-durable household outlays.
+            - **Medical Care:** {cat_stat("Medical Care")}. Health outlays across institutional and non-institutional care.
+            - **Rent, Taxes & Other Non-Food:** {cat_stat("Rent, Taxes & Other Non-Food")}.
               *Classification Note:* This combined survey category aggregates residential rent, municipal taxes, water charges, and consumer fees rather than isolating standalone residential rent.
             """)
 

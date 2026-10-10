@@ -9,7 +9,7 @@
 [![Code License: MIT](https://img.shields.io/badge/Code%20License-MIT-blue.svg)](LICENSE)
 [![Data License: OGDL-India](https://img.shields.io/badge/Data%20License-OGDL--India-orange.svg)](https://data.gov.in/)
 
-An institutional-grade, audit-ready research intelligence platform analyzing official household consumption expenditure patterns, rural-urban disparities, commodity basket allocations, and retail price dynamics in India. Built with Python, pandas, Streamlit, and Plotly.
+An editorial research intelligence application analyzing official Indian household consumption expenditure patterns, rural-urban disparities, commodity basket allocations, and retail price dynamics. Built with Python, pandas, Streamlit, and Plotly for secondary research and macroeconomic analysis.
 
 ---
 
@@ -19,7 +19,7 @@ An institutional-grade, audit-ready research intelligence platform analyzing off
 
 The application analyzes the official **Household Consumption Expenditure Survey (HCES) 2023–24** (NSS Report No. 592 & PIB PRID 2247612) and **HCES 2022–23** (NSS Report No. 590) released by the National Sample Survey Office (NSSO), Ministry of Statistics and Programme Implementation (MoSPI), Government of India. Official retail inflation from the transitioned **Consumer Price Index (Base 2024=100)** is integrated as decoupled macroeconomic context.
 
-*Note: ConsumerLens India is designed to run locally or self-hosted in a Python 3.11 environment with zero paid external APIs or cloud dependencies.*
+*Note: ConsumerLens India is designed to run locally or self-hosted in a Python 3.11 environment with zero paid external APIs or runtime LLM dependencies.*
 
 ---
 
@@ -40,7 +40,7 @@ The application analyzes the official **Household Consumption Expenditure Survey
 
 ---
 
-## 🛠️ System Architecture & Zero-Cost Stack
+## 🛠️ System Architecture & Stack
 
 - **Data Ingestion & Pipeline:** Python 3.11, pandas, NumPy (`src/pipeline.py`) ingesting from structured source tables (`data/sources/`)
 - **Deterministic Pipeline Validation Engine:** Exactly 28 automated checks across 5 dimensions (`src/quality_engine.py`)
@@ -48,7 +48,7 @@ The application analyzes the official **Household Consumption Expenditure Survey
 - **Interactive UI & Visualizations:** Streamlit, Plotly Express & Graph Objects (`app.py`, `src/ui/`)
 - **Continuous Integration:** GitHub Actions (`.github/workflows/ci.yml`)
 - **Testing:** Pytest test suite (`tests/`)
-- **Zero Cost Guarantee:** Zero paid APIs, zero runtime LLM dependencies, zero proprietary keys. Operates 100% offline with preserved raw source files and SHA-256 cryptographic verification.
+- **Self-Contained & Reproducible Architecture:** Requires no paid APIs, runtime LLM dependencies, or external credential services. Operates offline with preserved official raw source extracts, deterministic data transformations, and cryptographic SHA-256 verification.
 
 ```
 india-consumer-spending-intelligence/

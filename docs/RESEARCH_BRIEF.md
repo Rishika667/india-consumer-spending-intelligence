@@ -42,11 +42,11 @@ The official release of the Household Consumption Expenditure Survey (HCES) 2023
 - **Non-Food Allocation:** Conveyance / transport is the largest non-food item (**7.59% rural, 8.46% urban** in 2023–24). The combined category *Rent, Taxes & Other Non-Food* stands at **4.61% rural and 9.26% urban**, reflecting combined housing rent, municipal charges, and consumer fees.
 
 ### 2.4 State-Level Heterogeneity (2023–24 Unimputed)
-- **Leading Spending Geographies:** Sikkim reports the highest MPCE (Rural: **₹9,377**; Urban: **₹13,927**), followed by Goa (Rural: **₹8,048**; Urban: **₹9,726**) and Kerala (Rural: **₹5,959**; Urban: **₹8,511**).
-- **Lagging Geographies:** Chhattisgarh reports the lowest rural MPCE (**₹2,739** rural; **₹4,927** urban), followed by Odisha (**₹3,357** rural; **₹5,825** urban), Jharkhand (**₹3,568** rural; **₹5,758** urban), and Bihar (**₹3,670** rural; **₹5,080** urban).
-- **Disparity Ratios:** The urban-to-rural multiple varies widely across states:
-  - High Disparity: Meghalaya (**1.96×**), Chhattisgarh (**1.80×**), Maharashtra (**1.78×**), Telangana (**1.65×**), West Bengal (**1.60×**).
-  - High Parity: Goa (**1.21×**), Bihar (**1.38×**), Punjab (**1.40×**), Kerala (**1.43×**).
+- **Leading Spending Geographies:** Sikkim reports the highest MPCE (Rural: **₹9,377**; Urban: **₹13,927**), followed by Goa (Rural: **₹8,048**; Urban: **₹9,726**), Andaman & N Islands (Rural: **₹7,771**; Urban: **₹10,453**), and Kerala (Rural: **₹6,611**; Urban: **₹7,783**).
+- **Lagging Geographies:** Chhattisgarh reports the lowest rural MPCE (**₹2,739** rural; **₹4,927** urban), followed by Jharkhand (**₹2,946** rural; **₹5,393** urban), Odisha (**₹3,357** rural; **₹5,825** urban), and Bihar (**₹3,670** rural; **₹5,080** urban).
+- **Disparity Ratios:** The urban-to-rural consumption multiple varies substantially across states:
+  - Widest Disparity: Meghalaya (**2.04×**), Jharkhand (**1.83×**), Chhattisgarh (**1.80×**), Maharashtra (**1.78×**), Telangana (**1.65×**), West Bengal (**1.60×**).
+  - Closest to Parity: Lakshadweep (**1.00×**), Puducherry (**1.14×**), Kerala (**1.18×**), Goa (**1.21×**), Punjab (**1.27×**), Bihar (**1.38×**).
 - **Data Availability Note:** Delhi and Chandigarh rural cells were not published in official 2023–24 press note tables; these are retained as explicit missing cells.
 
 ---
